@@ -106,7 +106,7 @@ class _CarrinhoViewPageState extends State<CarrinhoView>{
                     fontSize: 18,
                   ),
                 ),
-                onPressed: null,)
+                onPressed: (){},)
             ),
           ),
         ],
