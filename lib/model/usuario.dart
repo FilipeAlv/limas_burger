@@ -1,5 +1,4 @@
 import 'dart:convert';
-
 import 'package:limas_burger/model/endereco.dart';
 import 'package:http/http.dart' as http;
 import 'package:limas_burger/util/util.dart';
@@ -108,6 +107,18 @@ class Usuario{
       return "Informe a senha";
     else
       return null;
+  }
+
+  static Usuario fromJson(var json){
+    var _id = json[0]['pk'];
+    var _nome = json[0]['fields']['nome'];
+    var _contato = json[0]['fields']['contato'];
+    var _enderecos = json[0]['fields']['enderecos'];
+
+    Usuario usuario = Usuario(_id, _nome, null, null, _contato, null);
+
+
+    return usuario;
   }
 
 }

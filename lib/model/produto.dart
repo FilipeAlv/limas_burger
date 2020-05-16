@@ -94,4 +94,10 @@ class Produto{
     return await _fromJson(jsonDecode(response.body));
   }
   
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return nome.toUpperCase();
+  }
 }

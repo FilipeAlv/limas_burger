@@ -3,6 +3,7 @@ import 'package:limas_burger/model/dao/databasehelper.dart';
 import 'package:limas_burger/util/util.dart';
 import 'package:limas_burger/view/CarrinhoView.dart';
 import 'package:limas_burger/view/CatalogoView.dart';
+import 'package:limas_burger/view/PedidosView.dart';
 
 void main() => runApp(LimasBurger());
 
@@ -50,7 +51,7 @@ class LimasBurgerTabBar extends State<LimasBurger> {
     if(_inicio){
       _tab1 = CatalogoView.getInstance(this);
       _tab2 = CarrinhoView.getInstance(this);
-      _tab3 = Center( child: Text("Page 3"),);
+      _tab3 = PedidosView.getInstance(this);
       _tab4 = Center( child: Text("Page 4"),);
       _inicio=false;
     }

@@ -58,7 +58,7 @@ class _DialogQuantidadeProdutoState extends State<DialogQuantidadeProduto>{
                                     widget._pai.setQuantidade(int.parse(value));
                                     Navigator.pop(context);
                                   }on Exception{
-                                    print("isto nao e um numero");
+                                    print("isto não é um número");
                                   }
                                   
                                 },
