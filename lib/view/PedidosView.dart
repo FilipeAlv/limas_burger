@@ -13,6 +13,7 @@ import 'package:limas_burger/model/produto.dart';
 import 'package:limas_burger/model/produto_pedido.dart';
 import 'package:limas_burger/model/usuario.dart';
 import 'package:limas_burger/util/util.dart';
+import 'package:limas_burger/view/DestalhesPedidoView.dart';
 import 'package:limas_burger/view/ProdutoView.dart';
 import 'package:limas_burger/view/dialogs/Connection.dart';
 import 'package:limas_burger/view/dialogs/DialogErrorServer.dart';
@@ -42,7 +43,6 @@ class _PedidosViewPageState extends State<PedidosView> {
 
   @override
   Widget build(BuildContext context) {
-    print("L ${Util.pedidos.length}");
 
     return Scaffold(
         appBar: AppBar(
@@ -57,14 +57,14 @@ class _PedidosViewPageState extends State<PedidosView> {
                     width: MediaQuery.of(context).size.width / 7,
                     child: Image(image: AssetImage('assets/images/logo.png')),
                   ),
-                  Text("Lista de pedidos")
+                  Text("Meus Pedidos")
                 ],
               )),
         ),
         body: Util.pedidos.length == 0
             ? Center(
                 child: Text(
-                  "Sua lista de pedidos está vazia",
+                  "Você ainda não tem pedidos. :(",
                   style: TextStyle(
                     fontSize: 20,
                   ),
@@ -77,20 +77,20 @@ class _PedidosViewPageState extends State<PedidosView> {
                     child: ListView.builder(
                       itemCount: Util.pedidos.length,
                       itemBuilder: (BuildContext context, int index) {
-                        String dataHoraEntrega = formatDate
-                            .format(Util.pedidos[index].dataHoraPedido);
                         String dataHoraPedido = formatDate
                             .format(Util.pedidos[index].dataHoraPedido);
                         NumberFormat formatterValor = NumberFormat("00.00");
                         String valor = formatterValor
                             .format(Util.pedidos[index].valorTotal);
-                        print("valor  ${Util.pedidos[index].valorTotal}");
                         return Container(
                           margin: EdgeInsets.only(bottom: 2),
                           color: Colors.black26,
                           child: ListTile(
-                            title:
-                                Text(dataHoraPedido + " - " + dataHoraEntrega),
+                            title: Text(
+                              Util.pedidos[index].status +
+                                  " - " +
+                                  dataHoraPedido,
+                            ),
                             subtitle: Text(
                               Util.pedidos[index].produtos.toString(),
                               maxLines: 1,
@@ -98,11 +98,10 @@ class _PedidosViewPageState extends State<PedidosView> {
                             ),
                             trailing: Text(valor.replaceAll('.', ',')),
                             onTap: () {
-                              /*  widget._pai.setTab2(ProdutoView(
-                                  widget._pai,
-                                  Util.carrinho.produtos[index].produto,
-                                  Util.carrinho.produtos[index]));
-                              */
+                              widget._pai.setTab3(DetalhePedidoView(
+                                widget._pai,
+                                Util.pedidos[index],
+                              ));
                             },
                           ),
                         );
@@ -116,7 +115,6 @@ class _PedidosViewPageState extends State<PedidosView> {
   void loadPedidos() async {
     Util.pedidos.clear();
     var jsonPedido = await Pedido.buscarPedidosUsuario();
-    print("jsonPedido $jsonPedido");
     for (int i = 0; i < jsonPedido.length; i++) {
       var _id = jsonPedido[0]['pk'];
       var _status = jsonPedido[0]['fields']['status'];

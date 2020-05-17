@@ -32,6 +32,12 @@ class LimasBurgerTabBar extends State<LimasBurger> {
       _tab2 = tab;
     });
   }
+
+   setTab3(tab){
+    setState(() {      
+      _tab3 = tab;
+    });
+  }
   @override
   void initState() {
     super.initState();

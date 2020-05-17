@@ -43,7 +43,6 @@ class ProdutoPedido {
   }
 
   static Future<ProdutoPedido> fromJson(var json)async{
-    print("json $json");
     var _id = json[0]['pk'];
     var _quantidade = json[0]['fields']['quantidade'];
     var _produto = await Produto.listarProdutosPorId(json[0]['fields']['produto']);
@@ -55,7 +54,6 @@ class ProdutoPedido {
 
   @override
   String toString() {
-    // TODO: implement toString
     return produto.toString() ;
   }
 }
