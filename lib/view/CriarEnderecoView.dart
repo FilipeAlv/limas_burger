@@ -160,32 +160,32 @@ class CriarEnderecoViewPageState extends State<CriarEnderecoView>{
   }
 
   String _validarBairro(String value){
-    value.trim();
-    if(value.length==0)
+    bairro = value.trim();
+    if(bairro.length==0)
       return "Informe o bairro";
     else
       return null;
   }
   
   String _validarRua(String value){
-  value.trim();
-  if(value.length==0)
+  rua = value.trim();
+  if(rua.length==0)
     return "Informe a rua";
   else
     return null;
 }
 
   String _validarNumero(String value){
-  value.trim();
-  if(value.length==0)
+  numero = value.trim();
+  if(numero.length==0)
     return "Informe o número";
   else
     return null;
 }
 
 String _validarReferencia(String value){
-  value.trim();
-  if(value.length==0)
+  referencia = value.trim();
+  if(referencia.length==0)
     return "Informe uma referência";
   else
     return null;
@@ -199,7 +199,7 @@ String _validarReferencia(String value){
   _sendForm() async {
     if (_key.currentState.validate()) {
       DialogsLoading.showLoadingDialog(context, _key2);
-        var id = widget._endereco == null?null:widget._endereco.id;
+        var id = widget._endereco == null ? null : widget._endereco.id;
         Endereco endereco = Endereco(
         id, upperNome(bairro), upperNome(rua), numero, referencia);
 
