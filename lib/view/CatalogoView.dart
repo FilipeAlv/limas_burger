@@ -131,7 +131,7 @@ class _CatalogoViewPageState extends State<CatalogoView>{
     if(string==null){
       _loading = true;
       _produtos = await Produto.listarProdutos(string, init, fim);
-      _produtos.sort((a, b)=>a.id.compareTo(b.id));
+      if(_produtos!=null){_produtos.sort((a, b)=>a.id.compareTo(b.id));}
     }else{
       setState(() {
          _loadingFilter = true; 

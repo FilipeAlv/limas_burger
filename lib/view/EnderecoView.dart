@@ -9,6 +9,8 @@ import 'package:limas_burger/view/CriarEnderecoView.dart';
 import 'package:limas_burger/view/FormaPagamentoView.dart';
 import 'package:limas_burger/view/dialogs/DialogErrorServer.dart';
 
+import 'CriarEnderecoView.dart';
+
 class EnderecoView extends StatefulWidget{
   ProdutoPedido produto;
   List<ProdutoPedido> produtos;
@@ -39,8 +41,7 @@ class EnderecoViewPageState extends State<EnderecoView>{
       });
       Util.usuario.enderecos = <Endereco>[];
       enderecos.forEach((item)async{
-        var _responseEndereco = await Endereco.getData(item);
-        List _resultEndereco = jsonDecode(_responseEndereco.body);
+        List _resultEndereco = await Endereco.getData(item);
         
         
         _resultEndereco.forEach((item){
@@ -153,7 +154,9 @@ class EnderecoViewPageState extends State<EnderecoView>{
                                       child:FlatButton(
                                         onPressed: (){}, 
                                         child: FlatButton.icon(
-                                          onPressed: (){},
+                                          onPressed: (){
+                                            Navigator.push(context, MaterialPageRoute(builder: (context)=>CriarEnderecoView(this, Util.usuario.enderecos[index])));
+                                          },
                                           icon: Icon(Icons.edit, color: MyColors.secondaryColor, size: 20,),
                                           label:  Text("Editar", style: TextStyle(color:MyColors.secondaryColor),),
                                         ), 
@@ -185,7 +188,7 @@ class EnderecoViewPageState extends State<EnderecoView>{
                               ),
                             ),
                             onPressed: (){
-                              Navigator.push(context, MaterialPageRoute(builder: (context)=>CriarEnderecoView(this)));
+                              Navigator.push(context, MaterialPageRoute(builder: (context)=>CriarEnderecoView(this, null)));
                             },
                           ),
                         );

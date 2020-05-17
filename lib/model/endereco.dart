@@ -41,21 +41,37 @@ class Endereco {
   }
 
   save() async {
-    var response = await http.get(
-        Uri.encodeFull(Util.URL +
-            "add/endereco/" +
-            Util.usuario.id.toString() +
-            "&" +
-            bairro +
-            "&" +
-            rua +
-            "&" +
-            numero +
-            "&" +
-            referencia),
-        headers: {"Accept": "apllication/json"});
+    var response;
+    if(id == null){
+      response = await http.get(
+          Uri.encodeFull(Util.URL +
+              "add/endereco/" +
+              Util.usuario.id.toString() +
+              "&" +
+              bairro +
+              "&" +
+              rua +
+              "&" +
+              numero +
+              "&" +
+              referencia),
+          headers: {"Accept": "apllication/json"});
+    }else{
+      response = await http.get(
+          Uri.encodeFull(Util.URL +
+              "editar/endereco/" +
+              id.toString() +
+              "&" +
+              bairro +
+              "&" +
+              rua +
+              "&" +
+              numero +
+              "&" +
+              referencia),
+          headers: {"Accept": "apllication/json"});
+    }
     var _result;
-    print("nn ${response.body}");
     try {
       _result = jsonDecode(response.body);
     } catch (e) {}

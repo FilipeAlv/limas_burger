@@ -115,37 +115,39 @@ class _PedidosViewPageState extends State<PedidosView> {
   void loadPedidos() async {
     Util.pedidos.clear();
     var jsonPedido = await Pedido.buscarPedidosUsuario();
-    for (int i = 0; i < jsonPedido.length; i++) {
-      var _id = jsonPedido[0]['pk'];
-      var _status = jsonPedido[0]['fields']['status'];
-      var _dataHoraPedido = jsonPedido[0]['fields']['dataHoraPedido'];
-      var _dataHoraEntrega = jsonPedido[0]['fields']['dataHoraEntrega'];
-      var _formaPagamento = jsonPedido[0]['fields']['formaPagamento'];
-      var _valorTotal = double.parse(jsonPedido[0]['fields']['ValorTotal']);
-      var _endereco = Endereco.fromJson(
-          await Endereco.getData(jsonPedido[0]['fields']['Endereco']));
-      var _usuario =
-          Usuario.fromJson(await Usuario.buscarPorId(Util.usuario.id));
-      List<ProdutoPedido> _produtosPedidos = List();
+    if(jsonPedido!=null){
+      for (int i = 0; i < jsonPedido.length; i++) {
+        var _id = jsonPedido[0]['pk'];
+        var _status = jsonPedido[0]['fields']['status'];
+        var _dataHoraPedido = jsonPedido[0]['fields']['dataHoraPedido'];
+        var _dataHoraEntrega = jsonPedido[0]['fields']['dataHoraEntrega'];
+        var _formaPagamento = jsonPedido[0]['fields']['formaPagamento'];
+        var _valorTotal = double.parse(jsonPedido[0]['fields']['ValorTotal']);
+        var _endereco = Endereco.fromJson(
+            await Endereco.getData(jsonPedido[0]['fields']['Endereco']));
+        var _usuario =
+            Usuario.fromJson(await Usuario.buscarPorId(Util.usuario.id));
+        List<ProdutoPedido> _produtosPedidos = List();
 
-      for (int j = 0;
-          j < jsonPedido[0]['fields']['produtosPedidos'].length;
-          j++) {
-        var _idp = jsonPedido[0]['pk'];
-        ProdutoPedido pp =
-            await ProdutoPedido.fromJson(await ProdutoPedido.getData(_idp));
-        _produtosPedidos.add(pp);
+        for (int j = 0;
+            j < jsonPedido[0]['fields']['produtosPedidos'].length;
+            j++) {
+          var _idp = jsonPedido[0]['pk'];
+          ProdutoPedido pp =
+              await ProdutoPedido.fromJson(await ProdutoPedido.getData(_idp));
+          _produtosPedidos.add(pp);
+        }
+
+        DateTime _dhEntrega = Util.converterStringEmDateTime(_dataHoraEntrega);
+        DateTime _dhPedido = Util.converterStringEmDateTime(_dataHoraPedido);
+
+        Pedido pedido = Pedido(_id, _dhPedido, _dhEntrega, _status,
+            _formaPagamento, _valorTotal, _endereco, _usuario, _produtosPedidos);
+
+        setState(() {
+          Util.pedidos.add(pedido);
+        });
       }
-
-      DateTime _dhEntrega = Util.converterStringEmDateTime(_dataHoraEntrega);
-      DateTime _dhPedido = Util.converterStringEmDateTime(_dataHoraPedido);
-
-      Pedido pedido = Pedido(_id, _dhPedido, _dhEntrega, _status,
-          _formaPagamento, _valorTotal, _endereco, _usuario, _produtosPedidos);
-
-      setState(() {
-        Util.pedidos.add(pedido);
-      });
     }
   }
 }

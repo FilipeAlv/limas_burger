@@ -10,8 +10,8 @@ import 'package:limas_burger/view/dialogs/DialogLoading.dart';
 class CriarEnderecoView extends StatefulWidget{
 
   EnderecoViewPageState _pai;
-
-  CriarEnderecoView(this._pai);
+  Endereco _endereco;
+  CriarEnderecoView(this._pai, this._endereco);
 
   @override
   State<StatefulWidget> createState() => CriarEnderecoViewPageState();
@@ -49,7 +49,7 @@ class CriarEnderecoViewPageState extends State<CriarEnderecoView>{
           child: Column(children :<Widget>[
             AppBar(
               elevation: 0,
-              title: Text("Novo Endereço"),
+              title: Text(widget._endereco==null?"Novo Endereço":"Editar Endereço"),
             ),
             
             Container(
@@ -71,6 +71,7 @@ class CriarEnderecoViewPageState extends State<CriarEnderecoView>{
                               ),
                               validator: (text)=>_validarRua(text),
                               onChanged: (text)=> rua=text.trim(),
+                              initialValue: widget._endereco==null?"":widget._endereco.rua,
                             ),
                           ),
                           
@@ -82,6 +83,7 @@ class CriarEnderecoViewPageState extends State<CriarEnderecoView>{
                               ),
                               validator: (text)=>_validarBairro(text),
                               onChanged: (text)=> bairro=text.trim(),
+                              initialValue: widget._endereco==null?"":widget._endereco.bairro,
                             ),
                           ),
 
@@ -95,6 +97,7 @@ class CriarEnderecoViewPageState extends State<CriarEnderecoView>{
                               ),
                               validator: (text)=>_validarNumero(text),
                               onChanged: (text)=> numero=text.trim(),
+                              initialValue: widget._endereco==null?"":widget._endereco.numero,
                             ),
                           ),
 
@@ -117,6 +120,7 @@ class CriarEnderecoViewPageState extends State<CriarEnderecoView>{
                               ),
                               onChanged: (text)=> referencia=text.trim(),
                               validator: (text)=>_validarReferencia(text),
+                              initialValue: widget._endereco == null?"":widget._endereco.referencia,
                             ),
                           ),
 
@@ -130,7 +134,7 @@ class CriarEnderecoViewPageState extends State<CriarEnderecoView>{
                               borderRadius: BorderRadius.circular(6)
                             ),
                             child: FlatButton(
-                              child: Text("Salvar",
+                              child: Text(widget._endereco==null?"Salvar":"Editar",
                                 style: TextStyle(
                                   color: Colors.black,
                                   fontSize: 18,
@@ -193,12 +197,11 @@ String _validarReferencia(String value){
 
 
   _sendForm() async {
-    
-
     if (_key.currentState.validate()) {
       DialogsLoading.showLoadingDialog(context, _key2);
+        var id = widget._endereco == null?null:widget._endereco.id;
         Endereco endereco = Endereco(
-        null, upperNome(bairro), upperNome(rua), numero, referencia);
+        id, upperNome(bairro), upperNome(rua), numero, referencia);
 
         List _result = await endereco.save(); 
 
