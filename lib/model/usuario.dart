@@ -113,6 +113,7 @@ class Usuario{
     var _id = json[0]['pk'];
     var _nome = json[0]['fields']['nome'];
     var _contato = json[0]['fields']['contato'];
+    var _email = json[0]['fields']['email'];
     var _enderecos = json[0]['fields']['enderecos'];
 
     Usuario usuario = Usuario(_id, _nome, null, null, _contato, null);

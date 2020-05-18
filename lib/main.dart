@@ -4,6 +4,7 @@ import 'package:limas_burger/util/util.dart';
 import 'package:limas_burger/view/CarrinhoView.dart';
 import 'package:limas_burger/view/CatalogoView.dart';
 import 'package:limas_burger/view/PedidosView.dart';
+import 'package:limas_burger/view/PerfilView.dart';
 
 void main() => runApp(LimasBurger());
 
@@ -38,6 +39,13 @@ class LimasBurgerTabBar extends State<LimasBurger> {
       _tab3 = tab;
     });
   }
+
+  setTab4(tab){
+    setState(() {      
+      _tab4 = tab;
+    });
+  }
+
   @override
   void initState() {
     super.initState();
@@ -58,7 +66,7 @@ class LimasBurgerTabBar extends State<LimasBurger> {
       _tab1 = CatalogoView.getInstance(this);
       _tab2 = CarrinhoView.getInstance(this);
       _tab3 = PedidosView.getInstance(this);
-      _tab4 = Center( child: Text("Page 4"),);
+      _tab4 = PerfilView.getInstance(this);
       _inicio=false;
     }
 
