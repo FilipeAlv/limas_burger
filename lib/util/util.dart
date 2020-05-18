@@ -10,13 +10,12 @@ class Util {
       "http://ec2-18-229-29-129.sa-east-1.compute.amazonaws.com:8000/";
   static const String URL_IMAGENS =
       "http://ec2-18-229-29-129.sa-east-1.compute.amazonaws.com:8000/media/";
-
- /* static const String URL =
-      "http://192.168.2.103:8000/";
+/*
+  static const String URL =
+      "http://10.0.0.105:8000/";
   static const String URL_IMAGENS =
-      "http://192.168.2.103:8000/media/";
-  */
-
+      "http://10.0.0.105:8000/media/";
+*/
       
   static const int QUANT_LIST_PRODUTOS = 10;
   static Carrinho carrinho = Carrinho();

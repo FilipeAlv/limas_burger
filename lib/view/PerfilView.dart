@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:limas_burger/view/dialogs/DialogEdit.dart';
 
 import '../main.dart';
 import '../util/util.dart';
@@ -23,6 +24,7 @@ class PerfilView extends StatefulWidget{
 } 
 
 class _PerfilViewPageState extends State<PerfilView>{
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -69,6 +71,13 @@ class _PerfilViewPageState extends State<PerfilView>{
                       title: Text("Nome"),
                       subtitle: Text(Util.usuario.nome),
                       trailing: Icon(Icons.keyboard_arrow_right),
+                      onTap: (){
+                        showDialog(context: context,
+                          builder: (BuildContext context){
+                            return DialogEdit(Util.usuario.nome, "Nome");
+                          }
+                        );
+                      }
                     ),
                     Divider(color: Colors.white,),
 

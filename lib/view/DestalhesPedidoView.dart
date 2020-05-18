@@ -2,19 +2,10 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:limas_burger/main.dart';
-import 'package:limas_burger/model/ingrediente.dart';
 import 'package:limas_burger/model/pedido.dart';
-import 'package:limas_burger/model/produto.dart';
 import 'package:limas_burger/model/produto_pedido.dart';
 import 'package:limas_burger/util/util.dart';
-import 'package:limas_burger/view/CarrinhoView.dart';
-import 'package:limas_burger/view/CatalogoView.dart';
-import 'package:limas_burger/view/EnderecoView.dart';
 import 'package:limas_burger/view/PedidosView.dart';
-import 'package:limas_burger/view/dialogs/DialogQuantidadeProduto.dart';
-import 'dart:ui' as ui;
-
-import 'package:limas_burger/view/dialogs/DialogUsuario.dart';
 
 class DetalhePedidoView extends StatefulWidget {
   LimasBurgerTabBar _tabBar;
