@@ -54,8 +54,6 @@ class LimasBurgerTabBar extends State<LimasBurger> {
 
   _loadUsuario() async {
     DataBaseHelper db = DataBaseHelper.getInstance();
-    print(db);
-
     Util.usuario = await db.getUsuario();
   }
 

@@ -19,8 +19,6 @@ import 'package:limas_burger/view/dialogs/DialogUsuario.dart';
 class DetalhePedidoView extends StatefulWidget {
   LimasBurgerTabBar _tabBar;
   Pedido _pedido;
-  static List<ListTile> _children = <ListTile>[];
-
   DetalhePedidoView(this._tabBar, this._pedido);
 
   @override
@@ -29,9 +27,27 @@ class DetalhePedidoView extends StatefulWidget {
 
 class DetalhePedidoViewState extends State<DetalhePedidoView> {
   final formatDate = DateFormat('dd/MM/dd hh:mm');
+  List<ListTile> _listProdutos = List();
+  NumberFormat formatterValor = NumberFormat("00.00");
+  final double tamanhoFontItem = 15;
+
   @override
   void initState() {
-    super.initState();
+    List<ProdutoPedido> _produtos = widget._pedido.produtos;
+    for (ProdutoPedido produtoPedido in _produtos) {
+      NumberFormat formatterValor = NumberFormat("00.00");
+      String valor = formatterValor.format(produtoPedido.produto.valor);
+      ListTile listTile = ListTile(
+        title: Text(produtoPedido.produto.nome,
+            style: TextStyle(
+                fontSize: tamanhoFontItem, fontWeight: FontWeight.bold)),
+        trailing: Text(valor,
+            style: TextStyle(
+                fontSize: tamanhoFontItem, fontWeight: FontWeight.bold)),
+      );
+
+      _listProdutos.add(listTile);
+    }
   }
 
   Future<bool> onBackPressed() {
@@ -78,15 +94,14 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                         )
                       ],
                     ),
-                    
+                    Column(children: _listProdutos),
                     Row(
                       children: <Widget>[
                         Padding(
                           padding:
                               EdgeInsets.only(left: 10, top: 20, bottom: 20),
                           child: Text(
-                            "Valor total: " +
-                                widget._pedido.valorTotal.toString(),
+                            "Valor total ",
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
@@ -99,8 +114,21 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                           padding:
                               EdgeInsets.only(left: 10, top: 20, bottom: 20),
                           child: Text(
-                            "Forma de pagamento: " +
-                                widget._pedido.formaDePagamento,
+                            formatterValor.format(widget._pedido.valorTotal),
+                            style: TextStyle(
+                                fontSize: tamanhoFontItem,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding:
+                              EdgeInsets.only(left: 10, top: 20, bottom: 20),
+                          child: Text(
+                            "Forma de pagamento ",
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
                           ),
@@ -113,11 +141,35 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                           padding:
                               EdgeInsets.only(left: 10, top: 20, bottom: 20),
                           child: Text(
-                            "Data/Hora do pedido: " +
-                                formatDate
-                                    .format(widget._pedido.dataHoraPedido),
+                            widget._pedido.formaDePagamento,
+                            style: TextStyle(
+                                fontSize: tamanhoFontItem, fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding:
+                              EdgeInsets.only(left: 10, top: 20, bottom: 20),
+                          child: Text(
+                            "Data/Hora do pedido ",
                             style: TextStyle(
                                 fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding:
+                              EdgeInsets.only(left: 10, top: 20, bottom: 20),
+                          child: Text(
+                            formatDate.format(widget._pedido.dataHoraPedido),
+                            style: TextStyle(
+                                fontSize: tamanhoFontItem, fontWeight: FontWeight.bold),
                           ),
                         )
                       ],
@@ -145,7 +197,8 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                           child: Text(
                             "Nome: " + widget._pedido.usuario.nome,
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                                fontSize: tamanhoFontItem,
+                                fontWeight: FontWeight.bold),
                           ),
                         )
                       ],
@@ -157,7 +210,8 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                           child: Text(
                             "Contato: " + widget._pedido.usuario.contato,
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                                fontSize: tamanhoFontItem,
+                                fontWeight: FontWeight.bold),
                           ),
                         )
                       ],
@@ -183,7 +237,8 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                           child: Text(
                             "Rua: " + widget._pedido.enderecoEntrega.rua,
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                                fontSize: tamanhoFontItem,
+                                fontWeight: FontWeight.bold),
                           ),
                         )
                       ],
@@ -195,7 +250,8 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                           child: Text(
                             "Bairro: " + widget._pedido.enderecoEntrega.bairro,
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                                fontSize: tamanhoFontItem,
+                                fontWeight: FontWeight.bold),
                           ),
                         )
                       ],
@@ -207,7 +263,8 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                           child: Text(
                             "Nº: " + widget._pedido.enderecoEntrega.numero,
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                                fontSize: tamanhoFontItem,
+                                fontWeight: FontWeight.bold),
                           ),
                         )
                       ],
@@ -220,7 +277,8 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                             "Referência: " +
                                 widget._pedido.enderecoEntrega.referencia,
                             style: TextStyle(
-                                fontSize: 20, fontWeight: FontWeight.bold),
+                                fontSize: tamanhoFontItem,
+                                fontWeight: FontWeight.bold),
                           ),
                         )
                       ],

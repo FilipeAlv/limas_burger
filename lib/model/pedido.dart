@@ -34,15 +34,20 @@ class Pedido {
         status = json['status'],
         formaDePagamento = json['formaDePagamento'],
         valorTotal = double.parse(json['valorTotal']);
-        
+
   static buscarPedidosUsuario() async {
     var _result;
     var response;
     try {
+      print(Util.usuario.id.toString());
       response = await http.get(
-          Uri.encodeFull(Util.URL + "buscar/pedido/" + Util.usuario.id.toString()),
+          Uri.encodeFull(
+              Util.URL + "buscar/pedido/" + Util.usuario.id.toString()),
           headers: {"Accept": "apllication/json"});
+
       _result = jsonDecode(response.body);
+
+      return _result;
     } catch (e) {}
     return _result;
   }

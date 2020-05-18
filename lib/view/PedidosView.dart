@@ -43,7 +43,6 @@ class _PedidosViewPageState extends State<PedidosView> {
 
   @override
   Widget build(BuildContext context) {
-
     return Scaffold(
         appBar: AppBar(
           backgroundColor: Color.fromRGBO(0, 0, 0, 255),
@@ -117,26 +116,34 @@ class _PedidosViewPageState extends State<PedidosView> {
     var jsonPedido = await Pedido.buscarPedidosUsuario();
     if(jsonPedido!=null){
       for (int i = 0; i < jsonPedido.length; i++) {
+      
         var _id = jsonPedido[0]['pk'];
         var _status = jsonPedido[0]['fields']['status'];
         var _dataHoraPedido = jsonPedido[0]['fields']['dataHoraPedido'];
         var _dataHoraEntrega = jsonPedido[0]['fields']['dataHoraEntrega'];
         var _formaPagamento = jsonPedido[0]['fields']['formaPagamento'];
+        
         var _valorTotal = double.parse(jsonPedido[0]['fields']['ValorTotal']);
         var _endereco = Endereco.fromJson(
             await Endereco.getData(jsonPedido[0]['fields']['Endereco']));
         var _usuario =
             Usuario.fromJson(await Usuario.buscarPorId(Util.usuario.id));
         List<ProdutoPedido> _produtosPedidos = List();
-
+        
         for (int j = 0;
             j < jsonPedido[0]['fields']['produtosPedidos'].length;
             j++) {
-          var _idp = jsonPedido[0]['pk'];
+            
+          var _idp = jsonPedido[0]['fields']['produtosPedidos'][j];
+          print("idp $_idp");
+
+          
           ProdutoPedido pp =
               await ProdutoPedido.fromJson(await ProdutoPedido.getData(_idp));
           _produtosPedidos.add(pp);
+          
         }
+        
 
         DateTime _dhEntrega = Util.converterStringEmDateTime(_dataHoraEntrega);
         DateTime _dhPedido = Util.converterStringEmDateTime(_dataHoraPedido);
@@ -147,7 +154,10 @@ class _PedidosViewPageState extends State<PedidosView> {
         setState(() {
           Util.pedidos.add(pedido);
         });
+      
       }
+      
     }
+    
   }
 }
