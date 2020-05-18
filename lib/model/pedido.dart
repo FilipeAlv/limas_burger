@@ -1,3 +1,4 @@
+import 'package:intl/intl.dart';
 import 'package:limas_burger/model/endereco.dart';
 import 'package:limas_burger/model/produto_pedido.dart';
 import 'package:limas_burger/model/usuario.dart';
@@ -50,5 +51,50 @@ class Pedido {
       return _result;
     } catch (e) {}
     return _result;
+  }
+
+  save() async {
+    var response;
+    print(valorTotal.toString());
+    String data = Util.formatDate.format(dataHoraPedido).trim().replaceAll("/", "-");
+    if (id == null) {
+      print(formaDePagamento);
+      response = await http.get(
+          Uri.encodeFull(Util.URL +
+              "add/pedido/"+ formaDePagamento + "&" + status + "&" + Util.usuario.id.toString() + "&" + enderecoEntrega.id.toString() + "&" + "Não definida" + '&' + data + "&" + valorTotal.toString()),
+          headers: {"Accept": "apllication/json"});
+    }
+    /*else{
+      response = await http.get(
+          Uri.encodeFull(Util.URL +
+              "editar/endereco/" +
+              id.toString() +
+              "&" +
+              bairro +
+              "&" +
+              rua +
+              "&" +
+              numero +
+              "&" +
+              referencia),
+          headers: {"Accept": "apllication/json"});
+    }
+    */
+    var _result;
+     print(response.body);
+    try {
+      _result = jsonDecode(response.body);
+    } catch (e) {
+      e.toString();
+    }
+   
+
+    return _result;
+  }
+
+  @override
+  String toString() {
+    // TODO: implement toString
+    return status + " - " + usuario.id.toString() + " - " + enderecoEntrega.id.toString();
   }
 }

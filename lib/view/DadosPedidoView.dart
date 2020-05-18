@@ -197,6 +197,7 @@ class EnderecoViewPageState extends State<DadosPedidoView>{
           ),
         ),
         onPressed: (){
+          widget.pedido.save();
         },
       ),
     );
