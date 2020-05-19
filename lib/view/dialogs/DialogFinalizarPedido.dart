@@ -46,6 +46,9 @@ class DialogFinalizarPedidoState extends State<DialogFinalizarPedido>{
               ),
               onPressed: (){
                 Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
+                Navigator.pop(context);
                // Navigator.push(context, MaterialPageRoute(builder: (context)=>PedidosViewwidget.produto, widget.produtos)));
               },)
           ),
