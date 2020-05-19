@@ -27,7 +27,13 @@ class Util {
       usuario; // = Usuario(1, "Filipe", "filipe", "filipe", "lfilipealves20@gmail.com", "(87) 9 9646-7908", enderecos);
 
   static DateTime converterStringEmDateTime(String dateString) {
-    DateTime novaData = DateFormat().add_yMd().add_Hm().parse(dateString);
+    DateTime novaData;
+    try{
+       novaData = DateFormat().add_yMd().add_Hm().parse(dateString);
+
+    }catch(e){
+
+    }
     return novaData;
   }
 }

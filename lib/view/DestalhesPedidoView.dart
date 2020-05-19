@@ -165,6 +165,32 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                         )
                       ],
                     ),
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding:
+                              EdgeInsets.only(left: 10, top: 20, bottom: 20),
+                          child: Text(
+                            "Data/Hora da entrega ",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding:
+                              EdgeInsets.only(left: 10, top: 20, bottom: 20),
+                          child: Text(
+                            widget._pedido.dataHoraEntrega!= null? formatDate.format(widget._pedido.dataHoraPedido):"Não definida.",
+                            style: TextStyle(
+                                fontSize: tamanhoFontItem, fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
+                    ),
                     Divider(
                       height: 20,
                     ),

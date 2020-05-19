@@ -74,7 +74,7 @@ class Produto{
   
   static Future<Produto> listarProdutosPorId(id)async {
     var response = await http.get(
-      Uri.encodeFull(Util.URL+"buscar/produtos/"+id.toString()),
+      Uri.encodeFull(Util.URL+"listar/listarPorIdProduto/"+id.toString()),
       headers: {
         "Accept":"apllication/json"
       }

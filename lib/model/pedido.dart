@@ -55,7 +55,7 @@ class Pedido {
 
   save() async {
     var response;
-    print(valorTotal.toString());
+    
     String data = Util.formatDate.format(dataHoraPedido).trim().replaceAll("/", "-");
     if (id == null) {
       print(formaDePagamento);

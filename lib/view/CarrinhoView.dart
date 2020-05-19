@@ -8,7 +8,9 @@ import 'package:limas_burger/main.dart';
 import 'package:limas_burger/model/carrinho.dart';
 import 'package:limas_burger/model/ingrediente.dart';
 import 'package:limas_burger/model/produto.dart';
+import 'package:limas_burger/model/produto_pedido.dart';
 import 'package:limas_burger/util/util.dart';
+import 'package:limas_burger/view/EnderecoView.dart';
 import 'package:limas_burger/view/ProdutoView.dart';
 import 'package:limas_burger/view/dialogs/Connection.dart';
 import 'package:limas_burger/view/dialogs/DialogErrorServer.dart';
@@ -106,7 +108,9 @@ class _CarrinhoViewPageState extends State<CarrinhoView>{
                     fontSize: 18,
                   ),
                 ),
-                onPressed: (){},)
+                onPressed: (){
+                  Navigator.push(context, MaterialPageRoute(builder: (context)=>EnderecoView(null, Util.carrinho.produtos)));
+                },)
             ),
           ),
         ],

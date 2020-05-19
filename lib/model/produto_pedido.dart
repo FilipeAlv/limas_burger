@@ -42,18 +42,56 @@ class ProdutoPedido {
     return _result;
   }
 
-  static Future<ProdutoPedido> fromJson(var json)async{
+  static Future<ProdutoPedido> fromJson(var json) async {
     var _id = json[0]['pk'];
     var _quantidade = json[0]['fields']['quantidade'];
-    var _produto = await Produto.listarProdutosPorId(json[0]['fields']['produto']);
+    var _produto =
+        await Produto.listarProdutosPorId(json[0]['fields']['produto']);
 
     ProdutoPedido _produtoPedido = ProdutoPedido(_id, _produto, _quantidade);
 
     return _produtoPedido;
   }
 
+  save() async {
+    var response;
+    if (id == null) {
+      response = await http.get(
+          Uri.encodeFull(Util.URL +
+              "add/addProdutoPedido/" +
+              quantidade.toString() +
+              "&" +
+              produto.id.toString()),
+          headers: {"Accept": "apllication/json"});
+    }
+    /*else{
+      response = await http.get(
+          Uri.encodeFull(Util.URL +
+              "editar/endereco/" +
+              id.toString() +
+              "&" +
+              bairro +
+              "&" +
+              rua +
+              "&" +
+              numero +
+              "&" +
+              referencia),
+          headers: {"Accept": "apllication/json"});
+    }
+    */
+    var _result;
+    try {
+      _result = jsonDecode(response.body);
+    } catch (e) {
+      e.toString();
+    }
+
+    return _result;
+  }
+
   @override
   String toString() {
-    return produto.toString() ;
+    return produto.toString();
   }
 }
