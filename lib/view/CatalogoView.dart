@@ -32,6 +32,26 @@ class CatalogoView extends StatefulWidget {
 }
 
 class _CatalogoViewPageState extends State<CatalogoView> {
+  String _searchText = "";
+  List names = new List();
+  List produtos = List();
+  final TextEditingController _filter = new TextEditingController();
+
+  _CatalogoViewPageState() {
+    _filter.addListener(() {
+      if (_filter.text.isEmpty) {
+        setState(() {
+          _searchText = "";
+          produtos = names;
+        });
+      } else {
+        setState(() {
+          _searchText = _filter.text;
+        });
+      }
+    });
+  }
+
   bool _loading = false;
   bool _loadingFilter = false;
   ScrollController _scrollController =
@@ -49,6 +69,10 @@ class _CatalogoViewPageState extends State<CatalogoView> {
   @override
   void initState() {
     super.initState();
+
+    this._getNames();
+
+    /*
     CatalogoView.bContext = context;
     if (CatalogoView._children.length == 0) {
       loadDataQuantidade();
@@ -64,7 +88,7 @@ class _CatalogoViewPageState extends State<CatalogoView> {
         loadData(null, CatalogoView._children.length,
             CatalogoView._children.length + Util.QUANT_LIST_PRODUTOS);
       }
-    });
+    });*/
   }
 
   loadDataQuantidade() async {
@@ -201,7 +225,8 @@ class _CatalogoViewPageState extends State<CatalogoView> {
           backgroundColor: MyColors.secondaryColor,
           floating: true,
           title: TextField(
-            controller: _controllerSearch,
+            controller: _filter,
+            /*
             onChanged: (string) async {
               if (string == "") {
                 setState(() {
@@ -226,19 +251,19 @@ class _CatalogoViewPageState extends State<CatalogoView> {
                 });
               }
             },
-            
+            */
             cursorColor: Colors.white,
             style: TextStyle(color: Colors.white),
-
             decoration: InputDecoration(
-              
               fillColor: Colors.white,
               border: InputBorder.none,
               hintText: 'Buscar produtos...',
               contentPadding: EdgeInsets.only(top: 20),
               hintStyle: TextStyle(color: Colors.white, fontSize: 15),
-
-              suffixIcon: Icon(Icons.search, color: Colors.white,),
+              suffixIcon: Icon(
+                Icons.search,
+                color: Colors.white,
+              ),
               prefixIcon: Image(
                 image: AssetImage('assets/images/logo_serra.png'),
                 width: MediaQuery.of(context).size.width / 4,
@@ -305,8 +330,36 @@ class _CatalogoViewPageState extends State<CatalogoView> {
     return await (Connectivity().checkConnectivity());
   }
 
+  Widget _buidBar(BuildContext buildContext) {
+    return new AppBar(
+      centerTitle: true,
+      title: TextField(
+        controller: _filter,
+        cursorColor: Colors.white,
+        style: TextStyle(color: Colors.white),
+        decoration: InputDecoration(
+          fillColor: Colors.white,
+          border: InputBorder.none,
+          hintText: 'Buscar produtos...',
+          contentPadding: EdgeInsets.only(top: 20),
+          hintStyle: TextStyle(color: Colors.white, fontSize: 15),
+          suffixIcon: Icon(
+            Icons.search,
+            color: Colors.white,
+          ),
+          prefixIcon: Image(
+            image: AssetImage('assets/images/logo_serra.png'),
+            width: MediaQuery.of(context).size.width / 4,
+          ),
+        ),
+      ),
+      backgroundColor: MyColors.secondaryColor,
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
+    /*
     loading = _loading
         ? Container(
             padding:
@@ -360,7 +413,102 @@ class _CatalogoViewPageState extends State<CatalogoView> {
         });
       },
     );
+    */
+    if (_loading) {
+      return Scaffold(
+        body: Container(
+          child: _buildList(),
+        ),
+        appBar: _buidBar(context),
+      );
+    } else {
+      return Container(
+          padding:
+              EdgeInsets.only(top: MediaQuery.of(context).size.height / 2.5),
+          child: Center(
+              child: Column(
+            children: <Widget>[
+              CircularProgressIndicator(),
+              SizedBox(
+                height: 30,
+              ),
+              Text("Carregando Dados...")
+            ],
+          )));
+    }
+  }
 
-    return Scaffold(body: _loading ? loading : _body);
+  Widget _buildList() {
+    NumberFormat formatter = NumberFormat("00.00");
+
+    if (!(_searchText.isEmpty)) {
+      List tempList = new List();
+      for (int i = 0; i < produtos.length; i++) {
+        if (produtos[i]
+            .nome
+            .toLowerCase()
+            .contains(_searchText.toLowerCase())) {
+          tempList.add(produtos[i]);
+        }
+      }
+      produtos = tempList;
+    }
+    return ListView.builder(
+      itemCount: names == null ? 0 : produtos.length,
+      itemBuilder: (BuildContext context, int index) {
+        String valor = formatter.format(produtos[index].valor);
+        String _ingredientes = "";
+        for (Ingrediente ingrediente in produtos[index].ingredientes) {
+          _ingredientes += ingrediente.nome + " | ";
+        }
+        return new Card(
+          shape: RoundedRectangleBorder(
+              side: BorderSide(color: Colors.white, width: 0),
+              borderRadius: BorderRadius.circular(10)),
+          elevation: 5,
+          color: MyColors.secondaryColor,
+          margin: EdgeInsets.all(10),
+          child: Padding(
+            padding: EdgeInsets.all(20),
+            child: ListTile(
+              leading: Image.network(
+                Util.URL_IMAGENS + produtos[index].imagem,
+              ),
+              title: Text(
+                "${produtos[index].nome}",
+                style: TextStyle(color: MyColors.textColor),
+              ),
+              subtitle: Text(
+                _ingredientes,
+                style: TextStyle(color: MyColors.textColor),
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
+              trailing: Text(valor.replaceAll('.', ','),
+                  style: TextStyle(color: MyColors.textColor)),
+              onTap: () {
+                widget._pai
+                    .setTab1(ProdutoView(widget._pai, produtos[index], null));
+              },
+            ),
+          ),
+        );
+      },
+    );
+  }
+
+  void _getNames() async {
+    produtos = _produtos = await Produto.listarProdutos(null, 0, 2);
+    setState(() {
+      names = produtos;
+      names.shuffle();
+      produtos = names;
+    });
+
+    setState(() {
+      _loading = true;
+    });
+
+    Util.produtosCarregados = true;
   }
 }

@@ -36,8 +36,15 @@ class PedidosView extends StatefulWidget {
 
 class _PedidosViewPageState extends State<PedidosView> {
   bool _loading = false;
+  
   _PedidosViewPageState() {
-    loadPedidos();
+    print("bool ${Util.pedidosCarregados}");
+    if(!Util.pedidosCarregados){
+      loadPedidos();
+    }else{
+      _loading = true;
+    }
+    
   }
 
   @override
@@ -130,7 +137,7 @@ class _PedidosViewPageState extends State<PedidosView> {
     }
   }
 
-  Future<bool> loadPedidos() async {
+  void loadPedidos() async {
     Util.pedidos.clear();
     var jsonPedido = await Pedido.buscarPedidosUsuario();
 
@@ -183,5 +190,7 @@ class _PedidosViewPageState extends State<PedidosView> {
     setState(() {
       _loading = true;
     });
+
+    Util.pedidosCarregados = true;
   }
 }

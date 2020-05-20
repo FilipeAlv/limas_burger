@@ -80,6 +80,7 @@ class ProdutoPedido {
           headers: {"Accept": "apllication/json"});
     }
     */
+    print(response.body);
     var _result;
     try {
       _result = jsonDecode(response.body);

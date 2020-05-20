@@ -205,6 +205,7 @@ class EnderecoViewPageState extends State<DadosPedidoView> {
                 return DialogFinalizarPedido(null);
               },
             );
+            Util.pedidosCarregados = false;
           } catch (e) {
             print("Deu erro");
           }

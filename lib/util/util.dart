@@ -20,6 +20,8 @@ class Util {
   static const int QUANT_LIST_PRODUTOS = 10;
   static Carrinho carrinho = Carrinho();
   static List<Pedido> pedidos = List();
+  static bool pedidosCarregados = false;
+  static bool produtosCarregados = false;
   // static List<Endereco> enderecos =[Endereco(1, "Vila Fortuna", "Avenida Nilcea Nunes Machado", "89", "Vizinho do mercado de Antônio"),
   //   Endereco(1, "Vila Fortuna", "Avenida Nilcea Nunes Machado", "89", "Vizinho do mercado de Antônio")
   // ];
