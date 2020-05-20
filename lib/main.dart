@@ -69,15 +69,17 @@ class LimasBurgerTabBar extends State<LimasBurger> {
     }
 
     return MaterialApp(
-      title: "Lima's Burger",
+      title: "Serra China",
       theme: ThemeData(
         primaryColor: Colors.black,
+        brightness: Brightness.light,
       ),
       home: DefaultTabController(
         length: 4,
         child: Theme(
           data: ThemeData(
-            brightness: Brightness.dark
+            brightness: Brightness.light,
+            
           ),
           child: Scaffold(
             bottomNavigationBar: TabBar(
@@ -88,8 +90,8 @@ class LimasBurgerTabBar extends State<LimasBurger> {
                   Tab(icon: Icon(Icons.person), text: "Perfil"),
                 ],
               unselectedLabelColor: Color(0xff999999),
-              labelColor: Colors.white,
-              indicatorColor: Colors.transparent
+              labelColor: MyColors.secondaryColor,
+              indicatorColor: MyColors.secondaryColor
             ),
             body: TabBarView(
               children: [

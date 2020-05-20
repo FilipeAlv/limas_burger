@@ -36,12 +36,12 @@ class EnderecoViewPageState extends State<FormaPagamentoView>{
   Widget build(BuildContext context) {
     
     return Theme(
-      data: ThemeData.dark(),
+      data: ThemeData.light(),
       child: Scaffold(
         appBar: AppBar(
           title: Text("Como deseja pagar?"),
           elevation: 0,
-          backgroundColor: Colors.transparent,
+          backgroundColor: MyColors.secondaryColor,
         ),
 
         body: Container(

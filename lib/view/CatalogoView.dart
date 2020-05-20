@@ -166,6 +166,7 @@ class _CatalogoViewPageState extends State<CatalogoView>{
               _ingredientes+=ingrediente.nome + " | ";}
             String valor = formatter.format(produto.valor);
             ListTile listTile = ListTile(
+               
               leading:Image.network(Util.URL_IMAGENS+produto.imagem,),
               title: Text("${produto.nome}"),
               subtitle: Text(_ingredientes, maxLines: 1, overflow: TextOverflow.ellipsis,),
@@ -195,7 +196,7 @@ class _CatalogoViewPageState extends State<CatalogoView>{
       controller: _scrollController,
         slivers: <Widget>[
           SliverAppBar(
-            backgroundColor: Color.fromRGBO(0, 0, 0, 255),
+            backgroundColor: MyColors.secondaryColor,
             floating: true,
             title:TextField(
               controller: _controllerSearch,
@@ -223,16 +224,16 @@ class _CatalogoViewPageState extends State<CatalogoView>{
                   }
                   
               },
-
+              cursorColor: Colors.redAccent,
               decoration: InputDecoration(
                 border: InputBorder.none,
                 hintText: 'Buscar produtos ...',
                 suffixIcon: Icon(Icons.search),
-                prefixIcon: Container(
-                  margin: EdgeInsets.symmetric(horizontal: 20),
-                  width: MediaQuery.of(context).size.width/7,
-                  child:Image(image:AssetImage('assets/images/logo.png')),
-                ),
+                prefixIcon: Image(image:AssetImage('assets/images/logo_serra.png'), width: MediaQuery.of(context).size.width/4,),
+                
+                  
+                  
+               
               ),
             ),      
           ),

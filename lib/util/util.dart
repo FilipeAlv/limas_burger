@@ -62,5 +62,5 @@ class FormaDePagamento {
 }
 
 class MyColors {
-  static final Color secondaryColor = Colors.tealAccent;
+  static final Color secondaryColor = Color(0xFF920004);
 }

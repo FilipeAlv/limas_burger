@@ -86,15 +86,16 @@ class EnderecoViewPageState extends State<EnderecoView>{
       child: Scaffold(
         appBar: AppBar(
           elevation: 0,
-          backgroundColor: Colors.black87,
+          brightness: Brightness.light,
+          backgroundColor: MyColors.secondaryColor,
           title: Text("Onde deseja receber?"),
         ),
         body:Theme(
           data: ThemeData(
-              brightness: Brightness.dark
+              brightness: Brightness.light
             ),
             child: Util.usuario.enderecos!=null?Container(
-            color: Colors.black87,
+            color: Colors.white70,
             child: Column(
                 children: <Widget>[
                   Expanded(
@@ -115,7 +116,7 @@ class EnderecoViewPageState extends State<EnderecoView>{
                         alignment: Alignment.centerLeft,
                         child:Text("Endereços cadastrados",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.black87,
                             fontWeight: FontWeight.bold
                           ),
                         )
@@ -137,7 +138,7 @@ class EnderecoViewPageState extends State<EnderecoView>{
                                     ListTile(
                                       title: Text("${Util.usuario.nome}",
                                         style: TextStyle(
-                                          color: Colors.white,
+                                          color: Colors.black87,
                                           fontWeight: FontWeight.bold,
                                         ),
                                       ),
@@ -145,7 +146,7 @@ class EnderecoViewPageState extends State<EnderecoView>{
                                         margin: EdgeInsets.only(top:10),
                                         child: Text(
                                           "${Util.usuario.enderecos[index].rua}, ${Util.usuario.enderecos[index].numero} - ${Util.usuario.enderecos[index].bairro} \n\n ${Util.usuario.enderecos[index].referencia} \n\n ${Util.usuario.contato}",
-                                          style: TextStyle(color: Colors.white ),
+                                          style: TextStyle(color: Colors.black87 ),
                                         ),
                                       ),
                                     ),

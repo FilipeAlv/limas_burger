@@ -28,12 +28,12 @@ class EnderecoViewPageState extends State<DadosPedidoView> {
   @override
   Widget build(BuildContext context) {
     return Theme(
-      data: ThemeData.dark(),
+      data: ThemeData.light(),
       child: Scaffold(
         appBar: AppBar(
           title: Text("Dados do Pedido"),
           elevation: 0,
-          backgroundColor: Colors.transparent,
+          backgroundColor: MyColors.secondaryColor,
         ),
         body: Container(
           child: ListView(children: _getWidgets()),

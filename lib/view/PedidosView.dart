@@ -45,7 +45,7 @@ class _PedidosViewPageState extends State<PedidosView> {
     if (_loading) {
       return Scaffold(
           appBar: AppBar(
-            backgroundColor: Color.fromRGBO(0, 0, 0, 255),
+            backgroundColor: MyColors.secondaryColor,
             elevation: 0,
             title: Container(
                 margin: EdgeInsets.only(left: 20),
@@ -53,8 +53,8 @@ class _PedidosViewPageState extends State<PedidosView> {
                   children: <Widget>[
                     Container(
                       margin: EdgeInsets.only(right: 20),
-                      width: MediaQuery.of(context).size.width / 7,
-                      child: Image(image: AssetImage('assets/images/logo.png')),
+                      width: MediaQuery.of(context).size.width / 3,
+                      child: Image(image: AssetImage('assets/images/logo_serra.png')),
                     ),
                     Text("Meus Pedidos")
                   ],
