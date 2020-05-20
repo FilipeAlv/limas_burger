@@ -54,7 +54,7 @@ class _DialogBemVindoState extends State<DialogBemVindo>{
                 },
                   child:Text("Obrigado!",
                     style: TextStyle(
-                      color: MyColors.secondaryColor,
+                      color: MyColors.textColor,
                       fontSize: 20
                     ),
                   ),

@@ -81,7 +81,7 @@ class _DialogLoginState extends State<DialogLogin>{
                 child: FlatButton(
                   child: Text("Entrar",
                     style: TextStyle(
-                      color: Colors.black,
+                      color: MyColors.textColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),

@@ -5,8 +5,9 @@ import 'package:limas_burger/view/CarrinhoView.dart';
 import 'package:limas_burger/view/CatalogoView.dart';
 import 'package:limas_burger/view/PedidosView.dart';
 import 'package:limas_burger/view/PerfilView.dart';
+import 'package:limas_burger/view/Splash.dart';
 
-void main() => runApp(LimasBurger());
+void main() => runApp(Splash());
 
 class LimasBurger extends StatefulWidget {
   @override

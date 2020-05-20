@@ -74,11 +74,17 @@ class EnderecoViewPageState extends State<DadosPedidoView> {
     for (ProdutoPedido produto in widget.pedido.produtos) {
       _produtosChild.add(
         Container(
-          color: Colors.black26,
+          color: MyColors.secondaryColor,
           margin: EdgeInsets.only(bottom: 2),
           child: ListTile(
-            title: Text(produto.produto.nome),
-            trailing: Text(produto.quantidade.toString()),
+            title: Text(
+              produto.produto.nome,
+              style: TextStyle(color: MyColors.textColor),
+            ),
+            trailing: Text(
+              produto.quantidade.toString(),
+              style: TextStyle(color: MyColors.textColor),
+            ),
           ),
         ),
       );
@@ -92,29 +98,37 @@ class EnderecoViewPageState extends State<DadosPedidoView> {
     itemRua = Container(
       padding: EdgeInsets.all(20),
       margin: EdgeInsets.only(bottom: 2),
-      color: Colors.black26,
+      color: MyColors.secondaryColor,
       child: Align(
           alignment: Alignment.centerLeft,
           child: Text(
-              "${widget.pedido.enderecoEntrega.rua}, ${widget.pedido.enderecoEntrega.numero}")),
+            "${widget.pedido.enderecoEntrega.rua}, ${widget.pedido.enderecoEntrega.numero}",
+            style: TextStyle(color: MyColors.textColor),
+          )),
     );
 
     itemBairro = Container(
-      color: Colors.black26,
+      color: MyColors.secondaryColor,
       padding: EdgeInsets.all(20),
       margin: EdgeInsets.only(bottom: 2),
       child: Align(
           alignment: Alignment.centerLeft,
-          child: Text("${widget.pedido.enderecoEntrega.bairro}")),
+          child: Text(
+            "${widget.pedido.enderecoEntrega.bairro}",
+            style: TextStyle(color: MyColors.textColor),
+          )),
     );
 
     itemReferencia = Container(
-      color: Colors.black26,
+      color: MyColors.secondaryColor,
       padding: EdgeInsets.all(20),
       margin: EdgeInsets.only(bottom: 2),
       child: Align(
           alignment: Alignment.centerLeft,
-          child: Text("${widget.pedido.enderecoEntrega.referencia}")),
+          child: Text(
+            "${widget.pedido.enderecoEntrega.referencia}",
+            style: TextStyle(color: MyColors.textColor),
+          )),
     );
 
     labelContato = Container(
@@ -123,12 +137,15 @@ class EnderecoViewPageState extends State<DadosPedidoView> {
     );
 
     itemContato = Container(
-      color: Colors.black26,
+      color: MyColors.secondaryColor,
       padding: EdgeInsets.all(20),
       margin: EdgeInsets.only(bottom: 2),
       child: Align(
           alignment: Alignment.centerLeft,
-          child: Text("${widget.pedido.usuario.contato}")),
+          child: Text(
+            "${widget.pedido.usuario.contato}",
+            style: TextStyle(color: MyColors.textColor),
+          )),
     );
 
     labelFormaPagamento = Container(
@@ -138,12 +155,15 @@ class EnderecoViewPageState extends State<DadosPedidoView> {
     );
 
     itemFormaPagameto = Container(
-      color: Colors.black26,
+      color: MyColors.secondaryColor,
       padding: EdgeInsets.all(20),
       margin: EdgeInsets.only(bottom: 2),
       child: Align(
           alignment: Alignment.centerLeft,
-          child: Text("${widget.pedido.formaDePagamento}")),
+          child: Text(
+            "${widget.pedido.formaDePagamento}",
+            style: TextStyle(color: MyColors.textColor),
+          )),
     );
 
     itemFormaPagameto = selectedRadio == 1
@@ -209,7 +229,17 @@ class EnderecoViewPageState extends State<DadosPedidoView> {
 
     _childrens.add(divider);
     _childrens.add(labelFormaPagamento);
-    _childrens.add(itemFormaPagameto);
+    _childrens.add(Container(
+      color: MyColors.secondaryColor,
+      padding: EdgeInsets.all(20),
+      margin: EdgeInsets.only(bottom: 2),
+      child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "${widget.pedido.formaDePagamento}",
+            style: TextStyle(color: MyColors.textColor),
+          )),
+    ));
 
     _childrens.add(btnConfirmar);
 

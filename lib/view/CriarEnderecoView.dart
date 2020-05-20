@@ -44,17 +44,18 @@ class CriarEnderecoViewPageState extends State<CriarEnderecoView>{
     cxt = context;
     return Scaffold(
       body: Theme(
-        data: ThemeData.dark(),
+        data: ThemeData.light(),
         child: SingleChildScrollView(
           child: Column(children :<Widget>[
             AppBar(
               elevation: 0,
+              backgroundColor: MyColors.secondaryColor ,
               title: Text(widget._endereco==null?"Novo Endereço":"Editar Endereço"),
             ),
             
             Container(
                 padding: EdgeInsets.all(20),
-                color: Colors.black87,
+                color: MyColors.textColor,
                 child: Column(
                   children: <Widget>[
                     Form(
@@ -103,9 +104,9 @@ class CriarEnderecoViewPageState extends State<CriarEnderecoView>{
 
                           Padding(
                             padding: EdgeInsets.symmetric(vertical: 15),
-                            child: Text("Informações para que seja mais fácil de encontrar a seu endereço de entrega",
+                            child: Text("Informações para que seja mais fácil de encontrar o seu endereço de entrega",
                               style: TextStyle(
-                                color: Colors.white,
+                                color: MyColors.secondaryColor,
                               ),
                             ),
                           ),
@@ -136,7 +137,7 @@ class CriarEnderecoViewPageState extends State<CriarEnderecoView>{
                             child: FlatButton(
                               child: Text(widget._endereco==null?"Salvar":"Editar",
                                 style: TextStyle(
-                                  color: Colors.black,
+                                  color: MyColors.textColor,
                                   fontSize: 18,
                                 ),
                               ),

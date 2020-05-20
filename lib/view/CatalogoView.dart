@@ -13,7 +13,7 @@ import 'package:limas_burger/view/dialogs/Connection.dart';
 import 'package:limas_burger/view/dialogs/DialogErrorServer.dart';
 import 'package:http/http.dart' as http;
 
-class CatalogoView extends StatefulWidget{
+class CatalogoView extends StatefulWidget {
   LimasBurgerTabBar _pai;
   static CatalogoView _catalogo;
   static List<ListTile> _children = <ListTile>[];
@@ -22,21 +22,20 @@ class CatalogoView extends StatefulWidget{
   static BuildContext bContext;
   CatalogoView(this._pai);
 
-  static getInstance(_pai){
-    if(_catalogo==null)
-      _catalogo = CatalogoView(_pai);
+  static getInstance(_pai) {
+    if (_catalogo == null) _catalogo = CatalogoView(_pai);
     return _catalogo;
   }
-  
+
   @override
   State<StatefulWidget> createState() => _CatalogoViewPageState();
-} 
+}
 
-class _CatalogoViewPageState extends State<CatalogoView>{
-
+class _CatalogoViewPageState extends State<CatalogoView> {
   bool _loading = false;
   bool _loadingFilter = false;
-  ScrollController _scrollController = ScrollController(initialScrollOffset: CatalogoView.scroll_position);
+  ScrollController _scrollController =
+      ScrollController(initialScrollOffset: CatalogoView.scroll_position);
   Widget loading;
   List<ListTile> filtredChildren = [];
   List<ListTile> filtredChildrenAux = [];
@@ -51,36 +50,36 @@ class _CatalogoViewPageState extends State<CatalogoView>{
   void initState() {
     super.initState();
     CatalogoView.bContext = context;
-    if(CatalogoView._children.length==0){
+    if (CatalogoView._children.length == 0) {
       loadDataQuantidade();
       CatalogoView._children = <ListTile>[];
       loadData(null, 0, Util.QUANT_LIST_PRODUTOS);
     }
-    
-    _scrollController.addListener(()async{
-      CatalogoView.scroll_position=_scrollController.position.pixels;
-      if(_scrollController.position.pixels==_scrollController.position.maxScrollExtent
-        && CatalogoView._children.length<CatalogoView._quantidade){ 
-        loadData(null, CatalogoView._children.length, CatalogoView._children.length+Util.QUANT_LIST_PRODUTOS);
+
+    _scrollController.addListener(() async {
+      CatalogoView.scroll_position = _scrollController.position.pixels;
+      if (_scrollController.position.pixels ==
+              _scrollController.position.maxScrollExtent &&
+          CatalogoView._children.length < CatalogoView._quantidade) {
+        loadData(null, CatalogoView._children.length,
+            CatalogoView._children.length + Util.QUANT_LIST_PRODUTOS);
       }
     });
   }
 
- 
-
-  loadDataQuantidade() async{
+  loadDataQuantidade() async {
     List result = await getDataQuantidade();
-    if(result!=null)
-      result.forEach((item){
+    if (result != null)
+      result.forEach((item) {
         CatalogoView._quantidade = int.parse(item["quantidade"].toString());
       });
   }
 
-  Future<int> loadDataQuantidadeFilter(string, ignore) async{
+  Future<int> loadDataQuantidadeFilter(string, ignore) async {
     int qt;
     List result = await getDataQuantidadeFilter(string, ignore);
 
-    result.forEach((item){
+    result.forEach((item) {
       qt = int.parse(item["quantidade"].toString());
     });
     return qt;
@@ -88,271 +87,280 @@ class _CatalogoViewPageState extends State<CatalogoView>{
 
   Future<List> getDataQuantidade() async {
     var response;
-    try{
-      response  = await http.get(
-        Uri.encodeFull(Util.URL+"produtos/cont"),
-        headers: {
-          "Accept":"apllication/json"
-        }
-      );
-      return  jsonDecode(response.body);
-    }catch(e){
-      showDialog(context: context,
-        builder: (BuildContext context){
-          return DialogErrorServer(true);
-        }
-      );
+    try {
+      response = await http.get(Uri.encodeFull(Util.URL + "produtos/cont"),
+          headers: {"Accept": "apllication/json"});
+      return jsonDecode(response.body);
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return DialogErrorServer(true);
+          });
       return null;
     }
   }
 
   Future<List> getDataQuantidadeFilter(string, ignore) async {
     var response;
-    try{
+    try {
       response = await http.get(
-        Uri.encodeFull(Util.URL+"produtos/cont/"+string+"-"+ignore.toString()),
-        headers: {
-          "Accept":"apllication/json"
-        }
-      
-      );
-      return  jsonDecode(response.body);
-    }catch(e){
-      showDialog(context: context,
-        builder: (BuildContext context){
-          return DialogErrorServer(false);
-        }
-      );
+          Uri.encodeFull(
+              Util.URL + "produtos/cont/" + string + "-" + ignore.toString()),
+          headers: {"Accept": "apllication/json"});
+      return jsonDecode(response.body);
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return DialogErrorServer(false);
+          });
       return null;
     }
   }
 
-  loadData(string, init, fim)async{     
-    if(string==null){
+  loadData(string, init, fim) async {
+    if (string == null) {
       _loading = true;
       _produtos = await Produto.listarProdutos(string, init, fim);
-      if(_produtos!=null){_produtos.sort((a, b)=>a.id.compareTo(b.id));}
-    }else{
+      if (_produtos != null) {
+        _produtos.sort((a, b) => a.id.compareTo(b.id));
+      }
+    } else {
       setState(() {
-         _loadingFilter = true; 
+        _loadingFilter = true;
       });
       _produtosAux = [];
       _produtosAux = await Produto.listarProdutos(string, init, fim);
     }
 
     _toListTile(string);
-    
+
     _loading = false;
     _loadingFilter = false;
 
-    if(CatalogoView._children.length<Util.QUANT_LIST_PRODUTOS && CatalogoView._children.length>0 && quantidadeChamadas<4){
+    if (CatalogoView._children.length < Util.QUANT_LIST_PRODUTOS &&
+        CatalogoView._children.length > 0 &&
+        quantidadeChamadas < 4) {
       loadData(null, CatalogoView._children.length, Util.QUANT_LIST_PRODUTOS);
       quantidadeChamadas++;
-    }else{
-      quantidadeChamadas=0;
+    } else {
+      quantidadeChamadas = 0;
     }
-      
+
     return true;
   }
 
-  _toListTile(string){
-    try{
+  _toListTile(string) {
+    try {
       setState(() {
         NumberFormat formatter = NumberFormat("00.00");
-        if(_quantidadefilter!=0 || string==null){
-          for(Produto produto in string==null?_produtos:_produtosAux){
+        if (_quantidadefilter != 0 || string == null) {
+          for (Produto produto in string == null ? _produtos : _produtosAux) {
             String _ingredientes = "";
             for (Ingrediente ingrediente in produto.ingredientes) {
-              _ingredientes+=ingrediente.nome + " | ";}
+              _ingredientes += ingrediente.nome + " | ";
+            }
             String valor = formatter.format(produto.valor);
             ListTile listTile = ListTile(
-               
-              leading:Image.network(Util.URL_IMAGENS+produto.imagem,),
+              leading: Image.network(
+                Util.URL_IMAGENS + produto.imagem,
+              ),
               title: Text("${produto.nome}"),
-              subtitle: Text(_ingredientes, maxLines: 1, overflow: TextOverflow.ellipsis,),
+              subtitle: Text(
+                _ingredientes,
+                maxLines: 1,
+                overflow: TextOverflow.ellipsis,
+              ),
               trailing: Text(valor.replaceAll('.', ',')),
-              onTap: (){
-                  widget._pai.setTab1(ProdutoView(widget._pai, produto, null));
+              onTap: () {
+                widget._pai.setTab1(ProdutoView(widget._pai, produto, null));
               },
             );
-            
-            List b = CatalogoView._children.where((f)=>
-              (f.title as Text).data == produto.nome
-            ).toList();
 
-            if(b.length==0 || string == null)
+            List b = CatalogoView._children
+                .where((f) => (f.title as Text).data == produto.nome)
+                .toList();
+
+            if (b.length == 0 || string == null)
               CatalogoView._children.add(listTile);
           }
         }
       });
-    }catch(e){
+    } catch (e) {
       CatalogoView.scroll_position = 0;
-      CatalogoView._children=[];
+      CatalogoView._children = [];
     }
   }
 
-  Widget _getListViewWidget(){
+  Widget _getListViewWidget() {
     var list = CustomScrollView(
       controller: _scrollController,
-        slivers: <Widget>[
-          SliverAppBar(
-            backgroundColor: MyColors.secondaryColor,
-            floating: true,
-            title:TextField(
-              controller: _controllerSearch,
-              onChanged: (string)async{
-                if(string==""){
-                  setState(() {
-                    filtredChildren = [];
-                    filtredChildrenAux=[];
-                  });
-                }else {
-                  if(filtredChildrenAux.length==0)
-                    id = _produtos[_produtos.length-1].id;
-                    
-                    _quantidadefilter = await loadDataQuantidadeFilter(string, id);
+      slivers: <Widget>[
+        SliverAppBar(
+          backgroundColor: MyColors.secondaryColor,
+          floating: true,
+          title: TextField(
+            controller: _controllerSearch,
+            onChanged: (string) async {
+              if (string == "") {
+                setState(() {
+                  filtredChildren = [];
+                  filtredChildrenAux = [];
+                });
+              } else {
+                if (filtredChildrenAux.length == 0)
+                  id = _produtos[_produtos.length - 1].id;
 
-                    
-                    await loadData(string,  id , _quantidadefilter);
+                _quantidadefilter = await loadDataQuantidadeFilter(string, id);
 
-                    setState(() {
-                      filtredChildren = CatalogoView._children.where((c)=>
-                        (c.title as Text).data.toLowerCase().contains(string.toLowerCase())
-                      ).toList();
-                    });              
-                      
-                  }
-                  
-              },
-              cursorColor: Colors.redAccent,
-              decoration: InputDecoration(
-                border: InputBorder.none,
-                hintText: 'Buscar produtos ...',
-                suffixIcon: Icon(Icons.search),
-                prefixIcon: Image(image:AssetImage('assets/images/logo_serra.png'), width: MediaQuery.of(context).size.width/4,),
-                
-                  
-                  
-               
+                await loadData(string, id, _quantidadefilter);
+
+                setState(() {
+                  filtredChildren = CatalogoView._children
+                      .where((c) => (c.title as Text)
+                          .data
+                          .toLowerCase()
+                          .contains(string.toLowerCase()))
+                      .toList();
+                });
+              }
+            },
+            
+            cursorColor: Colors.white,
+            style: TextStyle(color: Colors.white),
+
+            decoration: InputDecoration(
+              
+              fillColor: Colors.white,
+              border: InputBorder.none,
+              hintText: 'Buscar produtos...',
+              contentPadding: EdgeInsets.only(top: 20),
+              hintStyle: TextStyle(color: Colors.white, fontSize: 15),
+
+              suffixIcon: Icon(Icons.search, color: Colors.white,),
+              prefixIcon: Image(
+                image: AssetImage('assets/images/logo_serra.png'),
+                width: MediaQuery.of(context).size.width / 4,
               ),
-            ),      
-          ),
-
-          SliverList(
-            delegate: SliverChildBuilderDelegate(
-              (context, index){
-                if(filtredChildren.length==0  && _controllerSearch.text==""){
-                  if(index==CatalogoView._children.length){
-                    if(CatalogoView._children.length==CatalogoView._quantidade)
-                      return Divider(height: 0,);
-                    return Container(height: 1, child:LinearProgressIndicator());
-                  }
-                }else{
-                  if(index==0){
-                    if(_loadingFilter)
-                      return Container(height: 1, child:LinearProgressIndicator());
-                    return Divider(height: 0,);
-                  }
-                }
-                return Container(
-                  color: Colors.black26,
-                  margin: EdgeInsets.symmetric(vertical: 1),
-                  child: (_controllerSearch.text == "") ?CatalogoView._children[index]:filtredChildren[index-1],
-                );
-              },
-              childCount: (_controllerSearch.text == "") ?CatalogoView._children.length+1:filtredChildren.length+1,
             ),
           ),
-        ],
-      );
-    
-     new ListView.builder(
+        ),
+        SliverList(
+          delegate: SliverChildBuilderDelegate(
+            (context, index) {
+              if (filtredChildren.length == 0 && _controllerSearch.text == "") {
+                if (index == CatalogoView._children.length) {
+                  if (CatalogoView._children.length == CatalogoView._quantidade)
+                    return Divider(
+                      height: 0,
+                    );
+                  return Container(height: 1, child: LinearProgressIndicator());
+                }
+              } else {
+                if (index == 0) {
+                  if (_loadingFilter)
+                    return Container(
+                        height: 1, child: LinearProgressIndicator());
+                  return Divider(
+                    height: 0,
+                  );
+                }
+              }
+              return Container(
+                color: Colors.black26,
+                margin: EdgeInsets.symmetric(vertical: 1),
+                child: (_controllerSearch.text == "")
+                    ? CatalogoView._children[index]
+                    : filtredChildren[index - 1],
+              );
+            },
+            childCount: (_controllerSearch.text == "")
+                ? CatalogoView._children.length + 1
+                : filtredChildren.length + 1,
+          ),
+        ),
+      ],
+    );
+
+    new ListView.builder(
         controller: _scrollController,
-        itemCount: CatalogoView._children.length+1,
+        itemCount: CatalogoView._children.length + 1,
         padding: new EdgeInsets.only(top: 5.0),
-        itemBuilder: (context, index){
-          if(index==CatalogoView._children.length){
-            if(CatalogoView._children.length==CatalogoView._quantidade)
-              return Divider(height: 0,);
+        itemBuilder: (context, index) {
+          if (index == CatalogoView._children.length) {
+            if (CatalogoView._children.length == CatalogoView._quantidade)
+              return Divider(
+                height: 0,
+              );
             return CupertinoActivityIndicator();
           }
           return CatalogoView._children[index];
-        }
-    );
- 
+        });
+
     return list;
   }
 
-  getConnection()async{
+  getConnection() async {
     return await (Connectivity().checkConnectivity());
   }
 
   @override
   Widget build(BuildContext context) {
-
-    loading = _loading ? 
-    Container(
-      padding: EdgeInsets.only(top:MediaQuery.of(context).size.height/2.5),
-      child:Center(
-        child: Column(
-          children: <Widget>[
-            CircularProgressIndicator(),
-            SizedBox(height: 30,),
-            Text("Carregando Dados...")
-          ],
-        )
-      )
-    ) : null;
-    
-    var _content = CatalogoView._children.length!=0 ? _getListViewWidget() :
-      ListView.builder(
-        itemCount: 1,
-        padding: new EdgeInsets.only(top: 5.0),
-        itemBuilder: (context, index){
-          return  Container(
-            height: MediaQuery.of(context).size.height * 1/1.2 ,
+    loading = _loading
+        ? Container(
+            padding:
+                EdgeInsets.only(top: MediaQuery.of(context).size.height / 2.5),
             child: Center(
-              child: Text("Nenhum Produto Cadastrado", 
-                style: TextStyle(
-                  color: Colors.grey, 
-                  fontSize: 20 ,
-                )
-              )
-            )
-          );
-        }
-        
-    );
+                child: Column(
+              children: <Widget>[
+                CircularProgressIndicator(),
+                SizedBox(
+                  height: 30,
+                ),
+                Text("Carregando Dados...")
+              ],
+            )))
+        : null;
 
-    if(getConnection() == ConnectivityResult.none) {
+    var _content = CatalogoView._children.length != 0
+        ? _getListViewWidget()
+        : ListView.builder(
+            itemCount: 1,
+            padding: new EdgeInsets.only(top: 5.0),
+            itemBuilder: (context, index) {
+              return Container(
+                  height: MediaQuery.of(context).size.height * 1 / 1.2,
+                  child: Center(
+                      child: Text("Nenhum Produto Cadastrado",
+                          style: TextStyle(
+                            color: Colors.grey,
+                            fontSize: 20,
+                          ))));
+            });
+
+    if (getConnection() == ConnectivityResult.none) {
       _content = ListView.builder(
-        itemCount: 1,
-        padding: new EdgeInsets.only(top: 5.0),
-        itemBuilder: (context, index){
-          return  Container(
-            height: MediaQuery.of(context).size.height * 1/1.2 ,
-            child: Center(
-              child: Connection()
-            )
-          );
-        }
-      );  
+          itemCount: 1,
+          padding: new EdgeInsets.only(top: 5.0),
+          itemBuilder: (context, index) {
+            return Container(
+                height: MediaQuery.of(context).size.height * 1 / 1.2,
+                child: Center(child: Connection()));
+          });
     }
 
     var _body = RefreshIndicator(
       child: _content,
-      onRefresh: ()async{
+      onRefresh: () async {
         CatalogoView._children = <ListTile>[];
         setState(() {
-          CatalogoView.scroll_position=0;
-          loadData(null,0,Util.QUANT_LIST_PRODUTOS);
+          CatalogoView.scroll_position = 0;
+          loadData(null, 0, Util.QUANT_LIST_PRODUTOS);
         });
       },
     );
 
-    
-    return Scaffold(
-      body: _loading?loading:_body
-    );
+    return Scaffold(body: _loading ? loading : _body);
   }
 }

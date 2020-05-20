@@ -55,7 +55,7 @@ class _DialogEditState extends State<DialogEdit>{
                 child: FlatButton(
                   child: Text("Salvar",
                     style: TextStyle(
-                      color: Colors.black,
+                      color: MyColors.secondaryColor,
                       fontWeight: FontWeight.bold,
                       fontSize: 18,
                     ),

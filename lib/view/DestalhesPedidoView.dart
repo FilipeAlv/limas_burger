@@ -59,12 +59,12 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                   child: Row(
                     children: <Widget>[
                       Container(
-                        margin: EdgeInsets.only(right: 20),
+                        margin: EdgeInsets.only(right: 10),
                         width: MediaQuery.of(context).size.width / 3,
                         child:
                             Image(image: AssetImage('assets/images/logo_serra.png')),
                       ),
-                      Text("Detalhamento do pedido")
+                      Text("Detalhamento do pedido", style: TextStyle(fontSize: 16),)
                     ],
                   )),
             ),

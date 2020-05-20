@@ -39,16 +39,14 @@ class DialogFinalizarPedidoState extends State<DialogFinalizarPedido>{
             child: FlatButton(
               child: Text("Fechar",
                 style: TextStyle(
-                  color: Colors.black,
+                  color: MyColors.textColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
               ),
               onPressed: (){
                 Navigator.pop(context);
-                Navigator.pop(context);
-                Navigator.pop(context);
-                Navigator.pop(context);
+               
                // Navigator.push(context, MaterialPageRoute(builder: (context)=>PedidosViewwidget.produto, widget.produtos)));
               },)
           ),

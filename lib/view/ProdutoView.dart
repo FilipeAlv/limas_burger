@@ -184,7 +184,7 @@ class ProdutoViewPageState extends State<ProdutoView>{
                   child: FlatButton(
                     child: Text(widget.produtoPedido!=null?"Salvar Alterações":"Comprar",
                       style: TextStyle(
-                        color: Colors.black,
+                        color: MyColors.textColor,
                         fontWeight: FontWeight.bold,
                         fontSize: 18,
                       ),

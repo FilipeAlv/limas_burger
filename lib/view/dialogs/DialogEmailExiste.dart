@@ -57,7 +57,7 @@ class _DialogEmailExisteState extends State<DialogEmailExiste>{
                 child:Text("Tentar outro Email",    
                   textAlign: TextAlign.center,        
                   style: TextStyle(
-                      color: MyColors.secondaryColor
+                      color: MyColors.textColor
                     ),
                 ),
               ),

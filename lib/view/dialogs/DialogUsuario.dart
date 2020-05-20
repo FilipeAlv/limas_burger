@@ -39,7 +39,7 @@ class _DialogUsuarioState extends State<DialogUsuario>{
             child: FlatButton(
               child: Text("Criar conta",
                 style: TextStyle(
-                  color: Colors.black,
+                  color: MyColors.textColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),

@@ -63,4 +63,5 @@ class FormaDePagamento {
 
 class MyColors {
   static final Color secondaryColor = Color(0xFF920004);
+  static final Color textColor = Colors.white;
 }

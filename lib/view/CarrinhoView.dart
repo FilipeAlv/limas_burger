@@ -64,6 +64,7 @@ class _CarrinhoViewPageState extends State<CarrinhoView>{
       ):
       Column(
         children: <Widget>[
+          SizedBox(height: 10,),
           Expanded(
             flex: 6,
             child: ListView.builder(
@@ -76,7 +77,7 @@ class _CarrinhoViewPageState extends State<CarrinhoView>{
                 String valor = formatter.format(Util.carrinho.produtos[index].produto.valor);
                 return Container(
                   margin: EdgeInsets.only(bottom:2),
-                  color: Colors.black26,
+                  color: MyColors.secondaryColor,
                   child: ListTile(
                     leading:Image.network(Util.URL_IMAGENS+Util.carrinho.produtos[index].produto.imagem),
                     title: Text("${Util.carrinho.produtos[index].produto.nome}"),
