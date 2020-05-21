@@ -157,6 +157,8 @@ class _PerfilViewPageState extends State<PerfilView> {
                   : Offstage(),
             ),
           ],
-        ));
+        ),
+        
+        );
   }
 }

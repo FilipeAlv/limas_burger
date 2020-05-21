@@ -9,8 +9,8 @@ import 'package:limas_burger/view/Splash.dart';
 import 'package:limas_burger/view/dialogs/DialogLogin.dart';
 
 class DialogFinalizarPedido extends StatefulWidget{
-  PedidosView pedidosView;
-  DialogFinalizarPedido(this.pedidosView);
+  bool maisDeUm;
+  DialogFinalizarPedido(this.maisDeUm);
   @override
   DialogFinalizarPedidoState createState() => DialogFinalizarPedidoState();
 
@@ -47,7 +47,14 @@ class DialogFinalizarPedidoState extends State<DialogFinalizarPedido>{
                 ),
               ),
               onPressed: (){
-                Navigator.pop(context);
+                if(widget.maisDeUm){
+                  Navigator.of(context).pop();
+                  Navigator.of(context).pop();
+                  
+                }else{
+                  Navigator.pop(context);
+                   Navigator.pop(context);
+                }
                 //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LimasBurger.getInstance()));
                
               },)

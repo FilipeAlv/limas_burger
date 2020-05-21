@@ -38,6 +38,7 @@ class _CatalogoViewPageState extends State<CatalogoView> {
   final TextEditingController _filter = new TextEditingController();
 
   _CatalogoViewPageState() {
+    this._getNames();
     _filter.addListener(() {
       if (_filter.text.isEmpty) {
         setState(() {
@@ -70,7 +71,7 @@ class _CatalogoViewPageState extends State<CatalogoView> {
   void initState() {
     super.initState();
 
-    this._getNames();
+    
 
     /*
     CatalogoView.bContext = context;

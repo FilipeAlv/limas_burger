@@ -6,24 +6,25 @@ import 'package:limas_burger/model/pedido.dart';
 import 'package:limas_burger/model/usuario.dart';
 
 class Util {
-  /*
+  
   static const String URL =
       "http://ec2-18-229-29-129.sa-east-1.compute.amazonaws.com:8000/";
   static const String URL_IMAGENS =
       "http://ec2-18-229-29-129.sa-east-1.compute.amazonaws.com:8000/media/";
-*/
+  /*
   static const String URL =
       "http://192.168.2.108:8000/";
   static const String URL_IMAGENS =
       "http://192.168.2.108:8000/media/";
-
+  */
   static final formatDate = DateFormat('dd/MM/yyyy hh:mm');
   static const int QUANT_LIST_PRODUTOS = 10;
   static Carrinho carrinho = Carrinho();
   static List<Pedido> pedidos = List();
   static bool pedidosCarregados = false;
   static bool produtosCarregados = false;
-  
+   static List produtos = List();
+   
   static Usuario usuario;
 
   static DateTime converterStringEmDateTime(String dateString) {

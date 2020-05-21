@@ -199,10 +199,16 @@ class EnderecoViewPageState extends State<DadosPedidoView> {
             for (ProdutoPedido produtoPedido in widget.pedido.produtos) {
               produtoPedido.save();
             }
+            bool _maisDeUm = false;
+
+            if(widget.pedido.produtos.length > 1){
+              _maisDeUm = true;
+            } 
+            print("dp $_maisDeUm");
             showDialog(
               context: context,
               builder: (BuildContext context) {
-                return DialogFinalizarPedido(null);
+                return DialogFinalizarPedido(_maisDeUm);
               },
             );
             Util.pedidosCarregados = false;
