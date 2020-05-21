@@ -265,7 +265,7 @@ class _CatalogoViewPageState extends State<CatalogoView> {
                 color: Colors.white,
               ),
               prefixIcon: Image(
-                image: AssetImage('assets/images/logo_serra.png'),
+                image: AssetImage('assets/images/logo_210-90.png'),
                 width: MediaQuery.of(context).size.width / 4,
               ),
             ),
@@ -347,9 +347,13 @@ class _CatalogoViewPageState extends State<CatalogoView> {
             Icons.search,
             color: Colors.white,
           ),
-          prefixIcon: Image(
-            image: AssetImage('assets/images/logo_serra.png'),
-            width: MediaQuery.of(context).size.width / 4,
+          prefixIcon: Container(
+            width: MediaQuery.of(context).size.width/5,
+            margin: EdgeInsets.only(right: 10),
+            child: Image(
+              image: AssetImage('assets/images/logo_210-90.png'),
+              width: MediaQuery.of(context).size.width / 4,
+            )
           ),
         ),
       ),
@@ -458,39 +462,107 @@ class _CatalogoViewPageState extends State<CatalogoView> {
       itemBuilder: (BuildContext context, int index) {
         String valor = formatter.format(produtos[index].valor);
         String _ingredientes = "";
-        for (Ingrediente ingrediente in produtos[index].ingredientes) {
-          _ingredientes += ingrediente.nome + " | ";
+        for (int i = 0; i < produtos[index].ingredientes.length; i++) {
+           _ingredientes += produtos[index].ingredientes[i].nome;
+           if(i+1 != produtos[index].ingredientes.length)
+            _ingredientes += ", ";
+          else
+            _ingredientes += ".";
         }
         return new Card(
           shape: RoundedRectangleBorder(
               side: BorderSide(color: Colors.white, width: 0),
               borderRadius: BorderRadius.circular(10)),
           elevation: 5,
-          color: MyColors.secondaryColor,
+          color: MyColors.cardColor,
           margin: EdgeInsets.all(10),
           child: Padding(
-            padding: EdgeInsets.all(20),
-            child: ListTile(
-              leading: Image.network(
-                Util.URL_IMAGENS + produtos[index].imagem,
+            padding: EdgeInsets.all(5),
+            child: InkWell(
+              child:  Row(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Expanded(
+                    child:Image.network(
+                      Util.URL_IMAGENS + produtos[index].imagem,
+                      height: 100,
+                    ),
+                  ),
+
+                  Expanded(
+                    child: Container(
+                      height: 100,
+                      child: Column(
+                        mainAxisSize: MainAxisSize.max,
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: <Widget>[
+                          Container(
+                            margin: EdgeInsets.all(5),
+                            child:Text("${produtos[index].nome}",
+                              style: TextStyle(
+                                color: MyColors.textColor,
+                                fontWeight: FontWeight.bold,
+                                fontSize: 18
+                              ),
+                            ),
+                          ),
+                          
+                          Container(
+                            margin: EdgeInsets.symmetric(horizontal: 5),
+                            child:Text(
+                              _ingredientes,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: TextStyle(
+                                color: MyColors.textColor
+                              ),
+                            ),
+                          ),
+
+                          Container(
+                            alignment: Alignment.bottomRight,
+                            margin: EdgeInsets.only(right: 10, top:10),
+                            child:Text(valor.replaceAll('.', ','),
+                              style: TextStyle(
+                                fontSize: 18,
+                                color: MyColors.textColor
+                              ),
+                            ),
+                          ),
+                          
+                        ],
+                      ),
+                    ),
+                  )
+                ],
               ),
-              title: Text(
-                "${produtos[index].nome}",
-                style: TextStyle(color: MyColors.textColor),
-              ),
-              subtitle: Text(
-                _ingredientes,
-                style: TextStyle(color: MyColors.textColor),
-                maxLines: 1,
-                overflow: TextOverflow.ellipsis,
-              ),
-              trailing: Text(valor.replaceAll('.', ','),
-                  style: TextStyle(color: MyColors.textColor)),
               onTap: () {
                 widget._pai
                     .setTab1(ProdutoView(widget._pai, produtos[index], null));
               },
             ),
+            // child: ListTile(
+            //   leading: Image.network(
+            //     Util.URL_IMAGENS + produtos[index].imagem,
+            //   ),
+            //   title: Text(
+            //     "${produtos[index].nome}",
+            //     //style: TextStyle(color: MyColors.textColor),
+            //   ),
+            //   subtitle: Text(
+            //     _ingredientes,
+            //    // style: TextStyle(color: MyColors.textColor),
+            //     maxLines: 1,
+            //     overflow: TextOverflow.ellipsis,
+            //   ),
+            //   trailing: Text(valor.replaceAll('.', ','),
+            //       //style: TextStyle(color: MyColors.textColor)
+            //   ),
+            //   onTap: () {
+            //     widget._pai
+            //         .setTab1(ProdutoView(widget._pai, produtos[index], null));
+            //   },
+            // ),
           ),
         );
       },

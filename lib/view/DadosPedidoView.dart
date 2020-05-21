@@ -206,6 +206,7 @@ class EnderecoViewPageState extends State<DadosPedidoView> {
               },
             );
             Util.pedidosCarregados = false;
+            Util.carrinho.produtos = [];
           } catch (e) {
             print("Deu erro");
           }

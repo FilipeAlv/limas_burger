@@ -35,9 +35,9 @@ class _PerfilViewPageState extends State<PerfilView> {
                 children: <Widget>[
                   Container(
                     margin: EdgeInsets.only(right: 20),
-                    width: MediaQuery.of(context).size.width / 3,
+                    width: MediaQuery.of(context).size.width / 5,
                     child: Image(
-                        image: AssetImage('assets/images/logo_serra.png')),
+                        image: AssetImage('assets/images/logo_210-90.png')),
                   ),
                   Text("Perfil")
                 ],

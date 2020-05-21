@@ -60,9 +60,9 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                     children: <Widget>[
                       Container(
                         margin: EdgeInsets.only(right: 10),
-                        width: MediaQuery.of(context).size.width / 3,
+                        width: MediaQuery.of(context).size.width / 5,
                         child:
-                            Image(image: AssetImage('assets/images/logo_serra.png')),
+                            Image(image: AssetImage('assets/images/logo_210-90.png')),
                       ),
                       Text("Detalhamento do pedido", style: TextStyle(fontSize: 16),)
                     ],
@@ -74,7 +74,7 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                   children: <Widget>[
                     Row(
                       children: <Widget>[
-                        Padding(
+                        Container(
                           padding:
                               EdgeInsets.only(left: 10, top: 20, bottom: 20),
                           child: Text(

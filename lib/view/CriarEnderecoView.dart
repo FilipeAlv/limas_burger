@@ -220,7 +220,8 @@ String _validarReferencia(String value){
                       Navigator.of(_key2.currentContext,rootNavigator: true).pop();
                       widget._pai.atualizar();
                       Navigator.pop(context);
-                      Navigator.pop(context);
+                      if(widget._endereco==null)
+                        Navigator.pop(context);
                     },
                   )
                 ],

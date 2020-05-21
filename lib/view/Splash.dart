@@ -35,16 +35,16 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   Widget build(BuildContext context) {
     return SplashScreen(
-        seconds: 5,
-        navigateAfterSeconds: AfterSplash(),
-        title: Text(
-          'Bem vindo',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0, color: Colors.white),
-        ),
-        image: Image.asset('assets/images/logo_serra.png'),
-        photoSize: 200.0,
-        backgroundColor: MyColors.secondaryColor,
-        loaderColor: Colors.white);
+      seconds: 5,
+      navigateAfterSeconds: AfterSplash(),
+      title: Text(
+        'Bem vindo',
+        style: TextStyle(fontWeight: FontWeight.bold, fontSize: 30.0, color: MyColors.secondaryColor),
+      ),
+      image: Image.asset('assets/images/logo_400-400-red.png'),
+      photoSize: 150.0,
+      loaderColor: MyColors.secondaryColor,
+    );
   }
 }
 
@@ -53,6 +53,6 @@ class AfterSplash extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return new LimasBurger();
+    return LimasBurger.getInstance();
   }
 }

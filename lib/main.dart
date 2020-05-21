@@ -10,6 +10,16 @@ import 'package:limas_burger/view/Splash.dart';
 void main() => runApp(Splash());
 
 class LimasBurger extends StatefulWidget {
+  static LimasBurger _limasBurger;
+
+
+  
+  static getInstance(){
+    if(_limasBurger == null)
+       _limasBurger = LimasBurger();
+    return _limasBurger;
+  }
+
   @override
   State<StatefulWidget> createState() => LimasBurgerTabBar();
 
