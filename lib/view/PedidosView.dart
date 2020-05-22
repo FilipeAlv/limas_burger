@@ -21,13 +21,13 @@ import 'package:http/http.dart' as http;
 
 class PedidosView extends StatefulWidget {
   LimasBurgerTabBar _pai;
-  static PedidosView _catalogo;
+  static PedidosView _pedidosView;
 
   PedidosView(this._pai);
 
   static getInstance(_pai) {
-    if (_catalogo == null) _catalogo = PedidosView(_pai);
-    return _catalogo;
+    if (_pedidosView == null) _pedidosView = PedidosView(_pai);
+    return _pedidosView;
   }
 
   @override
@@ -36,15 +36,14 @@ class PedidosView extends StatefulWidget {
 
 class _PedidosViewPageState extends State<PedidosView> {
   bool _loading = false;
-  
+
   _PedidosViewPageState() {
     print("bool ${Util.pedidosCarregados}");
-    if(!Util.pedidosCarregados){
+    if (!Util.pedidosCarregados) {
       loadPedidos();
-    }else{
+    } else {
       _loading = true;
     }
-    
   }
 
   @override
@@ -61,7 +60,8 @@ class _PedidosViewPageState extends State<PedidosView> {
                     Container(
                       margin: EdgeInsets.only(right: 20),
                       width: MediaQuery.of(context).size.width / 5,
-                      child: Image(image: AssetImage('assets/images/logo_210-90.png')),
+                      child: Image(
+                          image: AssetImage('assets/images/logo_210-90.png')),
                     ),
                     Text("Meus Pedidos")
                   ],
@@ -71,17 +71,15 @@ class _PedidosViewPageState extends State<PedidosView> {
               ? Center(
                   child: Text(
                     "Você ainda não tem pedidos. :(",
-                    style: TextStyle(
-                      fontSize: 20,
-                      color: Colors.white
-                    ),
+                    style: TextStyle(fontSize: 20, color: Colors.white),
                   ),
                 )
               : Column(
                   children: <Widget>[
-                    SizedBox(height: 10,),
+                    SizedBox(
+                      height: 10,
+                    ),
                     Expanded(
-        
                       flex: 6,
                       child: ListView.builder(
                         itemCount: Util.pedidos.length,
@@ -91,22 +89,26 @@ class _PedidosViewPageState extends State<PedidosView> {
                           NumberFormat formatterValor = NumberFormat("00.00");
                           String valor = formatterValor
                               .format(Util.pedidos[index].valorTotal);
-                          return Container(
-
-                            margin: EdgeInsets.only(bottom: 2,),
-                            color: MyColors.secondaryColor,
+                          return Card(
+                            elevation: 2,
+                            color: MyColors.cardColor,
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
                             child: ListTile(
                               title: Text(
                                 Util.pedidos[index].status +
                                     " - " +
-                                    dataHoraPedido, style: TextStyle(color: Colors.white),
+                                    dataHoraPedido,
+                                style: TextStyle(color: Colors.white),
                               ),
                               subtitle: Text(
-                                Util.pedidos[index].produtos.toString(),style: TextStyle(color: Colors.white),
+                                Util.pedidos[index].produtos.toString(),
+                                style: TextStyle(color: Colors.white),
                                 maxLines: 1,
                                 overflow: TextOverflow.ellipsis,
                               ),
-                              trailing: Text(valor.replaceAll('.', ','), style: TextStyle(color: Colors.white70)),
+                              trailing: Text(valor.replaceAll('.', ','),
+                                  style: TextStyle(color: Colors.white70)),
                               onTap: () {
                                 widget._pai.setTab3(DetalhePedidoView(
                                   widget._pai,

@@ -8,64 +8,56 @@ import 'package:limas_burger/view/PedidosView.dart';
 import 'package:limas_burger/view/Splash.dart';
 import 'package:limas_burger/view/dialogs/DialogLogin.dart';
 
-class DialogFinalizarPedido extends StatefulWidget{
+class DialogFinalizarPedido extends StatefulWidget {
   bool maisDeUm;
   DialogFinalizarPedido(this.maisDeUm);
   @override
   DialogFinalizarPedidoState createState() => DialogFinalizarPedidoState();
-
 }
 
-class DialogFinalizarPedidoState extends State<DialogFinalizarPedido>{
-  
+class DialogFinalizarPedidoState extends State<DialogFinalizarPedido> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
       titlePadding: EdgeInsets.all(0),
-      title:Container(
+      title: Container(
         color: Colors.black12,
-        height: MediaQuery.of(context).size.height/8,
-        child: Center(child: Text("Pedido realizado com sucesso :)", textAlign: TextAlign.center,)),
+        height: MediaQuery.of(context).size.height / 8,
+        child: Center(
+            child: Text(
+          "Pedido realizado com sucesso :)",
+          textAlign: TextAlign.center,
+        )),
       ),
-      content: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          Container(
+      content: Column(mainAxisSize: MainAxisSize.min, children: <Widget>[
+        Container(
             margin: EdgeInsets.only(bottom: 10),
             width: MediaQuery.of(context).size.width,
             height: 50,
             decoration: BoxDecoration(
-              color: MyColors.secondaryColor,
-              borderRadius: BorderRadius.circular(6)
-            ),
+                color: MyColors.secondaryColor,
+                borderRadius: BorderRadius.circular(6)),
             child: FlatButton(
-              child: Text("Fechar",
+              child: Text(
+                "Fechar",
                 style: TextStyle(
                   color: MyColors.textColor,
                   fontWeight: FontWeight.bold,
                   fontSize: 18,
                 ),
               ),
-              onPressed: (){
-                if(widget.maisDeUm){
+              onPressed: () {
+                if (widget.maisDeUm) {
                   Navigator.of(context).pop();
-                  Navigator.of(context).pop();
-                  
-                }else{
-                  Navigator.pop(context);
-                   Navigator.pop(context);
+                  //Navigator.of(context).pop();
+                } else {
+                  Navigator.of(context, rootNavigator: true).pop();
+                  //Navigator.of(context, rootNavigator: true).pop();
                 }
                 //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context)=>LimasBurger.getInstance()));
-               
-              },)
-          ),
-         
-        ]
-         
-      ),
-    );  
+              },
+            )),
+      ]),
+    );
   }
-
 }
- 
- 

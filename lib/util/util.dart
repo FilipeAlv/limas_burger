@@ -23,7 +23,8 @@ class Util {
   static List<Pedido> pedidos = List();
   static bool pedidosCarregados = false;
   static bool produtosCarregados = false;
-   static List produtos = List();
+  static List produtos = List();
+  static String versao = "v0.0.1";
    
   static Usuario usuario;
 

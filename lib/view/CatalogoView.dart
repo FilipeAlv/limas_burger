@@ -35,10 +35,16 @@ class _CatalogoViewPageState extends State<CatalogoView> {
   String _searchText = "";
   List names = new List();
   List produtos = List();
+  bool _loading = false;
   final TextEditingController _filter = new TextEditingController();
 
   _CatalogoViewPageState() {
-    this._getNames();
+    if (!(Util.produtos.length > 0)) {
+      this._getNames();
+    } else {
+      produtos = Util.produtos;
+      _loading = true;
+    }
     _filter.addListener(() {
       if (_filter.text.isEmpty) {
         setState(() {
@@ -53,7 +59,6 @@ class _CatalogoViewPageState extends State<CatalogoView> {
     });
   }
 
-  bool _loading = false;
   bool _loadingFilter = false;
   ScrollController _scrollController =
       ScrollController(initialScrollOffset: CatalogoView.scroll_position);
@@ -70,8 +75,6 @@ class _CatalogoViewPageState extends State<CatalogoView> {
   @override
   void initState() {
     super.initState();
-
-    
 
     /*
     CatalogoView.bContext = context;
@@ -349,13 +352,12 @@ class _CatalogoViewPageState extends State<CatalogoView> {
             color: Colors.white,
           ),
           prefixIcon: Container(
-            width: MediaQuery.of(context).size.width/5,
-            margin: EdgeInsets.only(right: 10),
-            child: Image(
-              image: AssetImage('assets/images/logo_210-90.png'),
-              width: MediaQuery.of(context).size.width / 4,
-            )
-          ),
+              width: MediaQuery.of(context).size.width / 5,
+              margin: EdgeInsets.only(right: 10),
+              child: Image(
+                image: AssetImage('assets/images/logo_210-90.png'),
+                width: MediaQuery.of(context).size.width / 4,
+              )),
         ),
       ),
       backgroundColor: MyColors.secondaryColor,
@@ -464,8 +466,8 @@ class _CatalogoViewPageState extends State<CatalogoView> {
         String valor = formatter.format(produtos[index].valor);
         String _ingredientes = "";
         for (int i = 0; i < produtos[index].ingredientes.length; i++) {
-           _ingredientes += produtos[index].ingredientes[i].nome;
-           if(i+1 != produtos[index].ingredientes.length)
+          _ingredientes += produtos[index].ingredientes[i].nome;
+          if (i + 1 != produtos[index].ingredientes.length)
             _ingredientes += ", ";
           else
             _ingredientes += ".";
@@ -480,16 +482,15 @@ class _CatalogoViewPageState extends State<CatalogoView> {
           child: Padding(
             padding: EdgeInsets.all(5),
             child: InkWell(
-              child:  Row(
+              child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: <Widget>[
                   Expanded(
-                    child:Image.network(
+                    child: Image.network(
                       Util.URL_IMAGENS + produtos[index].imagem,
                       height: 100,
                     ),
                   ),
-
                   Expanded(
                     child: Container(
                       height: 100,
@@ -499,38 +500,32 @@ class _CatalogoViewPageState extends State<CatalogoView> {
                         children: <Widget>[
                           Container(
                             margin: EdgeInsets.all(5),
-                            child:Text("${produtos[index].nome}",
+                            child: Text(
+                              "${produtos[index].nome}",
                               style: TextStyle(
-                                color: MyColors.textColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18
-                              ),
+                                  color: MyColors.textColor,
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18),
                             ),
                           ),
-                          
                           Container(
                             margin: EdgeInsets.symmetric(horizontal: 5),
-                            child:Text(
+                            child: Text(
                               _ingredientes,
                               maxLines: 1,
                               overflow: TextOverflow.ellipsis,
-                              style: TextStyle(
-                                color: MyColors.textColor
-                              ),
+                              style: TextStyle(color: MyColors.textColor),
                             ),
                           ),
-
                           Container(
                             alignment: Alignment.bottomRight,
-                            margin: EdgeInsets.only(right: 10, top:10),
-                            child:Text(valor.replaceAll('.', ','),
+                            margin: EdgeInsets.only(right: 10, top: 10),
+                            child: Text(
+                              valor.replaceAll('.', ','),
                               style: TextStyle(
-                                fontSize: 18,
-                                color: MyColors.textColor
-                              ),
+                                  fontSize: 18, color: MyColors.textColor),
                             ),
                           ),
-                          
                         ],
                       ),
                     ),
@@ -571,14 +566,13 @@ class _CatalogoViewPageState extends State<CatalogoView> {
   }
 
   void _getNames() async {
-    produtos = _produtos = await Produto.listarProdutos(null, 0, 2);
+    Util.produtos = _produtos = await Produto.listarProdutos(null, 0, 2);
     setState(() {
-      names = produtos;
+      names = Util.produtos;
       names.shuffle();
-      produtos = names;
-    });
+      Util.produtos = names;
 
-    setState(() {
+      produtos = Util.produtos;
       _loading = true;
     });
 
