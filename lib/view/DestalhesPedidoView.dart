@@ -6,6 +6,7 @@ import 'package:limas_burger/model/pedido.dart';
 import 'package:limas_burger/model/produto_pedido.dart';
 import 'package:limas_burger/util/util.dart';
 import 'package:limas_burger/view/PedidosView.dart';
+import 'package:limas_burger/view/dialogs/DialogCancelarPedido.dart';
 
 class DetalhePedidoView extends StatefulWidget {
   LimasBurgerTabBar _tabBar;
@@ -61,10 +62,13 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                       Container(
                         margin: EdgeInsets.only(right: 10),
                         width: MediaQuery.of(context).size.width / 5,
-                        child:
-                            Image(image: AssetImage('assets/images/logo_210-90.png')),
+                        child: Image(
+                            image: AssetImage('assets/images/logo_210-90.png')),
                       ),
-                      Text("Detalhamento do pedido", style: TextStyle(fontSize: 16),)
+                      Text(
+                        "Detalhamento do pedido",
+                        style: TextStyle(fontSize: 16),
+                      )
                     ],
                   )),
             ),
@@ -134,7 +138,8 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                           child: Text(
                             widget._pedido.formaDePagamento,
                             style: TextStyle(
-                                fontSize: tamanhoFontItem, fontWeight: FontWeight.bold),
+                                fontSize: tamanhoFontItem,
+                                fontWeight: FontWeight.bold),
                           ),
                         )
                       ],
@@ -160,7 +165,8 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                           child: Text(
                             formatDate.format(widget._pedido.dataHoraPedido),
                             style: TextStyle(
-                                fontSize: tamanhoFontItem, fontWeight: FontWeight.bold),
+                                fontSize: tamanhoFontItem,
+                                fontWeight: FontWeight.bold),
                           ),
                         )
                       ],
@@ -184,9 +190,40 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                           padding:
                               EdgeInsets.only(left: 10, top: 20, bottom: 20),
                           child: Text(
-                            widget._pedido.dataHoraEntrega!= null? formatDate.format(widget._pedido.dataHoraPedido):"Não definida.",
+                            widget._pedido.dataHoraEntrega != null
+                                ? formatDate
+                                    .format(widget._pedido.dataHoraPedido)
+                                : "Não definida.",
                             style: TextStyle(
-                                fontSize: tamanhoFontItem, fontWeight: FontWeight.bold),
+                                fontSize: tamanhoFontItem,
+                                fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding:
+                              EdgeInsets.only(left: 10, top: 20, bottom: 20),
+                          child: Text(
+                            "Status do pedido",
+                            style: TextStyle(
+                                fontSize: 20, fontWeight: FontWeight.bold),
+                          ),
+                        )
+                      ],
+                    ),
+                    Row(
+                      children: <Widget>[
+                        Padding(
+                          padding:
+                              EdgeInsets.only(left: 10, top: 20, bottom: 20),
+                          child: Text(
+                            widget._pedido.status,
+                            style: TextStyle(
+                                fontSize: tamanhoFontItem,
+                                fontWeight: FontWeight.bold),
                           ),
                         )
                       ],
@@ -315,12 +352,22 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                           child: Text(
                             "Cancelar pedido",
                             style: TextStyle(
-                              color: Colors.black,
+                              color: MyColors.textColor,
                               fontWeight: FontWeight.bold,
                               fontSize: 18,
                             ),
                           ),
-                          onPressed: () {},
+                          onPressed: () async {
+                            await showDialog(
+                              context: context,
+                              builder: (BuildContext context) {
+                                return DialogCancelarPedido(widget._pedido);
+                              },
+                            ).then((valor) {
+                              setState(() {});
+                            });
+                            
+                          },
                         )),
                     Container(
                         margin:

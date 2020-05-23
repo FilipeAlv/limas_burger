@@ -201,11 +201,10 @@ class EnderecoViewPageState extends State<DadosPedidoView> {
             }
             bool _maisDeUm = false;
 
-            if(widget.pedido.produtos.length > 1){
+            if (widget.pedido.produtos.length > 1) {
               _maisDeUm = true;
-            } 
-            print("dp $_maisDeUm");
-            showDialog(
+            }
+            await showDialog(
               context: context,
               builder: (BuildContext context) {
                 return DialogFinalizarPedido(_maisDeUm);

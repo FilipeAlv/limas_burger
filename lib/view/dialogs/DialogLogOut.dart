@@ -1,18 +1,17 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:limas_burger/main.dart';
+import 'package:limas_burger/model/dao/databasehelper.dart';
 
 import 'package:limas_burger/util/util.dart';
-import 'package:limas_burger/view/PedidosView.dart';
 
-class DialogFinalizarPedido extends StatefulWidget {
-  bool maisDeUm;
-  DialogFinalizarPedido(this.maisDeUm);
+class DialoglogOut extends StatefulWidget {
   @override
-  DialogFinalizarPedidoState createState() => DialogFinalizarPedidoState();
+  DialoglogOutState createState() => DialoglogOutState();
 }
 
-class DialogFinalizarPedidoState extends State<DialogFinalizarPedido> {
+class DialoglogOutState extends State<DialoglogOut> {
+  final DataBaseHelper dataBaseHelper = DataBaseHelper.getInstance();
+
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -22,7 +21,7 @@ class DialogFinalizarPedidoState extends State<DialogFinalizarPedido> {
         height: MediaQuery.of(context).size.height / 8,
         child: Center(
             child: Text(
-          "Pedido realizado com sucesso :)",
+          "Tem certeza que deseja sair ? :(",
           textAlign: TextAlign.center,
         )),
       ),
@@ -36,7 +35,7 @@ class DialogFinalizarPedidoState extends State<DialogFinalizarPedido> {
                 borderRadius: BorderRadius.circular(6)),
             child: FlatButton(
               child: Text(
-                "Fechar",
+                "Sim",
                 style: TextStyle(
                   color: MyColors.textColor,
                   fontWeight: FontWeight.bold,
@@ -44,16 +43,36 @@ class DialogFinalizarPedidoState extends State<DialogFinalizarPedido> {
                 ),
               ),
               onPressed: () {
+                deletarUsuario();
                 Navigator.pop(context);
-                /*
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => LimasBurger);
-                        */
+              },
+            )),
+        Container(
+            margin: EdgeInsets.only(bottom: 10),
+            width: MediaQuery.of(context).size.width,
+            height: 50,
+            decoration: BoxDecoration(
+                border: Border.all(color: MyColors.secondaryColor),
+                borderRadius: BorderRadius.circular(6)),
+            child: FlatButton(
+              child: Text(
+                "Não",
+                style: TextStyle(
+                  color: MyColors.secondaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+              onPressed: () {
+                Navigator.pop(context);
               },
             )),
       ]),
     );
+  }
+
+  void deletarUsuario() async {
+    dataBaseHelper.deletUsuario(Util.usuario.id);
+    Util.usuario = null;
   }
 }

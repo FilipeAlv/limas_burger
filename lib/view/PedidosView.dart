@@ -1,23 +1,14 @@
-﻿import 'dart:convert';
-
-import 'package:connectivity/connectivity.dart';
+﻿
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:limas_burger/main.dart';
-import 'package:limas_burger/model/carrinho.dart';
 import 'package:limas_burger/model/endereco.dart';
-import 'package:limas_burger/model/ingrediente.dart';
 import 'package:limas_burger/model/pedido.dart';
-import 'package:limas_burger/model/produto.dart';
 import 'package:limas_burger/model/produto_pedido.dart';
 import 'package:limas_burger/model/usuario.dart';
 import 'package:limas_burger/util/util.dart';
 import 'package:limas_burger/view/DestalhesPedidoView.dart';
-import 'package:limas_burger/view/ProdutoView.dart';
-import 'package:limas_burger/view/dialogs/Connection.dart';
-import 'package:limas_burger/view/dialogs/DialogErrorServer.dart';
-import 'package:http/http.dart' as http;
 
 class PedidosView extends StatefulWidget {
   LimasBurgerTabBar _pai;
@@ -38,7 +29,6 @@ class _PedidosViewPageState extends State<PedidosView> {
   bool _loading = false;
 
   _PedidosViewPageState() {
-    print("bool ${Util.pedidosCarregados}");
     if (!Util.pedidosCarregados) {
       loadPedidos();
     } else {
@@ -194,5 +184,6 @@ class _PedidosViewPageState extends State<PedidosView> {
     });
 
     Util.pedidosCarregados = true;
+    
   }
 }

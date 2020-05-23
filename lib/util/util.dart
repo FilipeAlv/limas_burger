@@ -4,6 +4,9 @@ import 'package:intl/intl.dart';
 import 'package:limas_burger/model/carrinho.dart';
 import 'package:limas_burger/model/pedido.dart';
 import 'package:limas_burger/model/usuario.dart';
+import 'package:limas_burger/view/PedidosView.dart';
+
+import '../main.dart';
 
 class Util {
   
@@ -27,6 +30,7 @@ class Util {
   static String versao = "v0.0.1";
    
   static Usuario usuario;
+  static LimasBurgerTabBar pai;
 
   static DateTime converterStringEmDateTime(String dateString) {
     DateTime novaData;
@@ -51,6 +55,7 @@ class StatusPedido {
   static const String INICIADO = "Iniciado";
   static const String SAIU_PARA_ENTREGA = "Saiu para entrega";
   static const String ENTRGUE = "Entregue";
+  static const String CANCELADO = "Cancelado";
 }
 
 class StatusIngrediente {

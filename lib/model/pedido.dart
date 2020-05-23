@@ -53,15 +53,45 @@ class Pedido {
     return _result;
   }
 
+  cancelarPedido() async {
+    var _result;
+    var response;
+    try {
+      print(Util.usuario.id.toString());
+      response = await http.get(
+          Uri.encodeFull(Util.URL + "cancelar/pedido/" + this.id.toString()),
+          headers: {"Accept": "apllication/json"});
+
+      _result = jsonDecode(response.body);
+
+      return _result;
+    } catch (e) {}
+    return _result;
+  }
+
   save() async {
     var response;
-    
-    String data = Util.formatDate.format(dataHoraPedido).trim().replaceAll("/", "-");
+
+    String data =
+        Util.formatDate.format(dataHoraPedido).trim().replaceAll("/", "-");
     if (id == null) {
       print(formaDePagamento);
       response = await http.get(
           Uri.encodeFull(Util.URL +
-              "add/pedido/"+ formaDePagamento + "&" + status + "&" + Util.usuario.id.toString() + "&" + enderecoEntrega.id.toString() + "&" + "Não definida" + '&' + data + "&" + valorTotal.toString()),
+              "add/pedido/" +
+              formaDePagamento +
+              "&" +
+              status +
+              "&" +
+              Util.usuario.id.toString() +
+              "&" +
+              enderecoEntrega.id.toString() +
+              "&" +
+              "Não definida" +
+              '&' +
+              data +
+              "&" +
+              valorTotal.toString()),
           headers: {"Accept": "apllication/json"});
     }
     /*else{
@@ -81,13 +111,12 @@ class Pedido {
     }
     */
     var _result;
-     print(response.body);
+    print(response.body);
     try {
       _result = jsonDecode(response.body);
     } catch (e) {
       e.toString();
     }
-   
 
     return _result;
   }
@@ -137,15 +166,18 @@ class Pedido {
             _usuario,
             _produtosPedidos);
 
-        
-          pedidos.add(pedido);
-       
+        pedidos.add(pedido);
       }
     }
   }
+
   @override
   String toString() {
     // TODO: implement toString
-    return status + " - " + usuario.id.toString() + " - " + enderecoEntrega.id.toString();
+    return status +
+        " - " +
+        usuario.id.toString() +
+        " - " +
+        enderecoEntrega.id.toString();
   }
 }

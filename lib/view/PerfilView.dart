@@ -1,12 +1,11 @@
-import 'dart:convert';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:limas_burger/view/SobreView.dart';
 import 'package:limas_burger/view/dialogs/DialogEdit.dart';
+import 'package:limas_burger/view/dialogs/DialogFinalizarPedido.dart';
+import 'package:limas_burger/view/dialogs/DialogLogOut.dart';
 
 import '../main.dart';
-import '../util/util.dart';
 import '../util/util.dart';
 
 class PerfilView extends StatefulWidget {
@@ -21,6 +20,8 @@ class PerfilView extends StatefulWidget {
 
   @override
   State<StatefulWidget> createState() => _PerfilViewPageState();
+
+  atualizarTela() {}
 }
 
 class _PerfilViewPageState extends State<PerfilView> {
@@ -185,8 +186,15 @@ class _PerfilViewPageState extends State<PerfilView> {
                               style: TextStyle(color: MyColors.secondaryColor),
                             ),
                             FlatButton(
-                              onPressed: () {
-                                widget._pai.setTab4(SobreView(widget._pai));
+                              onPressed: () async {
+                                await showDialog(
+                                  context: context,
+                                  builder: (BuildContext context) {
+                                    return DialoglogOut();
+                                  },
+                                ).then((valor) {
+                                  setState(() {});
+                                });
                               },
                               child: Text(
                                 "Sair",
