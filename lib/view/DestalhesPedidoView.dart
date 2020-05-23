@@ -340,7 +340,7 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                     Divider(
                       height: 10,
                     ),
-                    Container(
+                     Container(
                         margin:
                             EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         width: MediaQuery.of(context).size.width - 40,
@@ -349,8 +349,8 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                             color: MyColors.secondaryColor,
                             borderRadius: BorderRadius.circular(6)),
                         child: FlatButton(
-                          child: Text(
-                            "Cancelar pedido",
+                          child: Text(widget._pedido.status == StatusPedido.CANCELADO?
+                            "Cancelar pedido":"Retomar pedido",
                             style: TextStyle(
                               color: MyColors.textColor,
                               fontWeight: FontWeight.bold,
@@ -369,7 +369,7 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                             
                           },
                         )),
-                    Container(
+                    widget._pedido.status == StatusPedido.CANCELADO? Container(
                         margin:
                             EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         width: MediaQuery.of(context).size.width - 40,
@@ -386,7 +386,7 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                                 fontSize: 18,
                               ),
                             ),
-                            onPressed: () {})),
+                            onPressed: () {})):Offstage(),
                   ],
                 ))
           ],
