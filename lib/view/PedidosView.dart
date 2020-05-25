@@ -160,8 +160,12 @@ class _PedidosViewPageState extends State<PedidosView> {
 
         _dataHoraEntrega = _dataHoraEntrega.replaceAll("-", "/");
         _dataHoraPedido = _dataHoraPedido.replaceAll("-", "/");
+        print(_dataHoraEntrega);
+        print(" dtpedido $_dataHoraPedido");
         DateTime _dhEntrega = Util.converterStringEmDateTime(_dataHoraEntrega);
         DateTime _dhPedido = Util.converterStringEmDateTime(_dataHoraPedido);
+        print(_dhPedido);
+
 
         Pedido pedido = Pedido(
             _id,

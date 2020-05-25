@@ -7,6 +7,7 @@ import 'package:limas_burger/model/produto_pedido.dart';
 import 'package:limas_burger/util/util.dart';
 import 'package:limas_burger/view/PedidosView.dart';
 import 'package:limas_burger/view/dialogs/DialogCancelarPedido.dart';
+import 'package:limas_burger/view/dialogs/DialogRetomarPedido.dart';
 
 class DetalhePedidoView extends StatefulWidget {
   LimasBurgerTabBar _tabBar;
@@ -48,6 +49,7 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
 
   @override
   Widget build(BuildContext context) {
+    print(widget._pedido.status);
     return WillPopScope(
         onWillPop: onBackPressed,
         child: CustomScrollView(
@@ -340,7 +342,7 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                     Divider(
                       height: 10,
                     ),
-                     Container(
+                    Container(
                         margin:
                             EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                         width: MediaQuery.of(context).size.width - 40,
@@ -349,8 +351,10 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                             color: MyColors.secondaryColor,
                             borderRadius: BorderRadius.circular(6)),
                         child: FlatButton(
-                          child: Text(widget._pedido.status == StatusPedido.CANCELADO?
-                            "Cancelar pedido":"Retomar pedido",
+                          child: Text(
+                            widget._pedido.status != StatusPedido.CANCELADO
+                                ? "Cancelar pedido"
+                                : "Retomar pedido",
                             style: TextStyle(
                               color: MyColors.textColor,
                               fontWeight: FontWeight.bold,
@@ -358,35 +362,49 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                             ),
                           ),
                           onPressed: () async {
-                            await showDialog(
-                              context: context,
-                              builder: (BuildContext context) {
-                                return DialogCancelarPedido(widget._pedido);
-                              },
-                            ).then((valor) {
-                              setState(() {});
-                            });
-                            
+                            if (widget._pedido.status ==
+                                StatusPedido.CANCELADO) {
+                              await showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return DialogRetomarPedido(widget._pedido);
+                                },
+                              ).then((valor) {
+                                setState(() {});
+                              });
+                            } else {
+                              await showDialog(
+                                context: context,
+                                builder: (BuildContext context) {
+                                  return DialogCancelarPedido(widget._pedido);
+                                },
+                              ).then((valor) {
+                                setState(() {});
+                              });
+                            }
                           },
                         )),
-                    widget._pedido.status == StatusPedido.CANCELADO? Container(
-                        margin:
-                            EdgeInsets.symmetric(horizontal: 20, vertical: 10),
-                        width: MediaQuery.of(context).size.width - 40,
-                        height: 50,
-                        decoration: BoxDecoration(
-                            border: Border.all(color: MyColors.secondaryColor),
-                            borderRadius: BorderRadius.circular(6)),
-                        child: FlatButton(
-                            child: Text(
-                              "Editar Pedido",
-                              style: TextStyle(
-                                color: MyColors.secondaryColor,
-                                fontWeight: FontWeight.bold,
-                                fontSize: 18,
-                              ),
-                            ),
-                            onPressed: () {})):Offstage(),
+                    widget._pedido.status != StatusPedido.CANCELADO
+                        ? Container(
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 20, vertical: 10),
+                            width: MediaQuery.of(context).size.width - 40,
+                            height: 50,
+                            decoration: BoxDecoration(
+                                border:
+                                    Border.all(color: MyColors.secondaryColor),
+                                borderRadius: BorderRadius.circular(6)),
+                            child: FlatButton(
+                                child: Text(
+                                  "Editar Pedido",
+                                  style: TextStyle(
+                                    color: MyColors.secondaryColor,
+                                    fontWeight: FontWeight.bold,
+                                    fontSize: 18,
+                                  ),
+                                ),
+                                onPressed: () {}))
+                        : Offstage(),
                   ],
                 ))
           ],

@@ -35,8 +35,8 @@ class Util {
   static DateTime converterStringEmDateTime(String dateString) {
     DateTime novaData;
     try{
-       novaData = DateFormat().add_yMd().add_Hm().parse(dateString);
-
+      novaData = DateFormat("dd/MM/yyyy HH:mm").parse(dateString);
+      print('novaData $novaData');
     }catch(e){
 
     }

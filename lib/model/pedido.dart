@@ -71,11 +71,10 @@ class Pedido {
 
   save() async {
     var response;
-
+    print(toString());
     String data =
         Util.formatDate.format(dataHoraPedido).trim().replaceAll("/", "-");
     if (id == null) {
-      print(formaDePagamento);
       response = await http.get(
           Uri.encodeFull(Util.URL +
               "add/pedido/" +
@@ -93,23 +92,28 @@ class Pedido {
               "&" +
               valorTotal.toString()),
           headers: {"Accept": "apllication/json"});
-    }
-    /*else{
+    } else {
       response = await http.get(
           Uri.encodeFull(Util.URL +
-              "editar/endereco/" +
+              "editar/pedido/" +
               id.toString() +
+              "&" + 
+              formaDePagamento +
               "&" +
-              bairro +
+              status +
               "&" +
-              rua +
+              Util.usuario.id.toString() +
               "&" +
-              numero +
+              enderecoEntrega.id.toString() +
               "&" +
-              referencia),
+              "Não definida" +
+              '&' +
+              data +
+              "&" +
+              valorTotal.toString()),
           headers: {"Accept": "apllication/json"});
     }
-    */
+
     var _result;
     print(response.body);
     try {

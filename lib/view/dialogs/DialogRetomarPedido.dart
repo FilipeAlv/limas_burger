@@ -5,16 +5,16 @@ import 'package:limas_burger/model/pedido.dart';
 
 import 'package:limas_burger/util/util.dart';
 
-class DialogCancelarPedido extends StatefulWidget {
+class DialogRetomarPedido extends StatefulWidget {
   Pedido pedido;
 
-  DialogCancelarPedido(this.pedido);
+  DialogRetomarPedido(this.pedido);
 
   @override
-  DialogDialogCancelarPedido createState() => DialogDialogCancelarPedido();
+  DialogRetomarPedidoState createState() => DialogRetomarPedidoState();
 }
 
-class DialogDialogCancelarPedido extends State<DialogCancelarPedido> {
+class DialogRetomarPedidoState extends State<DialogRetomarPedido> {
   @override
   Widget build(BuildContext context) {
     return AlertDialog(
@@ -24,7 +24,7 @@ class DialogDialogCancelarPedido extends State<DialogCancelarPedido> {
         height: MediaQuery.of(context).size.height / 8,
         child: Center(
             child: Text(
-          "Tem certeza que deseja cancelar? :(",
+          "Deseja retomar o pedido? :)",
           textAlign: TextAlign.center,
         )),
       ),
@@ -46,11 +46,10 @@ class DialogDialogCancelarPedido extends State<DialogCancelarPedido> {
                 ),
               ),
               onPressed: () {
-                widget.pedido.status = StatusPedido.CANCELADO;
+                widget.pedido.status = StatusPedido.FEITO;
                 Util.pedidosCarregados = false;
-                widget.pedido.save();
+                 widget.pedido.save();
                 Navigator.pop(context);
-
               },
             )),
         Container(

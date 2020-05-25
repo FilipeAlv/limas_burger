@@ -1,9 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:limas_burger/main.dart';
-
 import 'package:limas_burger/util/util.dart';
-import 'package:limas_burger/view/PedidosView.dart';
 
 class DialogFinalizarPedido extends StatefulWidget {
   bool maisDeUm;
