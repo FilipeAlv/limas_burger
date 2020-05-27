@@ -1,5 +1,4 @@
-﻿
-import 'package:flutter/cupertino.dart';
+﻿import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:limas_burger/main.dart';
@@ -9,10 +8,12 @@ import 'package:limas_burger/model/produto_pedido.dart';
 import 'package:limas_burger/model/usuario.dart';
 import 'package:limas_burger/util/util.dart';
 import 'package:limas_burger/view/DestalhesPedidoView.dart';
+import 'package:limas_burger/view/dialogs/DialogDatasFiltro.dart';
 
 class PedidosView extends StatefulWidget {
   LimasBurgerTabBar _pai;
   static PedidosView _pedidosView;
+  DateTime dataInicio, dataFim;
 
   PedidosView(this._pai);
 
@@ -27,7 +28,8 @@ class PedidosView extends StatefulWidget {
 
 class _PedidosViewPageState extends State<PedidosView> {
   bool _loading = false;
-
+  static final formatDate = DateFormat('dd/MM/yyyy');
+  bool filtroOn = false;
   _PedidosViewPageState() {
     if (!Util.pedidosCarregados) {
       loadPedidos();
@@ -43,6 +45,27 @@ class _PedidosViewPageState extends State<PedidosView> {
           appBar: AppBar(
             backgroundColor: MyColors.secondaryColor,
             elevation: 0,
+            actions: <Widget>[
+              IconButton(
+                icon: Icon(
+                  Icons.filter_list,
+                  color: MyColors.textColor,
+                  size: 30,
+                ),
+                onPressed: () {
+                  setState(() {
+                    if (filtroOn) {
+                      filtroOn = false;
+                      widget.dataInicio = null;
+                      widget.dataFim = null;
+                    } else {
+                      filtroOn = true;
+                    }
+                  });
+                },
+                color: Colors.white,
+              )
+            ],
             title: Container(
                 margin: EdgeInsets.only(left: 20),
                 child: Row(
@@ -66,6 +89,73 @@ class _PedidosViewPageState extends State<PedidosView> {
                 )
               : Column(
                   children: <Widget>[
+                    SizedBox(
+                      height: 10,
+                    ),
+                    filtroOn
+                        ? Row(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                  margin:
+                                      EdgeInsets.only(bottom: 10, right: 20),
+                                  width: MediaQuery.of(context).size.width / 3,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: MyColors.secondaryColor),
+                                      borderRadius: BorderRadius.circular(6)),
+                                  child: FlatButton(
+                                    child: Text(
+                                      "Data inicial",
+                                      style: TextStyle(
+                                        color: MyColors.secondaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    onPressed: () async {
+                                      widget.dataInicio =
+                                          await _exibirDatePicker();
+                                      print(widget.dataInicio);
+                                    },
+                                  )),
+                              Container(
+                                  margin:
+                                      EdgeInsets.only(bottom: 10, right: 20),
+                                  width: MediaQuery.of(context).size.width / 3,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      border: Border.all(
+                                          color: MyColors.secondaryColor),
+                                      borderRadius: BorderRadius.circular(6)),
+                                  child: FlatButton(
+                                    child: Text(
+                                      "Data fim",
+                                      style: TextStyle(
+                                        color: MyColors.secondaryColor,
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    onPressed: () async {
+                                      widget.dataFim =
+                                          await _exibirDatePicker();
+                                      print(widget.dataFim);
+                                      setState(() {});
+                                    },
+                                  )),
+                            ],
+                          )
+                        : Offstage(),
+                    SizedBox(
+                      height: 10,
+                    ),
+                    widget.dataFim == null
+                        ? Offstage()
+                        : Text(
+                            "${formatDate.format(widget.dataInicio)} à ${formatDate.format(widget.dataFim)}"),
                     SizedBox(
                       height: 10,
                     ),
@@ -160,12 +250,8 @@ class _PedidosViewPageState extends State<PedidosView> {
 
         _dataHoraEntrega = _dataHoraEntrega.replaceAll("-", "/");
         _dataHoraPedido = _dataHoraPedido.replaceAll("-", "/");
-        print(_dataHoraEntrega);
-        print(" dtpedido $_dataHoraPedido");
         DateTime _dhEntrega = Util.converterStringEmDateTime(_dataHoraEntrega);
         DateTime _dhPedido = Util.converterStringEmDateTime(_dataHoraPedido);
-        print(_dhPedido);
-
 
         Pedido pedido = Pedido(
             _id,
@@ -188,6 +274,35 @@ class _PedidosViewPageState extends State<PedidosView> {
     });
 
     Util.pedidosCarregados = true;
-    
+  }
+
+  void exibirDialogDatasFiltro() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return DialogDatasFiltro(widget.dataInicio, widget.dataFim);
+      },
+    ).then((value) {
+      setState(() {
+        print(widget.dataInicio);
+        print(widget.dataFim);
+      });
+    });
+  }
+
+  Future<DateTime> _exibirDatePicker() async {
+    DateTime data;
+    final DateTime selecionado = await showDatePicker(
+        context: context,
+        locale: Locale("pt"),
+        initialDate: data == null ? DateTime.now() : data,
+        firstDate: DateTime(DateTime.now().year),
+        lastDate: DateTime.now());
+
+    if (selecionado != null && selecionado != data) {
+      //print('Data:  ${selecionado.toString()}');
+    }
+
+    return selecionado;
   }
 }

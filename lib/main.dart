@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:limas_burger/model/dao/databasehelper.dart';
 import 'package:limas_burger/util/util.dart';
 import 'package:limas_burger/view/CarrinhoView.dart';
@@ -76,6 +77,19 @@ class LimasBurgerTabBar extends State<LimasBurger> {
 
     return MaterialApp(
       title: "Serra China",
+      localizationsDelegates: [
+        // ... app-specific localization delegate[s] here
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales: [
+        const Locale('en'), // English
+        const Locale('pt'), // Hebrew
+        const Locale.fromSubtags(
+            languageCode: 'zh'), // Chinese *See Advanced Locales below*
+        // ... other locales the app supports
+      ],
       theme: ThemeData(
         primaryColor: Colors.black,
         brightness: Brightness.light,

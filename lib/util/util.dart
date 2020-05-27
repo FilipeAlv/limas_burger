@@ -36,7 +36,6 @@ class Util {
     DateTime novaData;
     try{
       novaData = DateFormat("dd/MM/yyyy HH:mm").parse(dateString);
-      print('novaData $novaData');
     }catch(e){
 
     }

@@ -7,6 +7,7 @@ import 'package:limas_burger/model/produto_pedido.dart';
 import 'package:limas_burger/util/util.dart';
 import 'package:limas_burger/view/PedidosView.dart';
 import 'package:limas_burger/view/dialogs/DialogCancelarPedido.dart';
+import 'package:limas_burger/view/dialogs/DialogNaoCancelar.dart';
 import 'package:limas_burger/view/dialogs/DialogRetomarPedido.dart';
 
 class DetalhePedidoView extends StatefulWidget {
@@ -23,9 +24,13 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
   List<ListTile> _listProdutos = List();
   NumberFormat formatterValor = NumberFormat("00.00");
   final double tamanhoFontItem = 15;
+  bool _editavel = true;
 
   @override
   void initState() {
+    if (widget._pedido.status == StatusPedido.INICIADO) {
+      _editavel = false;
+    }
     List<ProdutoPedido> _produtos = widget._pedido.produtos;
     for (ProdutoPedido produtoPedido in _produtos) {
       NumberFormat formatterValor = NumberFormat("00.00");
@@ -348,7 +353,9 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                         width: MediaQuery.of(context).size.width - 40,
                         height: 50,
                         decoration: BoxDecoration(
-                            color: MyColors.secondaryColor,
+                            color: _editavel
+                                ? MyColors.secondaryColor
+                                : Colors.black,
                             borderRadius: BorderRadius.circular(6)),
                         child: FlatButton(
                           child: Text(
@@ -361,29 +368,10 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                               fontSize: 18,
                             ),
                           ),
-                          onPressed: () async {
-                            if (widget._pedido.status ==
-                                StatusPedido.CANCELADO) {
-                              await showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return DialogRetomarPedido(widget._pedido);
-                                },
-                              ).then((valor) {
-                                setState(() {});
-                              });
-                            } else {
-                              await showDialog(
-                                context: context,
-                                builder: (BuildContext context) {
-                                  return DialogCancelarPedido(widget._pedido);
-                                },
-                              ).then((valor) {
-                                setState(() {});
-                              });
-                            }
-                          },
+                          onPressed:
+                              _editavel ? cancelarRetomarPedido : exibirInfo,
                         )),
+                    /*
                     widget._pedido.status != StatusPedido.CANCELADO
                         ? Container(
                             margin: EdgeInsets.symmetric(
@@ -404,10 +392,41 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
                                   ),
                                 ),
                                 onPressed: () {}))
-                        : Offstage(),
+                        : Offstage(),*/
                   ],
                 ))
           ],
         ));
+  }
+
+  void cancelarRetomarPedido() async {
+    if (widget._pedido.status == StatusPedido.CANCELADO) {
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return DialogRetomarPedido(widget._pedido);
+        },
+      ).then((valor) {
+        setState(() {});
+      });
+    } else {
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return DialogCancelarPedido(widget._pedido);
+        },
+      ).then((valor) {
+        setState(() {});
+      });
+    }
+  }
+
+  void exibirInfo() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return DialogNaoCancelar();
+      },
+    );
   }
 }
