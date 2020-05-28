@@ -97,7 +97,7 @@ class Pedido {
           Uri.encodeFull(Util.URL +
               "editar/pedido/" +
               id.toString() +
-              "&" + 
+              "&" +
               formaDePagamento +
               "&" +
               status +
@@ -182,6 +182,8 @@ class Pedido {
         " - " +
         usuario.id.toString() +
         " - " +
-        enderecoEntrega.id.toString();
+        enderecoEntrega.id.toString() +
+        " - " +
+        dataHoraPedido.toString();
   }
 }

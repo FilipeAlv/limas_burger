@@ -27,6 +27,7 @@ class PedidosView extends StatefulWidget {
 }
 
 class _PedidosViewPageState extends State<PedidosView> {
+  List<Pedido> pedidosFilter, pedidos;
   bool _loading = false;
   static final formatDate = DateFormat('dd/MM/yyyy');
   bool filtroOn = false;
@@ -49,7 +50,7 @@ class _PedidosViewPageState extends State<PedidosView> {
               IconButton(
                 icon: Icon(
                   Icons.filter_list,
-                  color: MyColors.textColor,
+                  color: filtroOn ? Colors.blue : MyColors.textColor,
                   size: 30,
                 ),
                 onPressed: () {
@@ -58,6 +59,9 @@ class _PedidosViewPageState extends State<PedidosView> {
                       filtroOn = false;
                       widget.dataInicio = null;
                       widget.dataFim = null;
+                      if (pedidos != null) {
+                        Util.pedidos = pedidos;
+                      }
                     } else {
                       filtroOn = true;
                     }
@@ -118,7 +122,6 @@ class _PedidosViewPageState extends State<PedidosView> {
                                     onPressed: () async {
                                       widget.dataInicio =
                                           await _exibirDatePicker();
-                                      print(widget.dataInicio);
                                     },
                                   )),
                               Container(
@@ -132,7 +135,7 @@ class _PedidosViewPageState extends State<PedidosView> {
                                       borderRadius: BorderRadius.circular(6)),
                                   child: FlatButton(
                                     child: Text(
-                                      "Data fim",
+                                      "Data final",
                                       style: TextStyle(
                                         color: MyColors.secondaryColor,
                                         fontWeight: FontWeight.bold,
@@ -142,7 +145,7 @@ class _PedidosViewPageState extends State<PedidosView> {
                                     onPressed: () async {
                                       widget.dataFim =
                                           await _exibirDatePicker();
-                                      print(widget.dataFim);
+                                      alimentarFilter();
                                       setState(() {});
                                     },
                                   )),
@@ -190,6 +193,9 @@ class _PedidosViewPageState extends State<PedidosView> {
                               trailing: Text(valor.replaceAll('.', ','),
                                   style: TextStyle(color: Colors.white70)),
                               onTap: () {
+                                if (pedidos != null) {
+                                  Util.pedidos = pedidos;
+                                }
                                 widget._pai.setTab3(DetalhePedidoView(
                                   widget._pai,
                                   Util.pedidos[index],
@@ -264,9 +270,7 @@ class _PedidosViewPageState extends State<PedidosView> {
             _usuario,
             _produtosPedidos);
 
-        setState(() {
-          Util.pedidos.add(pedido);
-        });
+        Util.pedidos.add(pedido);
       }
     }
     setState(() {
@@ -283,10 +287,7 @@ class _PedidosViewPageState extends State<PedidosView> {
         return DialogDatasFiltro(widget.dataInicio, widget.dataFim);
       },
     ).then((value) {
-      setState(() {
-        print(widget.dataInicio);
-        print(widget.dataFim);
-      });
+      setState(() {});
     });
   }
 
@@ -304,5 +305,25 @@ class _PedidosViewPageState extends State<PedidosView> {
     }
 
     return selecionado;
+  }
+
+  void alimentarFilter() {
+    if (pedidos != null) {
+      Util.pedidos = pedidos;
+    }
+    pedidosFilter = List();
+    pedidos = Util.pedidos;
+    int diaInicio = widget.dataInicio.day;
+    int diaFim = widget.dataFim.day;
+    for (Pedido pedido in Util.pedidos) {
+      int diaPedido = pedido.dataHoraPedido.day;
+      if (diaPedido >= diaInicio && diaPedido <= diaFim) {
+        pedidosFilter.add(pedido);
+      }
+    }
+
+    setState(() {
+      Util.pedidos = pedidosFilter;
+    });
   }
 }

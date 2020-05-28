@@ -9,7 +9,6 @@ import 'package:limas_burger/view/PedidosView.dart';
 import '../main.dart';
 
 class Util {
-  
   static const String URL =
       "http://ec2-18-229-29-129.sa-east-1.compute.amazonaws.com:8000/";
   static const String URL_IMAGENS =
@@ -28,18 +27,21 @@ class Util {
   static bool produtosCarregados = false;
   static List produtos = List();
   static String versao = "v0.0.1";
-   
+
   static Usuario usuario;
   static LimasBurgerTabBar pai;
 
   static DateTime converterStringEmDateTime(String dateString) {
     DateTime novaData;
-    try{
+    try {
       novaData = DateFormat("dd/MM/yyyy HH:mm").parse(dateString);
-    }catch(e){
-
-    }
+    } catch (e) {}
     return novaData;
+  }
+
+  static String retirarSeparador(String texto, String separador, String substituirPor) {
+    texto = texto.replaceAll(separador, substituirPor);
+    return texto;
   }
 }
 
