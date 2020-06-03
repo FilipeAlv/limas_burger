@@ -27,6 +27,7 @@ class Util {
   static bool produtosCarregados = false;
   static List produtos = List();
   static String versao = "v0.0.1";
+  static TimeOfDay horarioInicialFuncionamento, horarioFinalFuncionamento;
 
   static Usuario usuario;
   static LimasBurgerTabBar pai;
