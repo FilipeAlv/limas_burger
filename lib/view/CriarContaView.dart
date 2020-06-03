@@ -219,7 +219,7 @@ class CriarContaViewPageState extends State<CriarContaView> {
         );
       } else {
         Usuario usuario = Usuario(null, upperNome(nome.trim()), senha.trim(),
-            email.trim(), celular.trim(), []);
+            email.trim(), celular.trim(), [], "Cliente");
 
         List _result = await usuario.save();
 

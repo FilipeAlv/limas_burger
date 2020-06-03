@@ -1,11 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:limas_burger/main.dart';
-import 'package:limas_burger/model/pedido.dart';
-import 'package:limas_burger/model/produto_pedido.dart';
 import 'package:limas_burger/util/util.dart';
-import 'package:limas_burger/view/PedidosView.dart';
 import 'package:limas_burger/view/PerfilView.dart';
 
 class SobreView extends StatefulWidget {
@@ -17,8 +13,7 @@ class SobreView extends StatefulWidget {
 }
 
 class SobreViewState extends State<SobreView> {
-  @override
-  void initState() {}
+  
 
   Future<bool> onBackPressed() {
     widget._tabBar.setTab4(PerfilView.getInstance(widget._tabBar));

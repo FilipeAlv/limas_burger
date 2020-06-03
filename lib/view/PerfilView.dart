@@ -1,9 +1,12 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:limas_burger/view/EstabelecimentoView.dart';
 import 'package:limas_burger/view/SobreView.dart';
 import 'package:limas_burger/view/dialogs/DialogEdit.dart';
 import 'package:limas_burger/view/dialogs/DialogFinalizarPedido.dart';
 import 'package:limas_burger/view/dialogs/DialogLogOut.dart';
+import 'package:limas_burger/view/dialogs/DialogLogin.dart';
+import 'package:limas_burger/view/dialogs/loginAdmin.dart';
 
 import '../main.dart';
 import '../util/util.dart';
@@ -31,6 +34,30 @@ class _PerfilViewPageState extends State<PerfilView> {
       appBar: AppBar(
         backgroundColor: MyColors.secondaryColor,
         elevation: 0,
+        actions: <Widget>[
+          IconButton(
+              icon: Icon(
+                Icons.business,
+                color: MyColors.textColor,
+                size: 30,
+              ),
+              onPressed: () {
+                if (Util.usuario == null ||
+                    Util.usuario.tipo == TipoUsuario.CLIENTE) {
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return DialogLoginAdmin();
+                    },
+                  );
+                } else {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => EstabelecimentoView()));
+                }
+              })
+        ],
         title: Container(
             margin: EdgeInsets.only(left: 20),
             child: Row(

@@ -7,16 +7,15 @@ import 'package:limas_burger/util/util.dart';
 import 'package:limas_burger/view/EnderecoView.dart';
 import 'package:limas_burger/view/EstabelecimentoView.dart';
 import 'package:limas_burger/view/dialogs/DialogLoading.dart';
+import 'package:toast/toast.dart';
 
-class DialogLogin extends StatefulWidget {
-  ProdutoPedido produto;
-  List<ProdutoPedido> produtos;
-  DialogLogin(this.produto, this.produtos);
+class DialogLoginAdmin extends StatefulWidget {
+  DialogLoginAdmin();
   @override
-  _DialogLoginState createState() => _DialogLoginState();
+  DialogLoginAdminState createState() => DialogLoginAdminState();
 }
 
-class _DialogLoginState extends State<DialogLogin> {
+class DialogLoginAdminState extends State<DialogLoginAdmin> {
   String email;
   String senha;
   bool validate = false;
@@ -108,8 +107,18 @@ class _DialogLoginState extends State<DialogLogin> {
           var _senha = senha;
           var _contato = item['fields']['contato'];
           var _tipo = item['fields']['tipo'];
-          Util.usuario =
-              Usuario(_id, _nome, _senha, _email, _contato, null, _tipo);
+
+          if (_tipo != TipoUsuario.CLIENTE) {
+            Util.usuario =
+                Usuario(_id, _nome, _senha, _email, _contato, null, _tipo);
+          } else {
+            Navigator.of(_key2.currentContext, rootNavigator: true).pop();
+            Toast.show("Você não está autorizado a acessar esta área.", context,
+                duration: Toast.LENGTH_LONG,
+                gravity: Toast.CENTER,
+                backgroundColor: MyColors.secondaryColor,
+                textColor: MyColors.textColor);
+          }
         }
       });
       if (Util.usuario != null) {
@@ -117,15 +126,8 @@ class _DialogLoginState extends State<DialogLogin> {
         db.insertUsuario(Util.usuario);
         if (Util.usuario.tipo == TipoUsuario.ADMINISTRADOR) {
           Navigator.of(_key2.currentContext, rootNavigator: true).pop();
-          Navigator.push(context,
+          Navigator.pushReplacement(context,
               MaterialPageRoute(builder: (context) => EstabelecimentoView()));
-        } else {
-          Navigator.of(_key2.currentContext, rootNavigator: true).pop();
-          Navigator.push(
-              context,
-              MaterialPageRoute(
-                  builder: (context) =>
-                      EnderecoView(widget.produto, widget.produtos)));
         }
       } else
         setState(() {

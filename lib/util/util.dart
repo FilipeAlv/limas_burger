@@ -75,3 +75,9 @@ class MyColors {
   static final Color textSecondaryColor = Colors.black;
   static final Color cardColor = Color(0xFF920004);
 }
+
+class TipoUsuario{
+  static const String CLIENTE = "Cliente";
+  static const String ADMINISTRADOR = "Adm";
+
+}

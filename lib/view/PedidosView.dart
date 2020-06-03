@@ -88,7 +88,7 @@ class _PedidosViewPageState extends State<PedidosView> {
               ? Center(
                   child: Text(
                     "Você ainda não tem pedidos. :(",
-                    style: TextStyle(fontSize: 20, color: Colors.white),
+                    style: TextStyle(fontSize: 20, color: MyColors.textSecondaryColor),
                   ),
                 )
               : Column(
