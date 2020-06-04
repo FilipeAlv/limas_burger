@@ -1,6 +1,8 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
+import 'package:limas_burger/view/CatalogoView.dart';
+import 'package:limas_burger/view/dialogs/DialogConfirmarConf.dart';
 import '../util/util.dart';
 
 class ConfiguracoesView extends StatefulWidget {
@@ -9,6 +11,14 @@ class ConfiguracoesView extends StatefulWidget {
 }
 
 class _ConfiguracoesViewPageState extends State<ConfiguracoesView> {
+  Util util;
+  bool _loading;
+  TextEditingController textInicial = TextEditingController();
+  TextEditingController textFinal = TextEditingController();
+
+  _ConfiguracoesViewPageState() {
+    carregarHorarios();
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -56,6 +66,7 @@ class _ConfiguracoesViewPageState extends State<ConfiguracoesView> {
                     ListTile(
                       leading: Icon(Icons.alarm_on),
                       title: TextField(
+                        controller: textInicial,
                         enabled: false,
                         cursorColor: MyColors.secondaryColor,
                         style: TextStyle(color: MyColors.textSecondaryColor),
@@ -68,16 +79,21 @@ class _ConfiguracoesViewPageState extends State<ConfiguracoesView> {
                       trailing: IconButton(
                           icon: Icon(Icons.alarm_add),
                           onPressed: () async {
-                            Util.horarioInicialFuncionamento =
+                            util.horarioInicialFuncionamento =
                                 await showTimePicker(
                                     context: context,
                                     initialTime: TimeOfDay.now());
-                            print(Util.horarioInicialFuncionamento);
+                            setState(() {
+                              textInicial.text = util
+                                  .horarioInicialFuncionamento
+                                  .format(context);
+                            });
                           }),
                     ),
                     ListTile(
                       leading: Icon(Icons.alarm_off),
                       title: TextField(
+                        controller: textFinal,
                         enabled: false,
                         cursorColor: MyColors.secondaryColor,
                         style: TextStyle(color: MyColors.textSecondaryColor),
@@ -90,11 +106,14 @@ class _ConfiguracoesViewPageState extends State<ConfiguracoesView> {
                       trailing: IconButton(
                           icon: Icon(Icons.alarm_add),
                           onPressed: () async {
-                            Util.horarioFinalFuncionamento =
+                            util.horarioFinalFuncionamento =
                                 await showTimePicker(
                                     context: context,
                                     initialTime: TimeOfDay.now());
-                            print(Util.horarioFinalFuncionamento);
+                            setState(() {
+                              textFinal.text = util.horarioFinalFuncionamento
+                                  .format(context);
+                            });
                           }),
                     ),
                     Row(
@@ -116,7 +135,46 @@ class _ConfiguracoesViewPageState extends State<ConfiguracoesView> {
             ],
           ),
         ),
+        Container(
+            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+            width: MediaQuery.of(context).size.width - 40,
+            height: 50,
+            decoration: BoxDecoration(
+                color: MyColors.secondaryColor,
+                borderRadius: BorderRadius.circular(6)),
+            child: FlatButton(
+                child: Text(
+                  "Salvar Alterações",
+                  style: TextStyle(
+                    color: MyColors.textColor,
+                    fontWeight: FontWeight.bold,
+                    fontSize: 18,
+                  ),
+                ),
+                onPressed: () {
+                  util.save(util.horarioInicialFuncionamento.format(context),
+                      util.horarioFinalFuncionamento.format(context));
+                  carregarHorarios();
+                  CatalogoView.util = util;
+                  showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return DialogConfirmacaoConf();
+                    },
+                  );
+                })),
       ],
     );
+  }
+
+  void carregarHorarios() async {
+    var json = await Util.buscarUtil();
+    if (json == null) {
+      util = Util(null, null, null);
+    } else {
+      util = Util.fromJson(json);
+      textInicial.text = util.horarioInicialFuncionamento.format(context);
+      textFinal.text = util.horarioFinalFuncionamento.format(context);
+    }
   }
 }

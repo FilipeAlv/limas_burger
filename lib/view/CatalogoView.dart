@@ -21,7 +21,7 @@ class CatalogoView extends StatefulWidget {
   static double scroll_position = 0;
   static BuildContext bContext;
   CatalogoView(this._pai);
-
+  static Util util;
   static getInstance(_pai) {
     if (_catalogo == null) _catalogo = CatalogoView(_pai);
     return _catalogo;
@@ -36,7 +36,22 @@ class _CatalogoViewPageState extends State<CatalogoView> {
   List names = new List();
   List produtos = List();
   bool _loading = false;
+  
   final TextEditingController _filter = new TextEditingController();
+  bool aberto = true;
+  //
+  bool _loadingFilter = false;
+  ScrollController _scrollController =
+      ScrollController(initialScrollOffset: CatalogoView.scroll_position);
+  Widget loading;
+  List<ListTile> filtredChildren = [];
+  List<ListTile> filtredChildrenAux = [];
+  int _quantidadefilter = 0;
+  List<Produto> _produtos = [];
+  List<Produto> _produtosAux = [];
+  TextEditingController _controllerSearch = TextEditingController();
+  int id;
+  int quantidadeChamadas = 0;
 
   _CatalogoViewPageState() {
     if (!(Util.produtos.length > 0)) {
@@ -58,19 +73,6 @@ class _CatalogoViewPageState extends State<CatalogoView> {
       }
     });
   }
-
-  bool _loadingFilter = false;
-  ScrollController _scrollController =
-      ScrollController(initialScrollOffset: CatalogoView.scroll_position);
-  Widget loading;
-  List<ListTile> filtredChildren = [];
-  List<ListTile> filtredChildrenAux = [];
-  int _quantidadefilter = 0;
-  List<Produto> _produtos = [];
-  List<Produto> _produtosAux = [];
-  TextEditingController _controllerSearch = TextEditingController();
-  int id;
-  int quantidadeChamadas = 0;
 
   @override
   void initState() {
@@ -421,11 +423,21 @@ class _CatalogoViewPageState extends State<CatalogoView> {
       },
     );
     */
+
     if (_loading) {
+      if (CatalogoView.util != null) {
+        setState(() {
+          aberto = Util.compararHoras(
+              CatalogoView.util.horarioInicialFuncionamento, CatalogoView.util.horarioFinalFuncionamento);
+          print(aberto);
+        });
+      }
       return Scaffold(
-        body: Container(
-          child: _buildList(),
-        ),
+        body: aberto
+            ? Container(
+                child: _buildList(),
+              )
+            : gerarFechado(),
         appBar: _buidBar(context),
       );
     } else {
@@ -567,15 +579,38 @@ class _CatalogoViewPageState extends State<CatalogoView> {
 
   void _getNames() async {
     Util.produtos = _produtos = await Produto.listarProdutos(null, 0, 2);
+    var json = await Util.buscarUtil();
+
     setState(() {
       names = Util.produtos;
       names.shuffle();
       Util.produtos = names;
 
       produtos = Util.produtos;
+      if (json != null) {
+        CatalogoView.util = Util.fromJson(json);
+      }
       _loading = true;
     });
 
     Util.produtosCarregados = true;
+  }
+
+  Widget gerarFechado() {
+    return Center(
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.center,
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Text(
+            "Infelizmente não estamos abertos ainda. :(",
+            style: TextStyle(fontSize: 18),
+          ),
+          Text("Horário de funcionamento"),
+          Text(
+              "${CatalogoView.util.horarioInicialFuncionamento.format(context)} ás ${CatalogoView.util.horarioFinalFuncionamento.format(context)}")
+        ],
+      ),
+    );
   }
 }

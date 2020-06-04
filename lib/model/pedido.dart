@@ -1,4 +1,3 @@
-import 'package:intl/intl.dart';
 import 'package:limas_burger/model/endereco.dart';
 import 'package:limas_burger/model/produto_pedido.dart';
 import 'package:limas_burger/model/usuario.dart';
