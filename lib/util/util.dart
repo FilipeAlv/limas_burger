@@ -12,10 +12,12 @@ import '../main.dart';
 
 class Util {
   int id;
-  TimeOfDay horarioInicialFuncionamento, horarioFinalFuncionamento;
+  TimeOfDay horarioInicialFuncionamento,
+      horarioFinalFuncionamento,
+      tempoEntrega;
 
   Util(this.id, this.horarioInicialFuncionamento,
-      this.horarioFinalFuncionamento);
+      this.horarioFinalFuncionamento, this.tempoEntrega);
 
   static const String URL =
       "http://ec2-18-229-29-129.sa-east-1.compute.amazonaws.com:8000/";
@@ -66,11 +68,17 @@ class Util {
     return _result;
   }
 
-  save(String inicial, String hfinal) async {
+  save(String inicial, String hfinal, String tempoEntrega) async {
     var response;
     if (id == null) {
       response = await http.get(
-          Uri.encodeFull(Util.URL + "util/add/" + inicial + "&" + hfinal),
+          Uri.encodeFull(Util.URL +
+              "util/add/" +
+              inicial +
+              "&" +
+              hfinal +
+              "&" +
+              tempoEntrega),
           headers: {"Accept": "apllication/json"});
     } else {
       response = await http.get(
@@ -80,12 +88,13 @@ class Util {
               "&" +
               inicial +
               "&" +
-              hfinal),
+              hfinal +
+              "&" +
+              tempoEntrega),
           headers: {"Accept": "apllication/json"});
     }
 
     var _result;
-    print(response.body);
     try {
       _result = jsonDecode(response.body);
     } catch (e) {
@@ -100,7 +109,8 @@ class Util {
         horarioInicialFuncionamento = converterStringEmTime(
             json[0]['fields']['hora_inicial_funcionamento']),
         horarioFinalFuncionamento = converterStringEmTime(
-            json[0]['fields']['hora_final_funcionamento']);
+            json[0]['fields']['hora_final_funcionamento']),
+        tempoEntrega = converterStringEmTime(json[0]['fields']['tempoEntrega']);
 
   @override
   String toString() {
@@ -118,15 +128,11 @@ class Util {
 
   static bool compararHoras(TimeOfDay inicial, TimeOfDay hfinal) {
     TimeOfDay horaAtual = TimeOfDay.now();
-    print(converterTimeOfDayEmDouble(horaAtual));
-    print(converterTimeOfDayEmDouble(inicial));
-    print(converterTimeOfDayEmDouble(hfinal));
 
     if ((converterTimeOfDayEmDouble(horaAtual) >=
             converterTimeOfDayEmDouble(inicial) &&
         converterTimeOfDayEmDouble(horaAtual) <=
             converterTimeOfDayEmDouble(hfinal))) {
-              print("Entrou aqui");
       return true;
     }
 

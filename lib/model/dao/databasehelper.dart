@@ -45,6 +45,7 @@ class DataBaseHelper {
 
   Future<int> insertUsuario(Usuario usuario) async {
     Database db = await this.database;
+    print("tipo ${usuario.tipo}");
     var resultado;
     try {
       resultado = await db.insert(usuarioTable, usuario.toMap());
@@ -57,9 +58,9 @@ class DataBaseHelper {
     Database db = await this.database;
     List maps = await db.query(
       usuarioTable,
-      columns: [colId, colNome, colEmail, colSenha, colContato],
+      columns: [colId, colNome, colEmail, colSenha, colContato, colTipo],
     );
-
+    print(maps);
     if (maps != null && maps.length > 0) {
       return Usuario(maps[0]['id'], maps[0]['nome'], maps[0]['senha'],
           maps[0]['email'], maps[0]['contato'], null, maps[0]['tipo']);

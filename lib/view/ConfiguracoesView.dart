@@ -15,6 +15,7 @@ class _ConfiguracoesViewPageState extends State<ConfiguracoesView> {
   bool _loading;
   TextEditingController textInicial = TextEditingController();
   TextEditingController textFinal = TextEditingController();
+  TextEditingController textTempoEntrega = TextEditingController();
 
   _ConfiguracoesViewPageState() {
     carregarHorarios();
@@ -135,6 +136,67 @@ class _ConfiguracoesViewPageState extends State<ConfiguracoesView> {
             ],
           ),
         ),
+        Card(
+          elevation: 5,
+          margin: EdgeInsets.all(10),
+          child: Column(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.all(15),
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Tempo de entrega estimado",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 20),
+                child: Column(
+                  children: <Widget>[
+                    ListTile(
+                      leading: Icon(Icons.motorcycle),
+                      title: TextField(
+                        controller: textTempoEntrega,
+                        enabled: false,
+                        cursorColor: MyColors.secondaryColor,
+                        style: TextStyle(color: MyColors.textSecondaryColor),
+                        decoration: InputDecoration(
+                          hintText: 'Tempo de entrega estimado',
+                          hintStyle: TextStyle(
+                              color: MyColors.secondaryColor, fontSize: 15),
+                        ),
+                      ),
+                      trailing: IconButton(
+                          icon: Icon(Icons.alarm_add),
+                          onPressed: () async {
+                            util.tempoEntrega = await showTimePicker(
+                                context: context, initialTime: TimeOfDay.now());
+
+                            setState(() {
+                              textTempoEntrega.text =
+                                  util.tempoEntrega.format(context);
+                            });
+                          }),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.center,
+                      children: <Widget>[
+                        Text(
+                          "toque no ",
+                        ),
+                        Icon(Icons.alarm_add),
+                        Text(
+                          " para adicionar os horários.",
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
         Container(
             margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             width: MediaQuery.of(context).size.width - 40,
@@ -152,8 +214,10 @@ class _ConfiguracoesViewPageState extends State<ConfiguracoesView> {
                   ),
                 ),
                 onPressed: () {
-                  util.save(util.horarioInicialFuncionamento.format(context),
-                      util.horarioFinalFuncionamento.format(context));
+                  util.save(
+                      util.horarioInicialFuncionamento.format(context),
+                      util.horarioFinalFuncionamento.format(context),
+                      util.tempoEntrega.format(context));
                   carregarHorarios();
                   CatalogoView.util = util;
                   showDialog(
@@ -170,11 +234,12 @@ class _ConfiguracoesViewPageState extends State<ConfiguracoesView> {
   void carregarHorarios() async {
     var json = await Util.buscarUtil();
     if (json == null) {
-      util = Util(null, null, null);
+      util = Util(null, null, null, null);
     } else {
       util = Util.fromJson(json);
       textInicial.text = util.horarioInicialFuncionamento.format(context);
       textFinal.text = util.horarioFinalFuncionamento.format(context);
+      textTempoEntrega.text = util.tempoEntrega.format(context);
     }
   }
 }

@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:limas_burger/util/util.dart';
+import 'package:limas_burger/view/CatalogoView.dart';
 
 class DialogFinalizarPedido extends StatefulWidget {
   bool maisDeUm;
@@ -19,7 +20,7 @@ class DialogFinalizarPedidoState extends State<DialogFinalizarPedido> {
         height: MediaQuery.of(context).size.height / 8,
         child: Center(
             child: Text(
-          "Pedido realizado com sucesso :)",
+          "Pedido realizado com sucesso :). tempo de entrega estimado: ${CatalogoView.util.tempoEntrega.format(context)} min.",
           textAlign: TextAlign.center,
         )),
       ),

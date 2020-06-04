@@ -4,6 +4,7 @@ import 'package:limas_burger/model/dao/databasehelper.dart';
 import 'package:limas_burger/util/util.dart';
 import 'package:limas_burger/view/CarrinhoView.dart';
 import 'package:limas_burger/view/CatalogoView.dart';
+import 'package:limas_burger/view/EstabelecimentoView.dart';
 import 'package:limas_burger/view/PedidosView.dart';
 import 'package:limas_burger/view/PerfilView.dart';
 import 'package:limas_burger/view/Splash.dart';
@@ -62,6 +63,8 @@ class LimasBurgerTabBar extends State<LimasBurger> {
   _loadUsuario() async {
     DataBaseHelper db = DataBaseHelper.getInstance();
     Util.usuario = await db.getUsuario();
+
+    
   }
 
   @override
@@ -78,17 +81,15 @@ class LimasBurgerTabBar extends State<LimasBurger> {
     return MaterialApp(
       title: "Serra China",
       localizationsDelegates: [
-        // ... app-specific localization delegate[s] here
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales: [
-        const Locale('en'), // English
-        const Locale('pt'), // Hebrew
+        const Locale('en'), 
+        const Locale('pt'), 
         const Locale.fromSubtags(
-            languageCode: 'zh'), // Chinese *See Advanced Locales below*
-        // ... other locales the app supports
+            languageCode: 'zh'),
       ],
       theme: ThemeData(
         primaryColor: Colors.black,

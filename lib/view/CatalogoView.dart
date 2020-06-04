@@ -429,7 +429,6 @@ class _CatalogoViewPageState extends State<CatalogoView> {
         setState(() {
           aberto = Util.compararHoras(
               CatalogoView.util.horarioInicialFuncionamento, CatalogoView.util.horarioFinalFuncionamento);
-          print(aberto);
         });
       }
       return Scaffold(

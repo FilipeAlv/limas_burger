@@ -81,7 +81,8 @@ class Usuario {
       'nome': nome,
       'email': email,
       'senha': senha,
-      'contato': contato
+      'contato': contato,
+      'tipo': tipo,
     };
   }
 
