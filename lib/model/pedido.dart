@@ -124,55 +124,23 @@ class Pedido {
     return _result;
   }
 
-  static Future<List<Pedido>> loadPedidos() async {
-    Util.pedidos.clear();
-    var jsonPedido = await Pedido.buscarPedidosUsuario();
-    List<Pedido> pedidos = List();
-    if (jsonPedido != null) {
-      for (int i = 0; i < jsonPedido.length; i++) {
-        var _id = jsonPedido[i]['pk'];
-        var _status = jsonPedido[i]['fields']['status'];
-        var _dataHoraPedido = jsonPedido[i]['fields']['dataHoraPedido'];
-        var _dataHoraEntrega = jsonPedido[i]['fields']['dataHoraEntrega'];
-        var _formaPagamento = jsonPedido[i]['fields']['formaPagamento'];
+  static buscarPedidosGeral(String busca) async {
+    var _result;
+    var response;
+    try {
+      response = await http.get(
+          Uri.encodeFull(
+              Util.URL + "buscar/pedido/geral/" + busca),
+          headers: {"Accept": "apllication/json"});
 
-        var _valorTotal = double.parse(jsonPedido[i]['fields']['ValorTotal']);
-        var _endereco = Endereco.fromJson(
-            await Endereco.getData(jsonPedido[i]['fields']['Endereco']));
-        var _usuario =
-            Usuario.fromJson(await Usuario.buscarPorId(Util.usuario.id));
-        List<ProdutoPedido> _produtosPedidos = List();
+      _result = jsonDecode(response.body);
 
-        for (int j = 0;
-            j < jsonPedido[i]['fields']['produtosPedidos'].length;
-            j++) {
-          var _idp = jsonPedido[i]['fields']['produtosPedidos'][j];
-
-          ProdutoPedido pp =
-              await ProdutoPedido.fromJson(await ProdutoPedido.getData(_idp));
-          _produtosPedidos.add(pp);
-        }
-
-        _dataHoraEntrega = _dataHoraEntrega.replaceAll("-", "/");
-        _dataHoraPedido = _dataHoraPedido.replaceAll("-", "/");
-        DateTime _dhEntrega = Util.converterStringEmDateTime(_dataHoraEntrega);
-        DateTime _dhPedido = Util.converterStringEmDateTime(_dataHoraPedido);
-
-        Pedido pedido = Pedido(
-            _id,
-            _dhPedido,
-            _dhEntrega,
-            _status,
-            _formaPagamento,
-            _valorTotal,
-            _endereco,
-            _usuario,
-            _produtosPedidos);
-
-        pedidos.add(pedido);
-      }
-    }
+      return _result;
+    } catch (e) {}
+    return _result;
   }
+
+  
 
   @override
   String toString() {

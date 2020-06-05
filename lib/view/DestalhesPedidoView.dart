@@ -39,7 +39,7 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
         title: Text(produtoPedido.produto.nome,
             style: TextStyle(
                 fontSize: tamanhoFontItem, fontWeight: FontWeight.bold)),
-        trailing: Text(valor,
+        trailing: Text("${produtoPedido.quantidade}x $valor",
             style: TextStyle(
                 fontSize: tamanhoFontItem, fontWeight: FontWeight.bold)),
       );

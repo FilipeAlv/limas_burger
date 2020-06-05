@@ -33,6 +33,7 @@ class Util {
   static const int QUANT_LIST_PRODUTOS = 10;
   static Carrinho carrinho = Carrinho();
   static List<Pedido> pedidos = List();
+  static List<Pedido> pedidosEstabelecimento = List();
   static bool pedidosCarregados = false;
   static bool produtosCarregados = false;
   static List produtos = List();

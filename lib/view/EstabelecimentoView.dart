@@ -1,5 +1,10 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
+import 'package:limas_burger/model/endereco.dart';
+import 'package:limas_burger/model/pedido.dart';
+import 'package:limas_burger/model/produto_pedido.dart';
+import 'package:limas_burger/model/usuario.dart';
 import 'package:limas_burger/view/ConfiguracoesView.dart';
 import 'package:limas_burger/view/dialogs/DialogEdit.dart';
 import 'package:limas_burger/view/dialogs/DialogLogOut.dart';
@@ -12,6 +17,12 @@ class EstabelecimentoView extends StatefulWidget {
 }
 
 class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
+  bool _loading = false;
+
+  _EstabelecimentoViewPageState() {
+    loadPedidos(StatusPedido.RECEBIDO);
+  }
+
   @override
   Widget build(BuildContext context) {
     ListView listaBarraLateral = ListView(
@@ -53,7 +64,13 @@ class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
           ),
           trailing: Icon(Icons.assignment),
           dense: true,
-          onTap: () {},
+          onTap: () {
+            setState(() {
+              _loading = false;
+            });
+            loadPedidos(StatusPedido.RECEBIDO);
+            Navigator.pop(context);
+          },
         ),
         ListTile(
           title: Text(
@@ -61,7 +78,13 @@ class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
           ),
           dense: true,
           trailing: Icon(Icons.play_arrow),
-          onTap: () {},
+          onTap: () {
+            setState(() {
+              _loading = false;
+            });
+            loadPedidos(StatusPedido.INICIADO);
+            Navigator.pop(context);
+          },
         ),
         ListTile(
           title: Text(
@@ -69,7 +92,13 @@ class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
           ),
           trailing: Icon(Icons.motorcycle),
           dense: true,
-          onTap: () {},
+          onTap: () {
+            setState(() {
+              _loading = false;
+            });
+            loadPedidos(StatusPedido.SAIU_PARA_ENTREGA);
+            Navigator.pop(context);
+          },
         ),
         ListTile(
           title: Text(
@@ -77,7 +106,13 @@ class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
           ),
           trailing: Icon(Icons.done),
           dense: true,
-          onTap: () {},
+          onTap: () {
+            setState(() {
+              _loading = false;
+            });
+            loadPedidos(StatusPedido.ENTRGUE);
+            Navigator.pop(context);
+          },
         ),
         ListTile(
           title: Text(
@@ -85,7 +120,13 @@ class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
           ),
           trailing: Icon(Icons.close),
           dense: true,
-          onTap: () {},
+          onTap: () {
+            setState(() {
+              _loading = false;
+            });
+            Navigator.pop(context);
+            loadPedidos(StatusPedido.CANCELADO);
+          },
         ),
         Divider(
           height: 20,
@@ -102,7 +143,7 @@ class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
         ),
       ],
     );
-    
+
     return Scaffold(
       drawer: Drawer(
         child: listaBarraLateral,
@@ -124,171 +165,125 @@ class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
               ],
             )),
       ),
-      body: Column(
-        children: <Widget>[
-          Expanded(
-            flex: 1,
-            child: Center(
-              child: Text(
-                Util.usuario != null && Util.usuario.nome != null
-                    ? Util.usuario.nome.split(" ")[0]
-                    : "Anônimo",
-                style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-              ),
-            ),
-          ),
-          Expanded(
-            flex: 5,
-            child: Util.usuario != null
-                ? Container(
-                    margin: EdgeInsets.symmetric(horizontal: 30),
-                    child: ListView(
-                      children: <Widget>[
-                        Card(
-                          color: MyColors.secondaryColor,
-                          elevation: 5,
-                          child: ListTile(
+      body: _loading
+          ? Util.pedidosEstabelecimento.length != 0
+              ? Column(
+                  children: <Widget>[
+                    Expanded(
+                      flex: 6,
+                      child: ListView.builder(
+                        itemCount: Util.pedidosEstabelecimento.length,
+                        itemBuilder: (BuildContext context, int index) {
+                          String dataHoraPedido = Util.formatDate.format(Util
+                              .pedidosEstabelecimento[index].dataHoraPedido);
+                          NumberFormat formatterValor = NumberFormat("00.00");
+                          String valor = formatterValor.format(
+                              Util.pedidosEstabelecimento[index].valorTotal);
+                          return Card(
+                            elevation: 2,
+                            color: MyColors.cardColor,
+                            margin: EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 5),
+                            child: ListTile(
                               title: Text(
-                                "Nome",
+                                Util.pedidosEstabelecimento[index].status +
+                                    " - " +
+                                    dataHoraPedido,
                                 style: TextStyle(color: Colors.white),
                               ),
-                              subtitle: Text(Util.usuario.nome,
+                              subtitle: Text(
+                                Util.pedidosEstabelecimento[index].produtos
+                                    .toString(),
+                                style: TextStyle(color: Colors.white),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              trailing: Text(valor.replaceAll('.', ','),
                                   style: TextStyle(color: Colors.white70)),
-                              trailing: Icon(
-                                Icons.keyboard_arrow_right,
-                                color: Colors.white,
-                              ),
-                              onTap: () {
-                                showDialog(
-                                    context: context,
-                                    builder: (BuildContext context) {
-                                      return DialogEdit(
-                                          Util.usuario.nome, "Nome");
-                                    });
-                              }),
-                        ),
-                        Divider(
-                          color: Colors.white,
-                        ),
-                        Card(
-                          color: MyColors.secondaryColor,
-                          elevation: 5,
-                          child: ListTile(
-                            title: Text(
-                              "Email",
-                              style: TextStyle(color: Colors.white),
+                              onTap: () {},
                             ),
-                            subtitle: Text(
-                              Util.usuario.email != null
-                                  ? Util.usuario.email
-                                  : "Adicionar e-mail",
-                              style: TextStyle(color: Colors.white70),
-                            ),
-                            trailing: Icon(
-                              Icons.keyboard_arrow_right,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Divider(
-                          color: Colors.white,
-                        ),
-                        Card(
-                          color: MyColors.secondaryColor,
-                          elevation: 5,
-                          child: ListTile(
-                            title: Text("Contato",
-                                style: TextStyle(color: Colors.white70)),
-                            subtitle: Text(
-                                Util.usuario.contato != null
-                                    ? Util.usuario.contato
-                                    : "Adicionar contato",
-                                style: TextStyle(color: Colors.white70)),
-                            trailing: Icon(
-                              Icons.keyboard_arrow_right,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Divider(
-                          color: Colors.white,
-                        ),
-                        Card(
-                          color: MyColors.secondaryColor,
-                          elevation: 5,
-                          child: ListTile(
-                            title: Text("Senha",
-                                style: TextStyle(color: Colors.white)),
-                            subtitle: Text("*******",
-                                style: TextStyle(color: Colors.white70)),
-                            trailing: Icon(
-                              Icons.keyboard_arrow_right,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Divider(
-                          color: Colors.white,
-                        ),
-                        Card(
-                          color: MyColors.secondaryColor,
-                          elevation: 5,
-                          child: ListTile(
-                            title: Text("Endereços",
-                                style: TextStyle(color: Colors.white)),
-                            trailing: Icon(
-                              Icons.keyboard_arrow_right,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                        Divider(
-                          color: MyColors.secondaryColor,
-                        ),
-                        Row(
-                          crossAxisAlignment: CrossAxisAlignment.center,
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            FlatButton(
-                              onPressed: () {},
-                              child: Text(
-                                "Sobre",
-                                style: TextStyle(
-                                    color: MyColors.secondaryColor,
-                                    fontSize: 15),
-                              ),
-                            ),
-                            Text(
-                              "|",
-                              style: TextStyle(color: MyColors.secondaryColor),
-                            ),
-                            FlatButton(
-                              onPressed: () async {
-                                await showDialog(
-                                  context: context,
-                                  builder: (BuildContext context) {
-                                    return DialoglogOut();
-                                  },
-                                ).then((valor) {
-                                  setState(() {});
-                                });
-                              },
-                              child: Text(
-                                "Sair",
-                                style: TextStyle(
-                                    color: MyColors.secondaryColor,
-                                    fontSize: 15),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  )
-                : Offstage(),
-          ),
-        ],
-      ),
+                          );
+                        },
+                      ),
+                    )
+                  ],
+                )
+              : Center(
+                  child: Text(
+                    "Você ainda não tem pedidos. :(",
+                    style: TextStyle(
+                        fontSize: 20, color: MyColors.textSecondaryColor),
+                  ),
+                )
+          : Container(
+              padding: EdgeInsets.only(
+                  top: MediaQuery.of(context).size.height / 2.5),
+              child: Center(
+                  child: Column(
+                children: <Widget>[
+                  CircularProgressIndicator(),
+                  SizedBox(
+                    height: 30,
+                  ),
+                  Text("Carregando Dados...")
+                ],
+              ))),
     );
+  }
+
+  void loadPedidos(String busca) async {
+    Util.pedidosEstabelecimento.clear();
+    var jsonPedido = await Pedido.buscarPedidosGeral(busca);
+    print(jsonPedido);
+
+    if (jsonPedido != null) {
+      for (int i = 0; i < jsonPedido.length; i++) {
+        var _id = jsonPedido[i]['pk'];
+        var _status = jsonPedido[i]['fields']['status'];
+        var _dataHoraPedido = jsonPedido[i]['fields']['dataHoraPedido'];
+        var _dataHoraEntrega = jsonPedido[i]['fields']['dataHoraEntrega'];
+        var _formaPagamento = jsonPedido[i]['fields']['formaPagamento'];
+
+        var _valorTotal = double.parse(jsonPedido[i]['fields']['ValorTotal']);
+        var _endereco = Endereco.fromJson(
+            await Endereco.getData(jsonPedido[i]['fields']['Endereco']));
+
+        var _usuario = Usuario.fromJson(
+            await Usuario.buscarPorId(jsonPedido[i]['fields']['cliente']));
+        List<ProdutoPedido> _produtosPedidos = List();
+
+        for (int j = 0;
+            j < jsonPedido[i]['fields']['produtosPedidos'].length;
+            j++) {
+          var _idp = jsonPedido[i]['fields']['produtosPedidos'][j];
+
+          ProdutoPedido pp =
+              await ProdutoPedido.fromJson(await ProdutoPedido.getData(_idp));
+          _produtosPedidos.add(pp);
+        }
+
+        _dataHoraEntrega = _dataHoraEntrega.replaceAll("-", "/");
+        _dataHoraPedido = _dataHoraPedido.replaceAll("-", "/");
+        DateTime _dhEntrega = Util.converterStringEmDateTime(_dataHoraEntrega);
+        DateTime _dhPedido = Util.converterStringEmDateTime(_dataHoraPedido);
+
+        Pedido pedido = Pedido(
+            _id,
+            _dhPedido,
+            _dhEntrega,
+            _status,
+            _formaPagamento,
+            _valorTotal,
+            _endereco,
+            _usuario,
+            _produtosPedidos);
+
+        Util.pedidosEstabelecimento.add(pedido);
+      }
+    }
+    setState(() {
+      _loading = true;
+    });
+    print(Util.pedidosEstabelecimento);
   }
 }

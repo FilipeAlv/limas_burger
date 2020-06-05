@@ -49,7 +49,6 @@ class ProdutoPedido {
         await Produto.listarProdutosPorId(json[0]['fields']['produto']);
 
     ProdutoPedido _produtoPedido = ProdutoPedido(_id, _produto, _quantidade);
-
     return _produtoPedido;
   }
 

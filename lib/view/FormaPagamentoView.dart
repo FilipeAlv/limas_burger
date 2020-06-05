@@ -161,7 +161,7 @@ class EnderecoViewPageState extends State<FormaPagamentoView> {
           null,
           DateTime.now(),
           null,
-          StatusPedido.FEITO,
+          StatusPedido.RECEBIDO,
           formaPagamento(selectedRadio),
           valorTotal,
           widget.endereco,
