@@ -49,6 +49,16 @@ class Util {
     return novaData;
   }
 
+  static DateTime converterStringEmDateTimeZerada(String dateString) {
+    DateTime novaData;
+    try {
+      novaData = DateFormat("yyyy-MM-dd").parse(dateString);
+    } catch (e) {
+      print("ERROR");
+    }
+    return novaData;
+  }
+
   static String retirarSeparador(
       String texto, String separador, String substituirPor) {
     texto = texto.replaceAll(separador, substituirPor);

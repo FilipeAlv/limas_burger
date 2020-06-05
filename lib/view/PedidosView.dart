@@ -88,7 +88,8 @@ class _PedidosViewPageState extends State<PedidosView> {
               ? Center(
                   child: Text(
                     "Você ainda não tem pedidos. :(",
-                    style: TextStyle(fontSize: 20, color: MyColors.textSecondaryColor),
+                    style: TextStyle(
+                        fontSize: 20, color: MyColors.textSecondaryColor),
                   ),
                 )
               : Column(
@@ -313,11 +314,14 @@ class _PedidosViewPageState extends State<PedidosView> {
     }
     pedidosFilter = List();
     pedidos = Util.pedidos;
-    int diaInicio = widget.dataInicio.day;
-    int diaFim = widget.dataFim.day;
+
+    DateTime dataIncial = widget.dataInicio;
+    DateTime dataFim = widget.dataFim;
+
     for (Pedido pedido in Util.pedidos) {
-      int diaPedido = pedido.dataHoraPedido.day;
-      if (diaPedido >= diaInicio && diaPedido <= diaFim) {
+      DateTime diaPedido = Util.converterStringEmDateTimeZerada(
+          pedido.dataHoraPedido.toString());
+      if (!(diaPedido.isAfter(dataFim)) && !(diaPedido.isBefore(dataIncial))) {
         pedidosFilter.add(pedido);
       }
     }
