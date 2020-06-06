@@ -46,7 +46,7 @@ class DialogRetomarPedidoState extends State<DialogRetomarPedido> {
                 ),
               ),
               onPressed: () {
-                widget.pedido.status = StatusPedido.FEITO;
+                widget.pedido.status = StatusPedido.RECEBIDO;
                 Util.pedidosCarregados = false;
                  widget.pedido.save();
                 Navigator.pop(context);

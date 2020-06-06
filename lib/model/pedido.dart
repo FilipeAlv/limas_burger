@@ -70,9 +70,10 @@ class Pedido {
 
   save() async {
     var response;
-    print(toString());
+   
     String data =
         Util.formatDate.format(dataHoraPedido).trim().replaceAll("/", "-");
+      print(data);
     if (id == null) {
       response = await http.get(
           Uri.encodeFull(Util.URL +
@@ -124,13 +125,28 @@ class Pedido {
     return _result;
   }
 
-  static buscarPedidosGeral(String busca) async {
+  static buscarPedidosDia(String busca) async {
     var _result;
     var response;
     try {
       response = await http.get(
           Uri.encodeFull(
-              Util.URL + "buscar/pedido/geral/" + busca),
+              Util.URL + "buscar/pedido/diaStatus/" + busca),
+          headers: {"Accept": "apllication/json"});
+
+      _result = jsonDecode(response.body);
+
+      return _result;
+    } catch (e) {}
+    return _result;
+  }
+   static buscarPedidosStatus(String busca) async {
+    var _result;
+    var response;
+    try {
+      response = await http.get(
+          Uri.encodeFull(
+              Util.URL + "buscar/pedido/statusGeral/" + busca),
           headers: {"Accept": "apllication/json"});
 
       _result = jsonDecode(response.body);

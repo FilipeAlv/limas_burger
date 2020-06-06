@@ -6,6 +6,7 @@ import 'package:limas_burger/model/pedido.dart';
 import 'package:limas_burger/model/produto_pedido.dart';
 import 'package:limas_burger/model/usuario.dart';
 import 'package:limas_burger/view/ConfiguracoesView.dart';
+import 'package:limas_burger/view/HistoricoPedidosView.dart';
 import 'package:limas_burger/view/dialogs/DialogEdit.dart';
 import 'package:limas_burger/view/dialogs/DialogLogOut.dart';
 import '../util/util.dart';
@@ -49,7 +50,7 @@ class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
         ),
         ListTile(
           title: Text(
-            "Pedidos",
+            "Pedidos do dia",
             style: TextStyle(
               fontSize: 15,
               fontWeight: FontWeight.bold,
@@ -139,6 +140,19 @@ class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
           onTap: () {
             Navigator.push(context,
                 MaterialPageRoute(builder: (context) => ConfiguracoesView()));
+          },
+        ),
+        Divider(
+          height: 20,
+        ),
+        ListTile(
+          title: Text("Histórico de pedidos",
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+          dense: true,
+          trailing: Icon(Icons.history),
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => HistoricoView()));
           },
         ),
       ],
@@ -233,8 +247,7 @@ class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
 
   void loadPedidos(String busca) async {
     Util.pedidosEstabelecimento.clear();
-    var jsonPedido = await Pedido.buscarPedidosGeral(busca);
-    print(jsonPedido);
+    var jsonPedido = await Pedido.buscarPedidosDia(busca);
 
     if (jsonPedido != null) {
       for (int i = 0; i < jsonPedido.length; i++) {
@@ -284,6 +297,5 @@ class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
     setState(() {
       _loading = true;
     });
-    print(Util.pedidosEstabelecimento);
   }
 }
