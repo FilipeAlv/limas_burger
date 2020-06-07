@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:limas_burger/model/ingrediente.dart';
+import 'package:limas_burger/model/promocao.dart';
 import 'package:limas_burger/util/util.dart';
 import 'package:http/http.dart' as http;
 
@@ -11,6 +12,7 @@ class Produto{
   List<Ingrediente> ingredientes;
   String status;
   String imagem;
+  Promocao promocao;
 
   Produto(this.id, this.nome, this.imagem, this.valor, this.status, this.ingredientes);
 

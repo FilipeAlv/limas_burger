@@ -49,7 +49,9 @@ class _PerfilViewPageState extends State<PerfilView> {
                     builder: (BuildContext context) {
                       return DialogLoginAdmin();
                     },
-                  );
+                  ).then((value) {
+                    setState(() {});
+                  });
                 } else {
                   Navigator.push(
                       context,

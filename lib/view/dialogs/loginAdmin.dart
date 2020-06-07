@@ -99,6 +99,7 @@ class DialogLoginAdminState extends State<DialogLoginAdmin> {
       userNotExit = false;
 
       List usuarios = await Usuario.autenticar(email, senha);
+      DataBaseHelper db = DataBaseHelper();
       usuarios.forEach((item) {
         if (item['pk'] != null) {
           var _id = item['pk'];
@@ -109,10 +110,12 @@ class DialogLoginAdminState extends State<DialogLoginAdmin> {
           var _tipo = item['fields']['tipo'];
 
           if (_tipo != TipoUsuario.CLIENTE) {
+            if (Util.usuario != null) {
+              db.deletUsuario(Util.usuario.id);
+            }
             Util.usuario =
                 Usuario(_id, _nome, _senha, _email, _contato, null, _tipo);
           } else {
-            Navigator.of(_key2.currentContext, rootNavigator: true).pop();
             Toast.show("Você não está autorizado a acessar esta área.", context,
                 duration: Toast.LENGTH_LONG,
                 gravity: Toast.CENTER,
@@ -122,8 +125,8 @@ class DialogLoginAdminState extends State<DialogLoginAdmin> {
         }
       });
       if (Util.usuario != null) {
-        DataBaseHelper db = DataBaseHelper();
         db.insertUsuario(Util.usuario);
+        print("Inseriu");
         if (Util.usuario.tipo == TipoUsuario.ADMINISTRADOR) {
           Navigator.of(_key2.currentContext, rootNavigator: true).pop();
           Navigator.pushReplacement(context,
@@ -135,6 +138,7 @@ class DialogLoginAdminState extends State<DialogLoginAdmin> {
           Navigator.of(_key2.currentContext, rootNavigator: true).pop();
         });
     } else {
+      print("eNTROU AQUI 2");
       setState(() {
         validate = true;
       });

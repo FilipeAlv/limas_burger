@@ -20,14 +20,13 @@ class EstabelecimentoView extends StatefulWidget {
 
 class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
   bool _loading = false;
-  String statusCorrente;
-  _EstabelecimentoViewPageState() {
-    loadPedidos(StatusPedido.RECEBIDO);
-  }
+  String statusCorrente = StatusPedido.RECEBIDO;
+ 
 
   @override
   Widget build(BuildContext context) {
     if (!Util.produtosCarregadosDia) {
+      print("Entrou");
       _loading = false;
       loadPedidos(statusCorrente);
     }
@@ -138,19 +137,6 @@ class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
           height: 20,
         ),
         ListTile(
-          title: Text("Configurações",
-              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
-          dense: true,
-          trailing: Icon(Icons.settings_applications),
-          onTap: () {
-            Navigator.push(context,
-                MaterialPageRoute(builder: (context) => ConfiguracoesView()));
-          },
-        ),
-        Divider(
-          height: 20,
-        ),
-        ListTile(
           title: Text("Histórico de pedidos",
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
           dense: true,
@@ -160,9 +146,33 @@ class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
                 MaterialPageRoute(builder: (context) => HistoricoView()));
           },
         ),
+        Divider(
+          height: 20,
+        ),
+        ListTile(
+          title: Text("Centro de promoções",
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+          dense: true,
+          trailing: Icon(Icons.notifications_active),
+          onTap: () {},
+        ),
+        Divider(
+          height: 20,
+        ),
+        ListTile(
+          title: Text("Configurações",
+              style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
+          dense: true,
+          trailing: Icon(Icons.settings_applications),
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => ConfiguracoesView()));
+          },
+        ),
       ],
     );
 
+    print(_loading);
     return Scaffold(
       drawer: Drawer(
         child: listaBarraLateral,
