@@ -20,7 +20,7 @@ class LimasBurger extends StatefulWidget {
   }
 
   @override
-  State<StatefulWidget> createState() => LimasBurgerTabBar();
+  LimasBurgerTabBar createState() => LimasBurgerTabBar();
 }
 
 class LimasBurgerTabBar extends State<LimasBurger> {

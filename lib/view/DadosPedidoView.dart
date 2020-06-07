@@ -4,25 +4,60 @@ import 'package:intl/intl.dart';
 import 'package:limas_burger/model/pedido.dart';
 import 'package:limas_burger/model/produto_pedido.dart';
 import 'package:limas_burger/util/util.dart';
+import 'package:limas_burger/view/dialogs/DialogAtualizarPedido.dart';
+import 'package:limas_burger/view/dialogs/DialogCancelarPedido.dart';
 import 'package:limas_burger/view/dialogs/DialogFinalizarPedido.dart';
+import 'package:limas_burger/view/dialogs/DialogNaoCancelar.dart';
+import 'package:limas_burger/view/dialogs/DialogRetomarPedido.dart';
 
 class DadosPedidoView extends StatefulWidget {
   Pedido pedido;
-  DadosPedidoView(this.pedido);
+  bool visivel;
+  DadosPedidoView(this.pedido, this.visivel);
 
   @override
-  State<StatefulWidget> createState() => EnderecoViewPageState();
+  State<StatefulWidget> createState() => DadosPedidoViewState();
 }
 
-class EnderecoViewPageState extends State<DadosPedidoView> {
+class DadosPedidoViewState extends State<DadosPedidoView> {
   int selectedRadio = 0;
   TextEditingController controller = TextEditingController();
   double troco;
   double valorTotal;
+  bool _editavel = true;
+  List status_dropdown = [
+    StatusPedido.RECEBIDO,
+    StatusPedido.INICIADO,
+    StatusPedido.SAIU_PARA_ENTREGA,
+    StatusPedido.ENTRGUE,
+    StatusPedido.CANCELADO,
+  ];
+  String _statusCorrente;
 
+  List<DropdownMenuItem<String>> _dropDownMenuItemsStatus;
   @override
   void initState() {
+    if (widget.pedido.status == StatusPedido.INICIADO) {
+      _editavel = false;
+    }
+    _dropDownMenuItemsStatus = getDropDownMenuItemsStatus();
+    _statusCorrente = widget.pedido.status;
     super.initState();
+  }
+
+  List<DropdownMenuItem<String>> getDropDownMenuItemsStatus() {
+    List<DropdownMenuItem<String>> items = new List();
+    for (String status in status_dropdown) {
+      items.add(new DropdownMenuItem(value: status, child: new Text(status)));
+    }
+    return items;
+  }
+
+  void changedDropDownItemStatus(String selectedConsulta) {
+    setState(() {
+      _statusCorrente = selectedConsulta;
+      exibirAtualizarDialog();
+    });
   }
 
   @override
@@ -56,19 +91,66 @@ class EnderecoViewPageState extends State<DadosPedidoView> {
     Widget itemContato;
     Widget itemFormaPagameto;
     Widget itemTroco;
+    Widget itemDataHoraPedido;
+    Widget itemDataHoraEntrega;
+    Widget itemStatus;
+    Widget itemCliente;
+
+    Widget itemValorTotal;
     Widget labelColunasProdutos;
+    Widget labelValorTotal;
+    Widget labeldataHoraPedido;
+    Widget labeldataHoraEntrega;
+    Widget labelStatus;
+    Widget labelCliente;
+    Widget labelDropStatus;
+
     Widget btnConfirmar;
+    Widget dropDownStatus;
     Widget divider = Divider();
+    NumberFormat formatterValor = NumberFormat("00.00");
 
     labelProdutos = Container(
       padding: EdgeInsets.all(10),
-      child: Align(alignment: Alignment.centerLeft, child: Text("PRODUTOS:")),
+      child: Align(alignment: Alignment.centerLeft, child: Text("PRODUTOS")),
+    );
+    labelValorTotal = Container(
+      padding: EdgeInsets.all(10),
+      child: Align(alignment: Alignment.centerLeft, child: Text("VALOR TOTAL")),
     );
 
+    labeldataHoraEntrega = Container(
+      padding: EdgeInsets.all(10),
+      child: Align(
+          alignment: Alignment.centerLeft, child: Text("DATA/HORA ENTREGA")),
+    );
+
+    labeldataHoraPedido = Container(
+      padding: EdgeInsets.all(10),
+      child: Align(
+          alignment: Alignment.centerLeft, child: Text("DATA/HORA PEDIDO")),
+    );
+
+    labelStatus = Container(
+      padding: EdgeInsets.all(10),
+      child: Align(
+          alignment: Alignment.centerLeft, child: Text("STATUS DO PEDIDO")),
+    );
+    labelCliente = Container(
+      padding: EdgeInsets.all(10),
+      child: Align(alignment: Alignment.centerLeft, child: Text("CLIENTE")),
+    );
+    labelDropStatus = Container(
+      padding: EdgeInsets.all(10),
+      child: Align(
+          alignment: Alignment.centerLeft,
+          child:
+              widget.pedido.id != null ? Text("ATUALIZAR STATUS") : Offstage()),
+    );
     labelColunasProdutos = Container(
         child: ListTile(
-      title: Text("Nome:"),
-      trailing: Text("Quantidade:"),
+      title: Text("Nome"),
+      trailing: Text("Valor/Quantidade"),
     ));
 
     for (ProdutoPedido produto in widget.pedido.produtos) {
@@ -82,7 +164,7 @@ class EnderecoViewPageState extends State<DadosPedidoView> {
               style: TextStyle(color: MyColors.textColor),
             ),
             trailing: Text(
-              produto.quantidade.toString(),
+              "${produto.quantidade.toString()} x ${formatterValor.format(produto.produto.valor)}",
               style: TextStyle(color: MyColors.textColor),
             ),
           ),
@@ -93,6 +175,56 @@ class EnderecoViewPageState extends State<DadosPedidoView> {
     labelEndereco = Container(
       padding: EdgeInsets.all(10),
       child: Align(alignment: Alignment.centerLeft, child: Text("ENDEREÇO:")),
+    );
+
+    itemDataHoraPedido = Container(
+      color: MyColors.secondaryColor,
+      padding: EdgeInsets.all(20),
+      margin: EdgeInsets.only(bottom: 2),
+      child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "${Util.formatDate.format(widget.pedido.dataHoraPedido)}",
+            style: TextStyle(color: MyColors.textColor),
+          )),
+    );
+    itemDataHoraEntrega = Container(
+      color: MyColors.secondaryColor,
+      padding: EdgeInsets.all(20),
+      margin: EdgeInsets.only(bottom: 2),
+      child: Align(
+          alignment: Alignment.centerLeft,
+          child: widget.pedido.dataHoraEntrega != null
+              ? Text(
+                  "${Util.formatDate.format(widget.pedido.dataHoraEntrega)}",
+                  style: TextStyle(color: MyColors.textColor),
+                )
+              : Text("Não definida.",
+                  style: TextStyle(color: MyColors.textColor))),
+    );
+
+    itemCliente = Container(
+      color: MyColors.secondaryColor,
+      padding: EdgeInsets.all(20),
+      margin: EdgeInsets.only(bottom: 2),
+      child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "${widget.pedido.usuario.nome}",
+            style: TextStyle(color: MyColors.textColor),
+          )),
+    );
+
+    itemStatus = Container(
+      color: MyColors.secondaryColor,
+      padding: EdgeInsets.all(20),
+      margin: EdgeInsets.only(bottom: 2),
+      child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "${widget.pedido.status}",
+            style: TextStyle(color: MyColors.textColor),
+          )),
     );
 
     itemRua = Container(
@@ -134,6 +266,17 @@ class EnderecoViewPageState extends State<DadosPedidoView> {
     labelContato = Container(
       padding: EdgeInsets.all(10),
       child: Align(alignment: Alignment.centerLeft, child: Text("CONTATO:")),
+    );
+    itemValorTotal = Container(
+      padding: EdgeInsets.all(20),
+      margin: EdgeInsets.only(bottom: 2),
+      color: MyColors.secondaryColor,
+      child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "${formatterValor.format(widget.pedido.valorTotal)}",
+            style: TextStyle(color: MyColors.textColor),
+          )),
     );
 
     itemContato = Container(
@@ -177,52 +320,83 @@ class EnderecoViewPageState extends State<DadosPedidoView> {
           )
         : Offstage();
 
-    btnConfirmar = Container(
-      margin: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
-      width: MediaQuery.of(context).size.width - 40,
-      height: 50,
-      decoration: BoxDecoration(
-          border: Border.all(color: MyColors.secondaryColor),
-          borderRadius: BorderRadius.circular(6)),
-      child: FlatButton(
-        child: Text(
-          "Confirmar pedido",
-          style: TextStyle(
-            color: MyColors.secondaryColor,
-            fontWeight: FontWeight.bold,
-            fontSize: 18,
-          ),
-        ),
-        onPressed: () async {
-          try {
-            widget.pedido.save();
-            for (ProdutoPedido produtoPedido in widget.pedido.produtos) {
-              produtoPedido.save();
-            }
-            bool _maisDeUm = false;
+    btnConfirmar = widget.visivel
+        ? Container(
+            margin: EdgeInsets.symmetric(horizontal: 20, vertical: 30),
+            width: MediaQuery.of(context).size.width - 40,
+            height: 50,
+            decoration: BoxDecoration(
+                border: Border.all(color: MyColors.secondaryColor),
+                borderRadius: BorderRadius.circular(6)),
+            child: FlatButton(
+              child: Text(
+                "Confirmar pedido",
+                style: TextStyle(
+                  color: MyColors.secondaryColor,
+                  fontWeight: FontWeight.bold,
+                  fontSize: 18,
+                ),
+              ),
+              onPressed: () async {
+                try {
+                  widget.pedido.save();
+                  for (ProdutoPedido produtoPedido in widget.pedido.produtos) {
+                    produtoPedido.save();
+                  }
 
-            if (widget.pedido.produtos.length > 1) {
-              _maisDeUm = true;
-            }
-            await showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return DialogFinalizarPedido(_maisDeUm);
+                  bool _maisDeUm = false;
+
+                  if (widget.pedido.produtos.length > 1) {
+                    _maisDeUm = true;
+                  }
+
+                  await showDialog(
+                    context: context,
+                    builder: (BuildContext context) {
+                      return DialogFinalizarPedido(_maisDeUm);
+                    },
+                  ).then((valor) {
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                    Navigator.pop(context);
+                  });
+                  Util.pedidosCarregados = false;
+                  Util.carrinho.produtos = [];
+                } catch (e) {
+                  print("Deu erro");
+                }
               },
-            );
-            Util.pedidosCarregados = false;
-            Util.carrinho.produtos = [];
-          } catch (e) {
-            print("Deu erro");
-          }
-        },
-      ),
-    );
+            ),
+          )
+        : SizedBox(
+            height: 20,
+          );
+
+    dropDownStatus = widget.pedido.id != null
+        ? Container(
+            margin: EdgeInsets.only(top: 10, left: 15, right: 15),
+            child: DropdownButton(
+              isExpanded: true,
+              value: _statusCorrente,
+              items: _dropDownMenuItemsStatus,
+              onChanged: changedDropDownItemStatus,
+            ),
+          )
+        : Offstage();
 
     _childrens.add(divider);
     _childrens.add(labelProdutos);
     _childrens.add(labelColunasProdutos);
     _childrens += _produtosChild;
+    _childrens.add(divider);
+    _childrens.add(labelValorTotal);
+    _childrens.add(itemValorTotal);
+    _childrens.add(labelStatus);
+    _childrens.add(itemStatus);
+    _childrens.add(labeldataHoraPedido);
+    _childrens.add(itemDataHoraPedido);
+    _childrens.add(labeldataHoraEntrega);
+    _childrens.add(itemDataHoraEntrega);
 
     _childrens.add(divider);
     _childrens.add(labelEndereco);
@@ -231,6 +405,8 @@ class EnderecoViewPageState extends State<DadosPedidoView> {
     _childrens.add(itemReferencia);
 
     _childrens.add(divider);
+    _childrens.add(labelCliente);
+    _childrens.add(itemCliente);
     _childrens.add(labelContato);
     _childrens.add(itemContato);
 
@@ -247,9 +423,57 @@ class EnderecoViewPageState extends State<DadosPedidoView> {
             style: TextStyle(color: MyColors.textColor),
           )),
     ));
+    _childrens.add(divider);
+    _childrens.add(SizedBox(
+      height: 15,
+    ));
+    _childrens.add(labelDropStatus);
+    _childrens.add(dropDownStatus);
 
     _childrens.add(btnConfirmar);
 
     return _childrens;
+  }
+
+  void cancelarRetomarPedido() async {
+    if (widget.pedido.status == StatusPedido.CANCELADO) {
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return DialogRetomarPedido(widget.pedido);
+        },
+      ).then((valor) {
+        setState(() {});
+      });
+    } else {
+      await showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return DialogCancelarPedido(widget.pedido);
+        },
+      ).then((valor) {
+        setState(() {});
+      });
+    }
+  }
+
+  void exibirInfo() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return DialogNaoCancelar();
+      },
+    );
+  }
+
+  void exibirAtualizarDialog() async {
+    await showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return DialogAtualizarPedido(widget.pedido, _statusCorrente);
+      },
+    ).then((valor) {
+      setState(() {});
+    });
   }
 }

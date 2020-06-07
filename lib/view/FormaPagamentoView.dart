@@ -15,10 +15,10 @@ class FormaPagamentoView extends StatefulWidget {
   FormaPagamentoView(this.produto, this.produtos, this.endereco);
 
   @override
-  State<StatefulWidget> createState() => EnderecoViewPageState();
+  FormaPagamentoPageState createState() => FormaPagamentoPageState();
 }
 
-class EnderecoViewPageState extends State<FormaPagamentoView> {
+class FormaPagamentoPageState extends State<FormaPagamentoView> {
   int selectedRadio = 1;
   double troco = 0;
   double valorTotal;
@@ -168,7 +168,8 @@ class EnderecoViewPageState extends State<FormaPagamentoView> {
           Util.usuario,
           getProdutos());
       Navigator.push(context,
-          MaterialPageRoute(builder: (context) => DadosPedidoView(pedido)));
+          MaterialPageRoute(builder: (context) => DadosPedidoView(pedido, true)));
+        
     }
   }
 

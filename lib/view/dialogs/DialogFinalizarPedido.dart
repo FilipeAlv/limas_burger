@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:limas_burger/main.dart';
 import 'package:limas_burger/util/util.dart';
 import 'package:limas_burger/view/CatalogoView.dart';
 
@@ -42,13 +43,8 @@ class DialogFinalizarPedidoState extends State<DialogFinalizarPedido> {
                 ),
               ),
               onPressed: () {
-                Navigator.pop(context);
-                /*
-                Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                        builder: (context) => LimasBurger);
-                        */
+                Navigator.of(context, rootNavigator: true).pop();
+               
               },
             )),
       ]),

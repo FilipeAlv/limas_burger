@@ -23,6 +23,7 @@ class CatalogoView extends StatefulWidget {
   CatalogoView(this._pai);
   static Util util;
   static getInstance(_pai) {
+    
     if (_catalogo == null) _catalogo = CatalogoView(_pai);
     return _catalogo;
   }
@@ -36,6 +37,7 @@ class _CatalogoViewPageState extends State<CatalogoView> {
   List names = new List();
   List produtos = List();
   bool _loading = false;
+
   
   final TextEditingController _filter = new TextEditingController();
   bool aberto = true;
@@ -54,6 +56,7 @@ class _CatalogoViewPageState extends State<CatalogoView> {
   int quantidadeChamadas = 0;
 
   _CatalogoViewPageState() {
+   
     if (!(Util.produtos.length > 0)) {
       this._getNames();
     } else {

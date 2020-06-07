@@ -229,7 +229,6 @@ class _PedidosViewPageState extends State<PedidosView> {
   void loadPedidos() async {
     Util.pedidos.clear();
     var jsonPedido = await Pedido.buscarPedidosUsuario();
-    print(jsonPedido);
     if (jsonPedido != null) {
       for (int i = 0; i < jsonPedido.length; i++) {
         var _id = jsonPedido[i]['pk'];

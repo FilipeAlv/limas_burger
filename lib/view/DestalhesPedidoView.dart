@@ -54,7 +54,6 @@ class DetalhePedidoViewState extends State<DetalhePedidoView> {
 
   @override
   Widget build(BuildContext context) {
-    print(widget._pedido.status);
     return WillPopScope(
         onWillPop: onBackPressed,
         child: CustomScrollView(

@@ -6,6 +6,7 @@ import 'package:limas_burger/model/pedido.dart';
 import 'package:limas_burger/model/produto_pedido.dart';
 import 'package:limas_burger/model/usuario.dart';
 import 'package:limas_burger/view/ConfiguracoesView.dart';
+import 'package:limas_burger/view/DadosPedidoView.dart';
 import 'package:limas_burger/view/HistoricoPedidosView.dart';
 import 'package:limas_burger/view/dialogs/DialogEdit.dart';
 import 'package:limas_burger/view/dialogs/DialogLogOut.dart';
@@ -19,13 +20,17 @@ class EstabelecimentoView extends StatefulWidget {
 
 class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
   bool _loading = false;
-
+  String statusCorrente;
   _EstabelecimentoViewPageState() {
     loadPedidos(StatusPedido.RECEBIDO);
   }
 
   @override
   Widget build(BuildContext context) {
+    if (!Util.produtosCarregadosDia) {
+      _loading = false;
+      loadPedidos(statusCorrente);
+    }
     ListView listaBarraLateral = ListView(
       padding: EdgeInsets.zero,
       children: <Widget>[
@@ -214,7 +219,16 @@ class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
                               ),
                               trailing: Text(valor.replaceAll('.', ','),
                                   style: TextStyle(color: Colors.white70)),
-                              onTap: () {},
+                              onTap: () {
+                                statusCorrente =
+                                    Util.pedidosEstabelecimento[index].status;
+                                Navigator.push(
+                                    context,
+                                    MaterialPageRoute(
+                                        builder: (context) => DadosPedidoView(
+                                            Util.pedidosEstabelecimento[index],
+                                            false)));
+                              },
                             ),
                           );
                         },
@@ -296,6 +310,7 @@ class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
     }
     setState(() {
       _loading = true;
+      Util.produtosCarregadosDia = true;
     });
   }
 }

@@ -6,10 +6,13 @@ import 'package:limas_burger/model/pedido.dart';
 import 'package:limas_burger/model/produto_pedido.dart';
 import 'package:limas_burger/model/usuario.dart';
 import 'package:limas_burger/util/util.dart';
+import 'package:limas_burger/view/DadosPedidoView.dart';
+import 'package:limas_burger/view/DestalhesPedidoView.dart';
 import 'package:limas_burger/view/dialogs/DialogDatasFiltro.dart';
 
 class HistoricoView extends StatefulWidget {
   DateTime dataInicio, dataFim;
+  static bool pedidosCarregados = true;
 
   @override
   _HistoricoViewPageState createState() => _HistoricoViewPageState();
@@ -55,6 +58,10 @@ class _HistoricoViewPageState extends State<HistoricoView> {
 
   @override
   Widget build(BuildContext context) {
+    if (!Util.produtosCarregadosHistorico) {
+      loadPedidos(_statusCorrente);
+      _loading = false;
+    }
     return Scaffold(
         appBar: AppBar(
           backgroundColor: MyColors.secondaryColor,
@@ -108,6 +115,7 @@ class _HistoricoViewPageState extends State<HistoricoView> {
                           value: _statusCorrente,
                           items: _dropDownMenuItemsStatus,
                           onChanged: changedDropDownItemStatus,
+                          
                         ),
                       ),
                       SizedBox(
@@ -134,6 +142,8 @@ class _HistoricoViewPageState extends State<HistoricoView> {
                           value: _statusCorrente,
                           items: _dropDownMenuItemsStatus,
                           onChanged: changedDropDownItemStatus,
+                          hint: Text("Selecione o status"),
+                          
                         ),
                       ),
                       SizedBox(
@@ -238,7 +248,15 @@ class _HistoricoViewPageState extends State<HistoricoView> {
                                 ),
                                 trailing: Text(valor.replaceAll('.', ','),
                                     style: TextStyle(color: Colors.white70)),
-                                onTap: () {},
+                                onTap: () {
+                                  Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => DadosPedidoView(
+                                              Util.pedidosEstabelecimento[
+                                                  index],
+                                              false)));
+                                },
                               ),
                             );
                           },
@@ -312,17 +330,7 @@ class _HistoricoViewPageState extends State<HistoricoView> {
     }
     setState(() {
       _loading = true;
-    });
-  }
-
-  void exibirDialogDatasFiltro() async {
-    await showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        return DialogDatasFiltro(widget.dataInicio, widget.dataFim);
-      },
-    ).then((value) {
-      setState(() {});
+      Util.produtosCarregadosHistorico = true;
     });
   }
 

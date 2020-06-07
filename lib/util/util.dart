@@ -36,6 +36,8 @@ class Util {
   static List<Pedido> pedidosEstabelecimento = List();
   static bool pedidosCarregados = false;
   static bool produtosCarregados = false;
+  static bool produtosCarregadosHistorico = false;
+   static bool produtosCarregadosDia = false;
   static List produtos = List();
   static String versao = "v0.0.1";
 
