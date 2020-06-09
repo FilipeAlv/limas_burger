@@ -38,6 +38,12 @@ dependencies:
 dev_dependencies:
   flutter_test:
     sdk: flutter
+  flutter_launcher_icons: any
+
+flutter_icons:
+  image_path: assets/images/logo_400-400-red.png
+  android: true
+  ios: true
 
 
 # For information on the generic Dart part of this file, see the
