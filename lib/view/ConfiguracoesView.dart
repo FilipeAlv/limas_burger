@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_time_picker_spinner/flutter_time_picker_spinner.dart';
+import 'package:intl/intl.dart';
 import 'package:limas_burger/view/CatalogoView.dart';
 import 'package:limas_burger/view/dialogs/DialogConfirmarConf.dart';
 import '../util/util.dart';
@@ -16,7 +17,8 @@ class _ConfiguracoesViewPageState extends State<ConfiguracoesView> {
   TextEditingController textInicial = TextEditingController();
   TextEditingController textFinal = TextEditingController();
   TextEditingController textTempoEntrega = TextEditingController();
-
+  TextEditingController textTaxaEntrega = TextEditingController();
+  NumberFormat formatter = NumberFormat("00.00");
   _ConfiguracoesViewPageState() {
     carregarHorarios();
   }
@@ -197,6 +199,53 @@ class _ConfiguracoesViewPageState extends State<ConfiguracoesView> {
             ],
           ),
         ),
+        Card(
+          elevation: 5,
+          margin: EdgeInsets.all(10),
+          child: Column(
+            children: <Widget>[
+              Container(
+                margin: EdgeInsets.all(15),
+                alignment: Alignment.topLeft,
+                child: Text(
+                  "Taxa de entrega",
+                  style: TextStyle(fontWeight: FontWeight.bold),
+                ),
+              ),
+              Container(
+                margin: EdgeInsets.only(bottom: 20),
+                child: Column(
+                  children: <Widget>[
+                    ListTile(
+                      leading: Icon(Icons.monetization_on),
+                      title: TextField(
+                        keyboardType: TextInputType.number,
+                        controller: textTaxaEntrega,
+                        cursorColor: MyColors.secondaryColor,
+                        style: TextStyle(color: MyColors.textSecondaryColor),
+                        decoration: InputDecoration(
+                          hintText: 'Taxa de entrega',
+                          hintStyle: TextStyle(
+                              color: MyColors.secondaryColor, fontSize: 15),
+                        ),
+                      ),
+                      trailing: IconButton(
+                          icon: Icon(Icons.alarm_add),
+                          onPressed: () async {
+                            util.taxaEntrega = double.parse(textTaxaEntrega.text);
+
+                            setState(() {
+                              textTaxaEntrega.text =
+                                  formatter.format(util.taxaEntrega);
+                            });
+                          }),
+                    ),
+                  ],
+                ),
+              )
+            ],
+          ),
+        ),
         Container(
             margin: EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             width: MediaQuery.of(context).size.width - 40,
@@ -217,7 +266,8 @@ class _ConfiguracoesViewPageState extends State<ConfiguracoesView> {
                   util.save(
                       util.horarioInicialFuncionamento.format(context),
                       util.horarioFinalFuncionamento.format(context),
-                      util.tempoEntrega.format(context));
+                      util.tempoEntrega.format(context),
+                      double.parse(textTaxaEntrega.text));
                   carregarHorarios();
                   CatalogoView.util = util;
                   showDialog(
@@ -234,12 +284,13 @@ class _ConfiguracoesViewPageState extends State<ConfiguracoesView> {
   void carregarHorarios() async {
     var json = await Util.buscarUtil();
     if (json == null) {
-      util = Util(null, null, null, null);
+      util = Util(null, null, null, null, null);
     } else {
       util = Util.fromJson(json);
       textInicial.text = util.horarioInicialFuncionamento.format(context);
       textFinal.text = util.horarioFinalFuncionamento.format(context);
       textTempoEntrega.text = util.tempoEntrega.format(context);
+      textTaxaEntrega.text = formatter.format(util.taxaEntrega);
     }
   }
 }

@@ -273,11 +273,12 @@ class _PedidosViewPageState extends State<PedidosView> {
         Util.pedidos.add(pedido);
       }
     }
-    setState(() {
-      _loading = true;
-    });
-
-    Util.pedidosCarregados = true;
+    try {
+      setState(() {
+        _loading = true;
+        Util.pedidosCarregados = true;
+      });
+    } catch (e) {}
   }
 
   void exibirDialogDatasFiltro() async {

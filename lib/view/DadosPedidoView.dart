@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:limas_burger/model/pedido.dart';
 import 'package:limas_burger/model/produto_pedido.dart';
 import 'package:limas_burger/util/util.dart';
+import 'package:limas_burger/view/CatalogoView.dart';
 import 'package:limas_burger/view/dialogs/DialogAtualizarPedido.dart';
 import 'package:limas_burger/view/dialogs/DialogCancelarPedido.dart';
 import 'package:limas_burger/view/dialogs/DialogFinalizarPedido.dart';
@@ -95,6 +96,7 @@ class DadosPedidoViewState extends State<DadosPedidoView> {
     Widget itemDataHoraEntrega;
     Widget itemStatus;
     Widget itemCliente;
+    Widget itemTaxaEntrega;
 
     Widget itemValorTotal;
     Widget labelColunasProdutos;
@@ -104,7 +106,7 @@ class DadosPedidoViewState extends State<DadosPedidoView> {
     Widget labelStatus;
     Widget labelCliente;
     Widget labelDropStatus;
-
+    Widget labelTaxaEntrega;
     Widget btnConfirmar;
     Widget dropDownStatus;
     Widget divider = Divider();
@@ -135,6 +137,11 @@ class DadosPedidoViewState extends State<DadosPedidoView> {
       padding: EdgeInsets.all(10),
       child: Align(
           alignment: Alignment.centerLeft, child: Text("STATUS DO PEDIDO")),
+    );
+    labelTaxaEntrega = Container(
+      padding: EdgeInsets.all(10),
+      child: Align(
+          alignment: Alignment.centerLeft, child: Text("TAXA DE ENTREGA")),
     );
     labelCliente = Container(
       padding: EdgeInsets.all(10),
@@ -223,6 +230,17 @@ class DadosPedidoViewState extends State<DadosPedidoView> {
           alignment: Alignment.centerLeft,
           child: Text(
             "${widget.pedido.status}",
+            style: TextStyle(color: MyColors.textColor),
+          )),
+    );
+    itemTaxaEntrega = Container(
+      color: MyColors.secondaryColor,
+      padding: EdgeInsets.all(20),
+      margin: EdgeInsets.only(bottom: 2),
+      child: Align(
+          alignment: Alignment.centerLeft,
+          child: Text(
+            "${formatterValor.format(CatalogoView.util.taxaEntrega)} R\$",
             style: TextStyle(color: MyColors.textColor),
           )),
     );
@@ -423,10 +441,9 @@ class DadosPedidoViewState extends State<DadosPedidoView> {
             style: TextStyle(color: MyColors.textColor),
           )),
     ));
+    _childrens.add(labelTaxaEntrega);
+     _childrens.add(itemTaxaEntrega);
     _childrens.add(divider);
-    _childrens.add(SizedBox(
-      height: 15,
-    ));
     _childrens.add(labelDropStatus);
     _childrens.add(dropDownStatus);
 

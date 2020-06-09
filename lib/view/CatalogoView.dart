@@ -194,7 +194,8 @@ class _CatalogoViewPageState extends State<CatalogoView> {
             for (Ingrediente ingrediente in produto.ingredientes) {
               _ingredientes += ingrediente.nome + " | ";
             }
-            String valor = formatter.format(produto.valor);
+            print(produto.promocao);
+            String valor = produto.promocao != null? formatter.format(produto.promocao.valor):formatter.format(produto.valor);
             ListTile listTile = ListTile(
               leading: Image.network(
                 Util.URL_IMAGENS + produto.imagem,
@@ -477,7 +478,8 @@ class _CatalogoViewPageState extends State<CatalogoView> {
     return ListView.builder(
       itemCount: names == null ? 0 : produtos.length,
       itemBuilder: (BuildContext context, int index) {
-        String valor = formatter.format(produtos[index].valor);
+            String valor = produtos[index].promocao != null? formatter.format(produtos[index].promocao.valor):formatter.format(produtos[index].valor);
+        
         String _ingredientes = "";
         for (int i = 0; i < produtos[index].ingredientes.length; i++) {
           _ingredientes += produtos[index].ingredientes[i].nome;
@@ -580,7 +582,7 @@ class _CatalogoViewPageState extends State<CatalogoView> {
   }
 
   void _getNames() async {
-    Util.produtos = _produtos = await Produto.listarProdutos(null, 0, 2);
+    Util.produtos  = await Produto.listarProdutos(null, 0, 2);
     var json = await Util.buscarUtil();
 
     setState(() {

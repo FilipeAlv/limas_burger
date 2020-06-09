@@ -8,6 +8,7 @@ import 'package:limas_burger/model/usuario.dart';
 import 'package:limas_burger/view/ConfiguracoesView.dart';
 import 'package:limas_burger/view/DadosPedidoView.dart';
 import 'package:limas_burger/view/HistoricoPedidosView.dart';
+import 'package:limas_burger/view/PromocaoView.dart';
 import 'package:limas_burger/view/dialogs/DialogEdit.dart';
 import 'package:limas_burger/view/dialogs/DialogLogOut.dart';
 import '../util/util.dart';
@@ -21,12 +22,10 @@ class EstabelecimentoView extends StatefulWidget {
 class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
   bool _loading = false;
   String statusCorrente = StatusPedido.RECEBIDO;
- 
 
   @override
   Widget build(BuildContext context) {
     if (!Util.produtosCarregadosDia) {
-      print("Entrou");
       _loading = false;
       loadPedidos(statusCorrente);
     }
@@ -154,7 +153,10 @@ class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
               style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold)),
           dense: true,
           trailing: Icon(Icons.notifications_active),
-          onTap: () {},
+          onTap: () {
+            Navigator.push(context,
+                MaterialPageRoute(builder: (context) => PromocaoView()));
+          },
         ),
         Divider(
           height: 20,
@@ -172,7 +174,6 @@ class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
       ],
     );
 
-    print(_loading);
     return Scaffold(
       drawer: Drawer(
         child: listaBarraLateral,
@@ -318,9 +319,11 @@ class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
         Util.pedidosEstabelecimento.add(pedido);
       }
     }
-    setState(() {
-      _loading = true;
-      Util.produtosCarregadosDia = true;
-    });
+    try {
+      setState(() {
+        _loading = true;
+        Util.produtosCarregadosDia = true;
+      });
+    } catch (e) {}
   }
 }

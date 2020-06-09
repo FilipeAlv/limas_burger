@@ -36,6 +36,7 @@ class _DialogEditState extends State<DialogEdit>{
             shrinkWrap: true,
             children: <Widget>[
               TextFormField(
+                
                 keyboardType: widget.tipo == "E-mail"? TextInputType.emailAddress: TextInputType.text,
                 decoration: InputDecoration(
                   labelText: widget.tipo,

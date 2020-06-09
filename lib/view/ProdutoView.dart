@@ -77,7 +77,7 @@ class ProdutoViewPageState extends State<ProdutoView>{
         ingrediente.selecionado=item.selecionado;
         ingredientes.add(ingrediente);
       }
-      produto = Produto( widget._produto.id,  widget._produto.nome,  widget._produto.imagem,  widget._produto.valor,  widget._produto.status,  ingredientes);
+      produto = Produto( widget._produto.id,  widget._produto.nome,  widget._produto.imagem,  widget._produto.valor,  widget._produto.status,  ingredientes, widget._produto.promocao);
       atualizando = true;
     }
     NumberFormat formatter = NumberFormat("00.00");

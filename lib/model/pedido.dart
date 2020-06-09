@@ -39,7 +39,6 @@ class Pedido {
     var _result;
     var response;
     try {
-      print(Util.usuario.id.toString());
       response = await http.get(
           Uri.encodeFull(
               Util.URL + "buscar/pedido/" + Util.usuario.id.toString()),

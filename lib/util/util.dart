@@ -15,9 +15,10 @@ class Util {
   TimeOfDay horarioInicialFuncionamento,
       horarioFinalFuncionamento,
       tempoEntrega;
+  double taxaEntrega;
 
   Util(this.id, this.horarioInicialFuncionamento,
-      this.horarioFinalFuncionamento, this.tempoEntrega);
+      this.horarioFinalFuncionamento, this.tempoEntrega, this.taxaEntrega);
 
   static const String URL =
       "http://ec2-18-229-29-129.sa-east-1.compute.amazonaws.com:8000/";
@@ -37,7 +38,7 @@ class Util {
   static bool pedidosCarregados = false;
   static bool produtosCarregados = false;
   static bool produtosCarregadosHistorico = false;
-   static bool produtosCarregadosDia = false;
+  static bool produtosCarregadosDia = false;
   static List produtos = List();
   static String versao = "v0.0.1";
 
@@ -81,7 +82,9 @@ class Util {
     return _result;
   }
 
-  save(String inicial, String hfinal, String tempoEntrega) async {
+  save(String inicial, String hfinal, String tempoEntrega,
+      double taxaEntrega) async {
+      
     var response;
     if (id == null) {
       response = await http.get(
@@ -91,7 +94,9 @@ class Util {
               "&" +
               hfinal +
               "&" +
-              tempoEntrega),
+              tempoEntrega +
+              "&" +
+              taxaEntrega.toString()),
           headers: {"Accept": "apllication/json"});
     } else {
       response = await http.get(
@@ -103,13 +108,16 @@ class Util {
               "&" +
               hfinal +
               "&" +
-              tempoEntrega),
+              tempoEntrega +
+              "&" +
+              taxaEntrega.toString()),
           headers: {"Accept": "apllication/json"});
     }
 
     var _result;
     try {
       _result = jsonDecode(response.body);
+      print(response.body);
     } catch (e) {
       e.toString();
     }
@@ -123,7 +131,8 @@ class Util {
             json[0]['fields']['hora_inicial_funcionamento']),
         horarioFinalFuncionamento = converterStringEmTime(
             json[0]['fields']['hora_final_funcionamento']),
-        tempoEntrega = converterStringEmTime(json[0]['fields']['tempoEntrega']);
+        tempoEntrega = converterStringEmTime(json[0]['fields']['tempoEntrega']),
+        taxaEntrega = double.parse(json[0]['fields']['taxaEntrega']);
 
   @override
   String toString() {
