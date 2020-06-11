@@ -108,8 +108,9 @@ class _DialogLoginState extends State<DialogLogin> {
           var _senha = senha;
           var _contato = item['fields']['contato'];
           var _tipo = item['fields']['tipo'];
-          Util.usuario =
-              Usuario(_id, _nome, _senha, _email, _contato, null, _tipo);
+          var _token = item['fields']['token'];
+          Util.usuario = Usuario(
+              _id, _nome, _senha, _email, _contato, null, _tipo, _token);
         }
       });
       if (Util.usuario != null) {

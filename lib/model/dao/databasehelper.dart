@@ -15,6 +15,7 @@ class DataBaseHelper {
   String colSenha = 'senha';
   String colContato = 'contato';
   String colTipo = 'tipo';
+  String colToken = 'token';
 
   static DataBaseHelper getInstance() {
     if (_dataBaseHelper == null) _dataBaseHelper = DataBaseHelper();
@@ -39,7 +40,7 @@ class DataBaseHelper {
 
   void _onCreate(Database database, int newVersion) async {
     await database.execute(
-      "CREATE TABLE $usuarioTable($colId INTEGER PRIMARY KEY, $colNome TEXT, $colSenha TEXT, $colEmail TEXT, $colContato TEXT, $colTipo TEXT)",
+      "CREATE TABLE $usuarioTable($colId INTEGER PRIMARY KEY, $colNome TEXT, $colSenha TEXT, $colEmail TEXT, $colContato TEXT, $colTipo TEXT, $colToken TEXT)",
     );
   }
 
@@ -58,12 +59,12 @@ class DataBaseHelper {
     Database db = await this.database;
     List maps = await db.query(
       usuarioTable,
-      columns: [colId, colNome, colEmail, colSenha, colContato, colTipo],
+      columns: [colId, colNome, colEmail, colSenha, colContato, colTipo, colToken],
     );
     print("map $maps");
     if (maps != null && maps.length > 0) {
       return Usuario(maps[0]['id'], maps[0]['nome'], maps[0]['senha'],
-          maps[0]['email'], maps[0]['contato'], null, maps[0]['tipo']);
+          maps[0]['email'], maps[0]['contato'], null, maps[0]['tipo'], maps[0]['token']);
     } else {
       return null;
     }

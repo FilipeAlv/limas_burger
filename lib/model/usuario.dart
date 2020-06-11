@@ -11,11 +11,12 @@ class Usuario {
   String email;
   String contato;
   String tipo;
-
+  String token;
   Usuario(this.id, this.nome, this.senha, this.email, this.contato,
-      this.enderecos, this.tipo);
+      this.enderecos, this.tipo, this.token);
 
   save() async {
+    print("save $token");
     var response = await http.get(
         Uri.encodeFull(Util.URL +
             "add/usuario/" +
@@ -25,11 +26,14 @@ class Usuario {
             "&" +
             senha +
             "&" +
-            contato),
+            contato +
+            "&" +
+            token),
         headers: {"Accept": "apllication/json"});
     var _result;
     try {
       _result = jsonDecode(response.body);
+      print(_result);
     } catch (e) {}
 
     return _result;
@@ -58,6 +62,17 @@ class Usuario {
       _result = jsonDecode(response.body);
     } catch (e) {}
 
+    return _result;
+  }
+
+  static buscarTodosClientes() async {
+    var _result;
+    var response;
+    try {
+      response = await http.get(Uri.encodeFull(Util.URL + "buscar/usuarios/"),
+          headers: {"Accept": "apllication/json"});
+      _result = jsonDecode(response.body);
+    } catch (e) {}
     return _result;
   }
 
@@ -115,8 +130,19 @@ class Usuario {
     var _email = json[0]['fields']['email'];
     var _enderecos = json[0]['fields']['enderecos'];
     var _tipo = json[0]['fields']['tipo'];
-    Usuario usuario = Usuario(_id, _nome, null, null, _contato, null, _tipo);
+    var _token = json[0]['fields']['token'];
+    Usuario usuario =
+        Usuario(_id, _nome, null, null, _contato, null, _tipo, _token);
 
     return usuario;
+  }
+
+  static Future<String> getToken() async {
+    String userToken = "";
+    Notificacao.firebaseMessaging.getToken().then((token) async {
+      userToken = token;
+    });
+
+    return userToken;
   }
 }

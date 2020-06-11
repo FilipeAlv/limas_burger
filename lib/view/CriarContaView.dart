@@ -60,7 +60,8 @@ class CriarContaViewPageState extends State<CriarContaView> {
                     alignment: Alignment.topLeft,
                     child: Text(
                       "Preencha seus dados",
-                      style: TextStyle(color: MyColors.secondaryColor, fontSize: 20),
+                      style: TextStyle(
+                          color: MyColors.secondaryColor, fontSize: 20),
                     ),
                   ),
                   Form(
@@ -218,30 +219,33 @@ class CriarContaViewPageState extends State<CriarContaView> {
           },
         );
       } else {
-        Usuario usuario = Usuario(null, upperNome(nome.trim()), senha.trim(),
-            email.trim(), celular.trim(), [], "Cliente");
+        String userToken = "";
+        Notificacao.firebaseMessaging.getToken().then((token) async {
+          Usuario usuario = Usuario(null, upperNome(nome.trim()), senha.trim(),
+              email.trim(), celular.trim(), [], "Cliente", token);
 
-        List _result = await usuario.save();
+          List _result = await usuario.save();
 
-        if (_result != null) {
-          _result.forEach((item) {
-            var _id = item["pk"];
-            usuario.id = _id;
-          });
-        }
-        DataBaseHelper db = DataBaseHelper();
-        print(usuario);
-        db.insertUsuario(usuario);
-        Util.usuario = usuario;
+          if (_result != null) {
+            _result.forEach((item) {
+              var _id = item["pk"];
+              usuario.id = _id;
+            });
+          }
+          DataBaseHelper db = DataBaseHelper();
+          print(usuario);
+          db.insertUsuario(usuario);
+          Util.usuario = usuario;
 
-        Navigator.of(_key2.currentContext, rootNavigator: true).pop();
-        showDialog(
-          barrierDismissible: false,
-          context: context,
-          builder: (BuildContext context) {
-            return DialogBemVindo(widget.produto, widget.produtos);
-          },
-        );
+          Navigator.of(_key2.currentContext, rootNavigator: true).pop();
+          showDialog(
+            barrierDismissible: false,
+            context: context,
+            builder: (BuildContext context) {
+              return DialogBemVindo(widget.produto, widget.produtos);
+            },
+          );
+        });
       }
     } else {
       setState(() {

@@ -43,7 +43,9 @@ class DialoglogOutState extends State<DialoglogOut> {
                 ),
               ),
               onPressed: () {
+                
                 deletarUsuario();
+                Util.usuario = null;
                 Navigator.pop(context);
               },
             )),
@@ -74,6 +76,8 @@ class DialoglogOutState extends State<DialoglogOut> {
   void deletarUsuario() async {
     int id = await dataBaseHelper.deletUsuario(Util.usuario.id);
     print(id);
-    Util.usuario = null;
+    setState(() {
+      Util.usuario = null;
+    });
   }
 }

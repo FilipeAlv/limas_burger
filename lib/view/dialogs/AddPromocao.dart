@@ -21,10 +21,13 @@ class _AddPromocaoState extends State<AddPromocao> {
   GlobalKey _key2 = GlobalKey();
   bool enviarNotificacao = false;
   TextEditingController textValor = TextEditingController();
+  TextEditingController textTitulo = TextEditingController();
+  TextEditingController textConteudo = TextEditingController();
   NumberFormat formatter = NumberFormat("00.00");
   @override
   void initState() {
     super.initState();
+    timeDilation = 1.0;
     if (widget.produto.promocao != null) {
       textValor.text = formatter.format(widget.produto.promocao.valor);
     }
@@ -74,6 +77,27 @@ class _AddPromocaoState extends State<AddPromocao> {
                     Text("Enviar notificações")
                   ],
                 ),
+                enviarNotificacao
+                    ? TextFormField(
+                        controller: textTitulo,
+                        decoration: InputDecoration(
+                          labelText: "Título",
+                        ),
+                      )
+                    : Offstage(),
+                enviarNotificacao
+                    ? TextFormField(
+                        controller: textConteudo,
+                        decoration: InputDecoration(
+                          labelText: "Conteúdo",
+                        ),
+                      )
+                    : Offstage(),
+                enviarNotificacao
+                    ? SizedBox(
+                        height: 10,
+                      )
+                    : Offstage(),
                 Container(
                     margin: EdgeInsets.only(bottom: 10),
                     width: MediaQuery.of(context).size.width,
@@ -143,8 +167,21 @@ class _AddPromocaoState extends State<AddPromocao> {
     } else {
       widget.produto.promocao = Promocao(null, double.parse(textValor.text));
     }
-
     widget.produto.promocao.save(widget.produto.id);
     PromocaoView.promocaoesCarregadas = false;
+    if (enviarNotificacao) {
+      timeDilation = 1.0;
+      List item = await Usuario.buscarTodosClientes();
+      List<Usuario> usuarios = List();
+      print("json $item");
+      for (int i = 0; i < item.length; i++) {
+        print(item[i]['fields']['token']);
+        String token = item[i]['fields']['token'];
+        await Notificacao.enviarNotificacao(
+            token, textTitulo.text, textConteudo.text);
+      }
+
+     
+    }
   }
 }

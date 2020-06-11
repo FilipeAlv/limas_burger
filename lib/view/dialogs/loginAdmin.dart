@@ -108,13 +108,13 @@ class DialogLoginAdminState extends State<DialogLoginAdmin> {
           var _senha = senha;
           var _contato = item['fields']['contato'];
           var _tipo = item['fields']['tipo'];
-
+          var _token = item['fields']['token'];
           if (_tipo != TipoUsuario.CLIENTE) {
             if (Util.usuario != null) {
               db.deletUsuario(Util.usuario.id);
             }
-            Util.usuario =
-                Usuario(_id, _nome, _senha, _email, _contato, null, _tipo);
+            Util.usuario = Usuario(
+                _id, _nome, _senha, _email, _contato, null, _tipo, _token);
           } else {
             Toast.show("Você não está autorizado a acessar esta área.", context,
                 duration: Toast.LENGTH_LONG,

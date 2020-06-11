@@ -7,6 +7,7 @@ import 'package:limas_burger/model/carrinho.dart';
 import 'package:limas_burger/model/pedido.dart';
 import 'package:limas_burger/model/usuario.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_messaging/firebase_messaging.dart';
 
 import '../main.dart';
 
@@ -84,7 +85,6 @@ class Util {
 
   save(String inicial, String hfinal, String tempoEntrega,
       double taxaEntrega) async {
-      
     var response;
     if (id == null) {
       response = await http.get(
@@ -202,4 +202,77 @@ class MyColors {
 class TipoUsuario {
   static const String CLIENTE = "Cliente";
   static const String ADMINISTRADOR = "Adm";
+}
+
+class Notificacao {
+  static String serverToken = "AAAA2iEahlk:APA91bFolEApbTI1Vur9ul9mtQJECJdHuPoHQJhG6eGhIVnWD8EnkDfKGYKgLodUH-LdPM8TW6jcmro8omN22f9u7_ucyLCyvHHU_oYIS1Objjh3_BEQOoLSTMOFNjqZ5H4GyYHYoBmo";
+  static FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
+  static Future<Map<String, dynamic>> enviarNotificacao(String token, String titulo, String conteudo) async {
+    print("token enviar $token");
+    await http.post(
+      'https://fcm.googleapis.com/fcm/send',
+      headers: <String, String>{
+        'Content-Type': 'application/json',
+        'Authorization': 'key=$serverToken',
+      },
+      body: jsonEncode(
+        <String, dynamic>{
+          'notification': <String, dynamic>{
+            'title': titulo,
+            'body': conteudo,
+            'sound': 'true'
+          },
+          'priority': 'high',
+          'data': <String, dynamic>{
+            'click_action': 'FLUTTER_NOTIFICATION_CLICK',
+            'id': '1',
+            'status': 'done',
+          },
+          'to': '$token',
+        },
+      ),
+    );
+  }
+
+  static receberNotificacao(BuildContext context) {
+    firebaseMessaging.configure(
+      // se o usuario estiver usando o app no momento da execução será mostrado esse metodo
+      // ignore: missing_return
+      onMessage: (Map<String, dynamic> message) {
+        print('on message $message');
+        print('Mesamengem 01');
+        if (message['notification']['title'] != null) {
+          return showCupertinoDialog(
+              useRootNavigator: false,
+              context: context,
+              builder: (x) {
+                return CupertinoAlertDialog(
+                  title: Text('${message['notification']['title']}'),
+                  content: Text('${message['notification']['body']}'),
+                  actions: <Widget>[
+                    CupertinoButton(
+                        child: Text('Ok'),
+                        onPressed: () {
+                          Navigator.pop(context);
+                        })
+                  ],
+                );
+              });
+        }
+      },
+
+      // este será executado quando estiver em segundo plano
+      onResume: (Map<String, dynamic> message) {
+        //Navigator.push(context, MaterialPageRoute(builder: (context)=>Tela_Alerta()));
+        print('on resume $message');
+        print('Mesamengem 02');
+      },
+
+      // e este metodo será executado mesmo que o app estiver fechado
+      onLaunch: (Map<String, dynamic> message) {
+        print('Mensagem de dados $message');
+        //return Navigator.push(context, MaterialPageRoute(builder: (context)=>Tela_Alerta()));
+      },
+    );
+  }
 }
