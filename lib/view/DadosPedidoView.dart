@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:limas_burger/model/pedido.dart';
 import 'package:limas_burger/model/produto_pedido.dart';
+import 'package:limas_burger/model/usuario.dart';
 import 'package:limas_burger/util/util.dart';
 import 'package:limas_burger/view/CatalogoView.dart';
 import 'package:limas_burger/view/dialogs/DialogAtualizarPedido.dart';
@@ -367,6 +368,15 @@ class DadosPedidoViewState extends State<DadosPedidoView> {
                   if (widget.pedido.produtos.length > 1) {
                     _maisDeUm = true;
                   }
+                  List item =
+                      await Usuario.buscarPorTipo(TipoUsuario.ADMINISTRADOR);
+                  print("jsonAdm $item");
+                  for (int i = 0; i < item.length; i++) {
+                    print(item[i]['fields']['token']);
+                    String token = item[i]['fields']['token'];
+                    await Notificacao.enviarNotificacao(
+                        token, "Novo Pedido", "Verifique os pedidos recentes.");
+                  }
 
                   await showDialog(
                     context: context,
@@ -442,7 +452,7 @@ class DadosPedidoViewState extends State<DadosPedidoView> {
           )),
     ));
     _childrens.add(labelTaxaEntrega);
-     _childrens.add(itemTaxaEntrega);
+    _childrens.add(itemTaxaEntrega);
     _childrens.add(divider);
     _childrens.add(labelDropStatus);
     _childrens.add(dropDownStatus);

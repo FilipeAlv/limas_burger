@@ -171,8 +171,8 @@ class _AddPromocaoState extends State<AddPromocao> {
     PromocaoView.promocaoesCarregadas = false;
     if (enviarNotificacao) {
       timeDilation = 1.0;
-      List item = await Usuario.buscarTodosClientes();
-      List<Usuario> usuarios = List();
+      List item = await Usuario.buscarPorTipo(TipoUsuario.CLIENTE);
+
       print("json $item");
       for (int i = 0; i < item.length; i++) {
         print(item[i]['fields']['token']);
@@ -180,8 +180,6 @@ class _AddPromocaoState extends State<AddPromocao> {
         await Notificacao.enviarNotificacao(
             token, textTitulo.text, textConteudo.text);
       }
-
-     
     }
   }
 }

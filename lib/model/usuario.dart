@@ -65,11 +65,11 @@ class Usuario {
     return _result;
   }
 
-  static buscarTodosClientes() async {
+  static buscarPorTipo(String tipo) async {
     var _result;
     var response;
     try {
-      response = await http.get(Uri.encodeFull(Util.URL + "buscar/usuarios/"),
+      response = await http.get(Uri.encodeFull(Util.URL + "buscar/usuarios/tipo/" + tipo),
           headers: {"Accept": "apllication/json"});
       _result = jsonDecode(response.body);
     } catch (e) {}
