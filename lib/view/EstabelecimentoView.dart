@@ -216,7 +216,10 @@ class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
                                 horizontal: 10, vertical: 5),
                             child: ListTile(
                               title: Text(
-                                Util.pedidosEstabelecimento[index].status +
+                                Util.pedidosEstabelecimento[index].usuario
+                                        .nome +
+                                    " - " +
+                                    Util.pedidosEstabelecimento[index].status +
                                     " - " +
                                     dataHoraPedido,
                                 style: TextStyle(color: Colors.white),

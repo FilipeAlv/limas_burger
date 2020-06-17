@@ -234,6 +234,8 @@ class _HistoricoViewPageState extends State<HistoricoView> {
                                   horizontal: 10, vertical: 5),
                               child: ListTile(
                                 title: Text(
+                                  Util.pedidosEstabelecimento[index].usuario.nome+
+                                      " - " +
                                   Util.pedidosEstabelecimento[index].status +
                                       " - " +
                                       dataHoraPedido,

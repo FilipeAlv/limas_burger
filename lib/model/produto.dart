@@ -31,7 +31,6 @@ class Produto {
         var _promocao = item['fields']['promocao'];
 
         Promocao promocao;
-        print(promocao);
         if (_promocao != null) {
           promocao = Promocao.fromJson(await Promocao.buscarPorId(_promocao));
         }

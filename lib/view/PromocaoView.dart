@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -5,6 +7,7 @@ import 'package:limas_burger/model/produto.dart';
 import 'package:limas_burger/model/promocao.dart';
 import 'package:limas_burger/util/util.dart';
 import 'package:limas_burger/view/dialogs/AddPromocao.dart';
+import 'package:limas_burger/view/dialogs/DialogErrorServer.dart';
 
 class PromocaoView extends StatefulWidget {
   // ExamplePage({ Key key }) : super(key: key);
@@ -21,6 +24,8 @@ class _PromocaoViewState extends State<PromocaoView> {
   Icon _searchIcon = new Icon(Icons.search);
   Widget _appBarTitle = new Text('Buscar produtos');
   bool _loading = false;
+  int quantidadeProdutos, faixaInicial, faixaFinal;
+  ScrollController _controller;
 
   _PromocaoViewState() {
     _filter.addListener(() {
@@ -36,18 +41,44 @@ class _PromocaoViewState extends State<PromocaoView> {
       }
     });
   }
+  _scrollListener() async {
+    if (_controller.offset >= _controller.position.maxScrollExtent &&
+        !_controller.position.outOfRange) {
+      faixaInicial = faixaFinal;
+      faixaFinal = faixaFinal + 5;
+      List produtosTemp =
+          await Produto.listarProdutos(null, faixaInicial, faixaFinal);
+
+      if (produtosTemp.length != 0) {
+        setState(() {
+          _loading = false;
+        });
+        produtosTemp.forEach((item) {
+          produtos.add(item);
+        });
+        setState(() {
+          _loading = true;
+        });
+      }
+    }
+  }
 
   @override
   void initState() {
+    loadDataQuantidade();
     this._getNames();
+    _controller = ScrollController();
+    _controller.addListener(_scrollListener);
     super.initState();
   }
 
   Widget build(BuildContext context) {
-    if(!PromocaoView.promocaoesCarregadas){
+    if (!PromocaoView.promocaoesCarregadas) {
+     
       _loading = false;
       _getNames();
     }
+   
     return Scaffold(
       appBar: _buildBar(context),
       body: Container(
@@ -103,6 +134,7 @@ class _PromocaoViewState extends State<PromocaoView> {
       produtos = tempList;
     }
     return ListView.builder(
+      controller: _controller,
       itemCount: names == null ? 0 : produtos.length,
       itemBuilder: (BuildContext context, int index) {
         NumberFormat formatter = NumberFormat("00.00");
@@ -216,13 +248,50 @@ class _PromocaoViewState extends State<PromocaoView> {
   }
 
   void _getNames() async {
-    produtos = await Produto.listarProdutos(null, 0, 2);
+    quantidadeProdutos = await loadDataQuantidade();
+    if (quantidadeProdutos < 5) {
+      faixaFinal = quantidadeProdutos;
+    } else {
+      faixaFinal = 6;
+    }
+    faixaInicial = 0;
+
+    produtos = await Produto.listarProdutos(null, faixaInicial, faixaFinal);
 
     setState(() {
       names = produtos;
-      names.shuffle();
+
       PromocaoView.promocaoesCarregadas = true;
       _loading = true;
     });
   }
+
+  Future<List> getDataQuantidade() async {
+    var response;
+    try {
+      response = await http.get(Uri.encodeFull(Util.URL + "produtos/cont"),
+          headers: {"Accept": "apllication/json"});
+      return jsonDecode(response.body);
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return DialogErrorServer(true);
+          });
+      return null;
+    }
+  }
+
+  Future<int> loadDataQuantidade() async {
+    List result = await getDataQuantidade();
+    int quantidadeProdutos;
+    if (result != null)
+      result.forEach((item) {
+        quantidadeProdutos = int.parse(item["quantidade"].toString());
+      });
+    return quantidadeProdutos;
+  }
 }
+/*
+  
+ */

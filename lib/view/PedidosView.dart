@@ -179,7 +179,8 @@ class _PedidosViewPageState extends State<PedidosView> {
                             margin: EdgeInsets.symmetric(
                                 horizontal: 10, vertical: 5),
                             child: ListTile(
-                              title: Text(
+                              title: Text(   Util.pedidos[index].usuario.nome +
+                                    " - " +
                                 Util.pedidos[index].status +
                                     " - " +
                                     dataHoraPedido,
