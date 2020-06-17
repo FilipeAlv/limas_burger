@@ -51,7 +51,10 @@ class _CatalogoViewPageState extends State<CatalogoView> {
   List<Produto> _produtosAux = [];
   TextEditingController _controllerSearch = TextEditingController();
   int id;
+
   int quantidadeChamadas = 0;
+  int quantidadeProdutos, faixaInicial, faixaFinal;
+  ScrollController _controller;
 
   _CatalogoViewPageState() {
     if (!(Util.produtos.length > 0)) {
@@ -73,10 +76,35 @@ class _CatalogoViewPageState extends State<CatalogoView> {
       }
     });
   }
+  _scrollListener() async {
+    if (_controller.offset >= _controller.position.maxScrollExtent &&
+        !_controller.position.outOfRange) {
+      faixaInicial = faixaFinal;
+      faixaFinal = faixaFinal + 5;
+      List produtosTemp =
+          await Produto.listarProdutos(null, faixaInicial, faixaFinal);
+
+      if (produtosTemp.length != 0) {
+        setState(() {
+          _loading = false;
+        });
+        produtosTemp.forEach((item) {
+          produtos.add(item);
+        });
+        new Future.delayed(new Duration(seconds: 1), () {
+          setState(() {
+            _loading = true;
+          });
+        });
+      }
+    }
+  }
 
   @override
   void initState() {
     super.initState();
+    _controller = ScrollController();
+    _controller.addListener(_scrollListener);
 
     /*
     CatalogoView.bContext = context;
@@ -96,7 +124,7 @@ class _CatalogoViewPageState extends State<CatalogoView> {
       }
     });*/
   }
-
+  /*
   loadDataQuantidade() async {
     List result = await getDataQuantidade();
     if (result != null)
@@ -104,6 +132,7 @@ class _CatalogoViewPageState extends State<CatalogoView> {
         CatalogoView._quantidade = int.parse(item["quantidade"].toString());
       });
   }
+  */
 
   Future<int> loadDataQuantidadeFilter(string, ignore) async {
     int qt;
@@ -115,6 +144,7 @@ class _CatalogoViewPageState extends State<CatalogoView> {
     return qt;
   }
 
+  /*
   Future<List> getDataQuantidade() async {
     var response;
     try {
@@ -130,7 +160,7 @@ class _CatalogoViewPageState extends State<CatalogoView> {
       return null;
     }
   }
-
+  */
   Future<List> getDataQuantidadeFilter(string, ignore) async {
     var response;
     try {
@@ -476,6 +506,7 @@ class _CatalogoViewPageState extends State<CatalogoView> {
       produtos = tempList;
     }
     return ListView.builder(
+      controller: _controller,
       itemCount: names == null ? 0 : produtos.length,
       itemBuilder: (BuildContext context, int index) {
         String valor = produtos[index].promocao != null
@@ -584,7 +615,17 @@ class _CatalogoViewPageState extends State<CatalogoView> {
   }
 
   void _getNames() async {
-    Util.produtos = await Produto.listarProdutos(null, 0, 2);
+    quantidadeProdutos = await loadDataQuantidade();
+
+    if (quantidadeProdutos < 5) {
+      faixaFinal = quantidadeProdutos;
+    } else {
+      faixaFinal = 6;
+    }
+    faixaInicial = 0;
+
+    Util.produtos =
+        await Produto.listarProdutos(null, faixaInicial, faixaFinal);
     var json = await Util.buscarUtil();
 
     setState(() {
@@ -617,5 +658,31 @@ class _CatalogoViewPageState extends State<CatalogoView> {
         ],
       ),
     );
+  }
+
+  Future<List> getDataQuantidade() async {
+    var response;
+    try {
+      response = await http.get(Uri.encodeFull(Util.URL + "produtos/cont"),
+          headers: {"Accept": "apllication/json"});
+      return jsonDecode(response.body);
+    } catch (e) {
+      showDialog(
+          context: context,
+          builder: (BuildContext context) {
+            return DialogErrorServer(true);
+          });
+      return null;
+    }
+  }
+
+  Future<int> loadDataQuantidade() async {
+    List result = await getDataQuantidade();
+    int quantidadeProdutos;
+    if (result != null)
+      result.forEach((item) {
+        quantidadeProdutos = int.parse(item["quantidade"].toString());
+      });
+    return quantidadeProdutos;
   }
 }

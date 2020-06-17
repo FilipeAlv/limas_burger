@@ -56,8 +56,10 @@ class _PromocaoViewState extends State<PromocaoView> {
         produtosTemp.forEach((item) {
           produtos.add(item);
         });
-        setState(() {
-          _loading = true;
+        new Future.delayed(new Duration(seconds: 1), () {
+          setState(() {
+            _loading = true;
+          });
         });
       }
     }
@@ -74,11 +76,10 @@ class _PromocaoViewState extends State<PromocaoView> {
 
   Widget build(BuildContext context) {
     if (!PromocaoView.promocaoesCarregadas) {
-     
       _loading = false;
       _getNames();
     }
-   
+
     return Scaffold(
       appBar: _buildBar(context),
       body: Container(
@@ -292,6 +293,4 @@ class _PromocaoViewState extends State<PromocaoView> {
     return quantidadeProdutos;
   }
 }
-/*
-  
- */
+
