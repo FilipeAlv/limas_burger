@@ -4,7 +4,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:limas_burger/model/produto.dart';
-import 'package:limas_burger/model/promocao.dart';
 import 'package:limas_burger/util/util.dart';
 import 'package:limas_burger/view/dialogs/AddPromocao.dart';
 import 'package:limas_burger/view/dialogs/DialogErrorServer.dart';
@@ -27,23 +26,12 @@ class _PromocaoViewState extends State<PromocaoView> {
   int quantidadeProdutos, faixaInicial, faixaFinal;
   ScrollController _controller;
 
-  _PromocaoViewState() {
-    _filter.addListener(() {
-      if (_filter.text.isEmpty) {
-        setState(() {
-          _searchText = "";
-          produtos = names;
-        });
-      } else {
-        setState(() {
-          _searchText = _filter.text;
-        });
-      }
-    });
-  }
+  _PromocaoViewState() {}
   _scrollListener() async {
     if (_controller.offset >= _controller.position.maxScrollExtent &&
         !_controller.position.outOfRange) {
+      print("faixas");
+      print("$faixaInicial - $faixaFinal");
       faixaInicial = faixaFinal;
       faixaFinal = faixaFinal + 5;
       List produtosTemp =
@@ -65,12 +53,32 @@ class _PromocaoViewState extends State<PromocaoView> {
     }
   }
 
+  _filterList() async {
+    if (_filter.text.isEmpty) {
+      setState(() {
+        _searchText = "";
+        produtos = names;
+      });
+    } else {
+      setState(() {
+        _loading = false;
+      });
+      _searchText = _filter.text;
+      List temp = await Produto.listarProdutoPorNomeIlike(_searchText);
+      setState(() {
+        produtos = temp;
+        _loading = true;
+      });
+    }
+  }
+
   @override
   void initState() {
     loadDataQuantidade();
     this._getNames();
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
+    _filter.addListener(_filterList);
     super.initState();
   }
 
@@ -122,6 +130,8 @@ class _PromocaoViewState extends State<PromocaoView> {
   }
 
   Widget _buildList() {
+    /*
+   
     if (!(_searchText.isEmpty)) {
       List tempList = new List();
       for (int i = 0; i < produtos.length; i++) {
@@ -132,8 +142,10 @@ class _PromocaoViewState extends State<PromocaoView> {
           tempList.add(produtos[i]);
         }
       }
+
       produtos = tempList;
     }
+    */
     return ListView.builder(
       controller: _controller,
       itemCount: names == null ? 0 : produtos.length,
@@ -233,11 +245,16 @@ class _PromocaoViewState extends State<PromocaoView> {
       if (this._searchIcon.icon == Icons.search) {
         this._searchIcon = new Icon(Icons.close);
         this._appBarTitle = new TextField(
+          style: TextStyle(color: Colors.white),
           cursorColor: Colors.white,
           controller: _filter,
           autofocus: true,
           decoration: new InputDecoration(
-              prefixIcon: new Icon(Icons.search), hintText: 'Buscar...'),
+              fillColor: Colors.white,
+              border: InputBorder.none,
+              prefixIcon: new Icon(Icons.search, color: Colors.white),
+              hintStyle: TextStyle(color: Colors.white, fontSize: 15),
+              hintText: 'Buscar...'),
         );
       } else {
         this._searchIcon = new Icon(Icons.search);
@@ -293,4 +310,3 @@ class _PromocaoViewState extends State<PromocaoView> {
     return quantidadeProdutos;
   }
 }
-

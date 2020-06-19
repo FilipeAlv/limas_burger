@@ -57,28 +57,28 @@ class _CatalogoViewPageState extends State<CatalogoView> {
   ScrollController _controller;
 
   _CatalogoViewPageState() {
-    if (!(Util.produtos.length > 0)) {
-      this._getNames();
-    } else {
-      produtos = Util.produtos;
-      _loading = true;
-    }
-    _filter.addListener(() {
-      if (_filter.text.isEmpty) {
-        setState(() {
-          _searchText = "";
-          produtos = names;
-        });
-      } else {
-        setState(() {
-          _searchText = _filter.text;
-        });
-      }
-    });
+    this._getNames();
   }
+  _filterList() async {
+    if (_filter.text.isEmpty) {
+      setState(() {
+        _searchText = "";
+        _getNames();
+      });
+    } else {
+      _searchText = _filter.text;
+      List temp = await Produto.listarProdutoPorNomeIlike(_searchText);
+      setState(() {
+        produtos = temp;
+      });
+    }
+  }
+
   _scrollListener() async {
     if (_controller.offset >= _controller.position.maxScrollExtent &&
         !_controller.position.outOfRange) {
+      print("faixas");
+      print("$faixaInicial - $faixaFinal");
       faixaInicial = faixaFinal;
       faixaFinal = faixaFinal + 5;
       List produtosTemp =
@@ -102,9 +102,11 @@ class _CatalogoViewPageState extends State<CatalogoView> {
 
   @override
   void initState() {
+    print("Aqui");
     super.initState();
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
+    _filter.addListener(_filterList);
 
     /*
     CatalogoView.bContext = context;
@@ -624,15 +626,13 @@ class _CatalogoViewPageState extends State<CatalogoView> {
     }
     faixaInicial = 0;
 
-    Util.produtos =
-        await Produto.listarProdutos(null, faixaInicial, faixaFinal);
+    produtos = await Produto.listarProdutos(null, faixaInicial, faixaFinal);
     var json = await Util.buscarUtil();
-
+    Util.produtos = produtos;
     setState(() {
-      names = Util.produtos;
-      Util.produtos = names;
+      names = produtos;
+      produtos = names;
 
-      produtos = Util.produtos;
       if (json != null) {
         CatalogoView.util = Util.fromJson(json);
       }

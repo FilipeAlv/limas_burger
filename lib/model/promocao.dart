@@ -22,7 +22,6 @@ class Promocao {
           headers: {"Accept": "apllication/json"});
 
       _result = jsonDecode(response.body);
-      print("buscar $_result");
       return _result;
     } catch (e) {}
     return _result;

@@ -100,6 +100,13 @@ class Produto {
 
     return await _fromJson(jsonDecode(response.body));
   }
+  static listarProdutoPorNomeIlike(String nome) async {
+    var response = await http.get(
+        Uri.encodeFull(Util.URL + "buscar/produtos/ilike/" + nome),
+        headers: {"Accept": "apllication/json"});
+
+    return await _fromJson(jsonDecode(response.body));
+  }
 
   @override
   String toString() {
