@@ -7,8 +7,7 @@ import 'package:limas_burger/model/produto_pedido.dart';
 import 'package:limas_burger/model/usuario.dart';
 import 'package:limas_burger/util/util.dart';
 import 'package:limas_burger/view/DadosPedidoView.dart';
-import 'package:limas_burger/view/DestalhesPedidoView.dart';
-import 'package:limas_burger/view/dialogs/DialogDatasFiltro.dart';
+
 
 class HistoricoView extends StatefulWidget {
   DateTime dataInicio, dataFim;
@@ -115,7 +114,6 @@ class _HistoricoViewPageState extends State<HistoricoView> {
                           value: _statusCorrente,
                           items: _dropDownMenuItemsStatus,
                           onChanged: changedDropDownItemStatus,
-                          
                         ),
                       ),
                       SizedBox(
@@ -143,7 +141,6 @@ class _HistoricoViewPageState extends State<HistoricoView> {
                           items: _dropDownMenuItemsStatus,
                           onChanged: changedDropDownItemStatus,
                           hint: Text("Selecione o status"),
-                          
                         ),
                       ),
                       SizedBox(
@@ -174,8 +171,11 @@ class _HistoricoViewPageState extends State<HistoricoView> {
                                         ),
                                       ),
                                       onPressed: () async {
+                                        print('01');
                                         widget.dataInicio =
                                             await _exibirDatePicker();
+                                        print('02');
+                                        print(widget.dataInicio);
                                       },
                                     )),
                                 Container(
@@ -234,9 +234,11 @@ class _HistoricoViewPageState extends State<HistoricoView> {
                                   horizontal: 10, vertical: 5),
                               child: ListTile(
                                 title: Text(
-                                  Util.pedidosEstabelecimento[index].usuario.nome+
+                                  Util.pedidosEstabelecimento[index].usuario
+                                          .nome +
                                       " - " +
-                                  Util.pedidosEstabelecimento[index].status +
+                                      Util.pedidosEstabelecimento[index]
+                                          .status +
                                       " - " +
                                       dataHoraPedido,
                                   style: TextStyle(color: Colors.white),
@@ -343,8 +345,10 @@ class _HistoricoViewPageState extends State<HistoricoView> {
         locale: Locale("pt"),
         initialDate: data == null ? DateTime.now() : data,
         firstDate: DateTime(DateTime.now().year),
-        lastDate: DateTime.now());
-
+        lastDate: DateTime.now(),
+        
+        );
+        
     if (selecionado != null && selecionado != data) {
       //print('Data:  ${selecionado.toString()}');
     }

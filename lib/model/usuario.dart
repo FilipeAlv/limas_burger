@@ -16,7 +16,6 @@ class Usuario {
       this.enderecos, this.tipo, this.token);
 
   save() async {
-    print("save $token");
     var response = await http.get(
         Uri.encodeFull(Util.URL +
             "add/usuario/" +
@@ -33,7 +32,6 @@ class Usuario {
     var _result;
     try {
       _result = jsonDecode(response.body);
-      print(_result);
     } catch (e) {}
 
     return _result;

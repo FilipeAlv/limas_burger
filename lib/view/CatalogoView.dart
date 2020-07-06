@@ -75,26 +75,18 @@ class _CatalogoViewPageState extends State<CatalogoView> {
   }
 
   _scrollListener() async {
-    if (_controller.offset >= _controller.position.maxScrollExtent &&
-        !_controller.position.outOfRange) {
-      print("faixas");
-      print("$faixaInicial - $faixaFinal");
+    if (( 30 + _controller.offset) >= _controller.position.maxScrollExtent) {
       faixaInicial = faixaFinal;
       faixaFinal = faixaFinal + 5;
       List produtosTemp =
           await Produto.listarProdutos(null, faixaInicial, faixaFinal);
 
       if (produtosTemp.length != 0) {
-        setState(() {
-          _loading = false;
-        });
         produtosTemp.forEach((item) {
           produtos.add(item);
         });
-        new Future.delayed(new Duration(seconds: 1), () {
-          setState(() {
-            _loading = true;
-          });
+        setState(() {
+          print("Tá chegando");
         });
       }
     }
@@ -102,7 +94,6 @@ class _CatalogoViewPageState extends State<CatalogoView> {
 
   @override
   void initState() {
-    print("Aqui");
     super.initState();
     _controller = ScrollController();
     _controller.addListener(_scrollListener);
@@ -223,7 +214,6 @@ class _CatalogoViewPageState extends State<CatalogoView> {
             for (Ingrediente ingrediente in produto.ingredientes) {
               _ingredientes += ingrediente.nome + " | ";
             }
-            print(produto.promocao);
             String valor = produto.promocao != null
                 ? formatter.format(produto.promocao.valor)
                 : formatter.format(produto.valor);

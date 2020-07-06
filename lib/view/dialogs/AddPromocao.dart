@@ -68,7 +68,6 @@ class _AddPromocaoState extends State<AddPromocao> {
                       value: timeDilation != 1.0,
                       onChanged: (bool value) {
                         enviarNotificacao = value;
-                        print(enviarNotificacao);
                         setState(() {
                           timeDilation = value ? 1.2 : 1.0;
                         });
@@ -161,7 +160,6 @@ class _AddPromocaoState extends State<AddPromocao> {
   }
 
   _sendForm() async {
-    print(textValor.text);
     if (widget.produto.promocao != null) {
       widget.produto.promocao.valor = double.parse(textValor.text);
     } else {
@@ -173,9 +171,7 @@ class _AddPromocaoState extends State<AddPromocao> {
       timeDilation = 1.0;
       List item = await Usuario.buscarPorTipo(TipoUsuario.CLIENTE);
 
-      print("json $item");
       for (int i = 0; i < item.length; i++) {
-        print(item[i]['fields']['token']);
         String token = item[i]['fields']['token'];
         await Notificacao.enviarNotificacao(
             token, textTitulo.text, textConteudo.text);

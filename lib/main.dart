@@ -118,6 +118,7 @@ class LimasBurgerTabBar extends State<LimasBurger> {
 
     return MaterialApp(
       title: "Serra China",
+      debugShowCheckedModeBanner: false,
       localizationsDelegates: [
         GlobalMaterialLocalizations.delegate,
         GlobalWidgetsLocalizations.delegate,

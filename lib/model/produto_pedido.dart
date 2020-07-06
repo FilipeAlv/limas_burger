@@ -54,7 +54,6 @@ class ProdutoPedido {
 
   save() async {
     var response;
-    print("id $id");
     if (id == null) {
       response = await http.get(
           Uri.encodeFull(Util.URL +
@@ -80,7 +79,6 @@ class ProdutoPedido {
           headers: {"Accept": "apllication/json"});
     }
     */
-    print(response.body);
     var _result;
     try {
       _result = jsonDecode(response.body);

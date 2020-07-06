@@ -55,7 +55,6 @@ class Pedido {
     var _result;
     var response;
     try {
-      print(Util.usuario.id.toString());
       response = await http.get(
           Uri.encodeFull(Util.URL + "cancelar/pedido/" + this.id.toString()),
           headers: {"Accept": "apllication/json"});
@@ -69,10 +68,9 @@ class Pedido {
 
   save() async {
     var response;
-   
+
     String data =
         Util.formatDate.format(dataHoraPedido).trim().replaceAll("/", "-");
-      print(data);
     if (id == null) {
       response = await http.get(
           Uri.encodeFull(Util.URL +
@@ -101,7 +99,7 @@ class Pedido {
               "&" +
               status +
               "&" +
-              Util.usuario.id.toString() +
+              usuario.id.toString() +
               "&" +
               enderecoEntrega.id.toString() +
               "&" +
@@ -114,7 +112,6 @@ class Pedido {
     }
 
     var _result;
-    print(response.body);
     try {
       _result = jsonDecode(response.body);
     } catch (e) {
@@ -129,8 +126,7 @@ class Pedido {
     var response;
     try {
       response = await http.get(
-          Uri.encodeFull(
-              Util.URL + "buscar/pedido/diaStatus/" + busca),
+          Uri.encodeFull(Util.URL + "buscar/pedido/diaStatus/" + busca),
           headers: {"Accept": "apllication/json"});
 
       _result = jsonDecode(response.body);
@@ -139,13 +135,13 @@ class Pedido {
     } catch (e) {}
     return _result;
   }
-   static buscarPedidosStatus(String busca) async {
+
+  static buscarPedidosStatus(String busca) async {
     var _result;
     var response;
     try {
       response = await http.get(
-          Uri.encodeFull(
-              Util.URL + "buscar/pedido/statusGeral/" + busca),
+          Uri.encodeFull(Util.URL + "buscar/pedido/statusGeral/" + busca),
           headers: {"Accept": "apllication/json"});
 
       _result = jsonDecode(response.body);
@@ -154,8 +150,6 @@ class Pedido {
     } catch (e) {}
     return _result;
   }
-
-  
 
   @override
   String toString() {

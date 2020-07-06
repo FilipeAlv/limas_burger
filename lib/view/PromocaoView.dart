@@ -30,8 +30,6 @@ class _PromocaoViewState extends State<PromocaoView> {
   _scrollListener() async {
     if (_controller.offset >= _controller.position.maxScrollExtent &&
         !_controller.position.outOfRange) {
-      print("faixas");
-      print("$faixaInicial - $faixaFinal");
       faixaInicial = faixaFinal;
       faixaFinal = faixaFinal + 5;
       List produtosTemp =

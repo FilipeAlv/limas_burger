@@ -75,7 +75,6 @@ class DialoglogOutState extends State<DialoglogOut> {
 
   void deletarUsuario() async {
     int id = await dataBaseHelper.deletUsuario(Util.usuario.id);
-    print(id);
     setState(() {
       Util.usuario = null;
     });

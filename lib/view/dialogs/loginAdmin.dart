@@ -126,7 +126,6 @@ class DialogLoginAdminState extends State<DialogLoginAdmin> {
       });
       if (Util.usuario != null) {
         db.insertUsuario(Util.usuario);
-        print("Inseriu");
         if (Util.usuario.tipo == TipoUsuario.ADMINISTRADOR) {
           Navigator.of(_key2.currentContext, rootNavigator: true).pop();
           Navigator.pushReplacement(context,
@@ -138,7 +137,6 @@ class DialogLoginAdminState extends State<DialogLoginAdmin> {
           Navigator.of(_key2.currentContext, rootNavigator: true).pop();
         });
     } else {
-      print("eNTROU AQUI 2");
       setState(() {
         validate = true;
       });

@@ -45,7 +45,6 @@ class DataBaseHelper {
   }
 
   Future<int> insertUsuario(Usuario usuario) async {
-    print("insert usuario ${usuario.nome}");
     Database db = await this.database;
     var resultado;
     try {
@@ -61,7 +60,6 @@ class DataBaseHelper {
       usuarioTable,
       columns: [colId, colNome, colEmail, colSenha, colContato, colTipo, colToken],
     );
-    print("map $maps");
     if (maps != null && maps.length > 0) {
       return Usuario(maps[0]['id'], maps[0]['nome'], maps[0]['senha'],
           maps[0]['email'], maps[0]['contato'], null, maps[0]['tipo'], maps[0]['token']);

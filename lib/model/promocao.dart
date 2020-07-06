@@ -56,7 +56,6 @@ class Promocao {
       response = await http.get(
           Uri.encodeFull(Util.URL + "deletar/promocao/" + id.toString()),
           headers: {"Accept": "apllication/json"});
-      print(response.body);
     }
   }
 }

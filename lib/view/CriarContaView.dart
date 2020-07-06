@@ -233,7 +233,6 @@ class CriarContaViewPageState extends State<CriarContaView> {
             });
           }
           DataBaseHelper db = DataBaseHelper();
-          print(usuario);
           db.insertUsuario(usuario);
           Util.usuario = usuario;
 

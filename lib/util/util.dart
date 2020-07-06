@@ -117,7 +117,6 @@ class Util {
     var _result;
     try {
       _result = jsonDecode(response.body);
-      print(response.body);
     } catch (e) {
       e.toString();
     }
@@ -208,7 +207,6 @@ class Notificacao {
   static String serverToken = "AAAA2iEahlk:APA91bFolEApbTI1Vur9ul9mtQJECJdHuPoHQJhG6eGhIVnWD8EnkDfKGYKgLodUH-LdPM8TW6jcmro8omN22f9u7_ucyLCyvHHU_oYIS1Objjh3_BEQOoLSTMOFNjqZ5H4GyYHYoBmo";
   static FirebaseMessaging firebaseMessaging = new FirebaseMessaging();
   static Future<Map<String, dynamic>> enviarNotificacao(String token, String titulo, String conteudo) async {
-    print("token enviar $token");
     await http.post(
       'https://fcm.googleapis.com/fcm/send',
       headers: <String, String>{
@@ -234,45 +232,5 @@ class Notificacao {
     );
   }
 
-  static receberNotificacao(BuildContext context) {
-    firebaseMessaging.configure(
-      // se o usuario estiver usando o app no momento da execução será mostrado esse metodo
-      // ignore: missing_return
-      onMessage: (Map<String, dynamic> message) {
-        print('on message $message');
-        print('Mesamengem 01');
-        if (message['notification']['title'] != null) {
-          return showCupertinoDialog(
-              useRootNavigator: false,
-              context: context,
-              builder: (x) {
-                return CupertinoAlertDialog(
-                  title: Text('${message['notification']['title']}'),
-                  content: Text('${message['notification']['body']}'),
-                  actions: <Widget>[
-                    CupertinoButton(
-                        child: Text('Ok'),
-                        onPressed: () {
-                          Navigator.pop(context);
-                        })
-                  ],
-                );
-              });
-        }
-      },
-
-      // este será executado quando estiver em segundo plano
-      onResume: (Map<String, dynamic> message) {
-        //Navigator.push(context, MaterialPageRoute(builder: (context)=>Tela_Alerta()));
-        print('on resume $message');
-        print('Mesamengem 02');
-      },
-
-      // e este metodo será executado mesmo que o app estiver fechado
-      onLaunch: (Map<String, dynamic> message) {
-        print('Mensagem de dados $message');
-        //return Navigator.push(context, MaterialPageRoute(builder: (context)=>Tela_Alerta()));
-      },
-    );
-  }
+ 
 }

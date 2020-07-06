@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:limas_burger/model/dao/databasehelper.dart';
 import 'package:limas_burger/model/pedido.dart';
-import 'package:limas_burger/model/usuario.dart';
 
 import 'package:limas_burger/util/util.dart';
 
@@ -48,6 +46,7 @@ class DialogAtualizarPedidoState extends State<DialogAtualizarPedido> {
               ),
               onPressed: () async {
                 widget.pedido.status = widget.status;
+                print(widget.pedido.usuario);
                 widget.pedido.save();
                 Util.produtosCarregadosHistorico = false;
                 Util.produtosCarregadosDia = false;
@@ -77,6 +76,7 @@ class DialogAtualizarPedidoState extends State<DialogAtualizarPedido> {
               ),
               onPressed: () {
                 Navigator.pop(context);
+                print(widget.pedido);
               },
             )),
       ]),

@@ -370,9 +370,7 @@ class DadosPedidoViewState extends State<DadosPedidoView> {
                   }
                   List item =
                       await Usuario.buscarPorTipo(TipoUsuario.ADMINISTRADOR);
-                  print("jsonAdm $item");
                   for (int i = 0; i < item.length; i++) {
-                    print(item[i]['fields']['token']);
                     String token = item[i]['fields']['token'];
                     await Notificacao.enviarNotificacao(
                         token, "Novo Pedido", "Verifique os pedidos recentes.");

@@ -43,7 +43,6 @@ class DialogDatasFiltroState extends State<DialogDatasFiltro> {
               ),
               onPressed: () async {
                 widget.dataInicio = await _exibirDatePicker();
-                print(widget.dataInicio);
               },
             )),
         Container(
@@ -64,7 +63,6 @@ class DialogDatasFiltroState extends State<DialogDatasFiltro> {
               ),
               onPressed: () async {
                 widget.dataFim = await _exibirDatePicker();
-                print(widget.dataFim);
               },
             )),
         Container(

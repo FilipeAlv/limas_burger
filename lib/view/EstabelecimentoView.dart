@@ -9,8 +9,6 @@ import 'package:limas_burger/view/ConfiguracoesView.dart';
 import 'package:limas_burger/view/DadosPedidoView.dart';
 import 'package:limas_burger/view/HistoricoPedidosView.dart';
 import 'package:limas_burger/view/PromocaoView.dart';
-import 'package:limas_burger/view/dialogs/DialogEdit.dart';
-import 'package:limas_burger/view/dialogs/DialogLogOut.dart';
 import '../util/util.dart';
 
 class EstabelecimentoView extends StatefulWidget {
@@ -291,6 +289,7 @@ class _EstabelecimentoViewPageState extends State<EstabelecimentoView> {
 
         var _usuario = Usuario.fromJson(
             await Usuario.buscarPorId(jsonPedido[i]['fields']['cliente']));
+            print("usuario pedido ${_usuario.email}");
         List<ProdutoPedido> _produtosPedidos = List();
 
         for (int j = 0;
